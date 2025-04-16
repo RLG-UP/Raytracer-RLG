@@ -35,4 +35,6 @@ public class Camera {
 
     public static double getEpsilon(){ return Camera.epsilon; }
     public static void setEpsilon(double epsilon){ Camera.epsilon = epsilon; }
+
+    public Vector3D getPosition() { return this.position; }
 }

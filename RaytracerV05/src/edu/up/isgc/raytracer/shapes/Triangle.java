@@ -1,11 +1,14 @@
 package edu.up.isgc.raytracer.shapes;
 
+import edu.up.isgc.raytracer.Light;
 import edu.up.isgc.raytracer.world.Camera;
 import edu.up.isgc.raytracer.Intersection;
 import edu.up.isgc.raytracer.Ray;
 import edu.up.isgc.raytracer.Vector3D;
 
 import java.awt.*;
+
+import static java.lang.Math.clamp;
 
 public class Triangle extends Object3D {
     private Vector3D A, B, C;
@@ -18,7 +21,7 @@ public class Triangle extends Object3D {
     }
 
     @Override
-    public Intersection[] intersect(Ray ray) {
+    public Intersection[] intersect(Ray ray, Light light) {
         Vector3D v2v0 = Vector3D.subtract(this.getC(), this.getA());
         Vector3D v1v0 = Vector3D.subtract(this.getB(), this.getA());
         Vector3D P = Vector3D.crossProduct(ray.direction, v1v0);
@@ -34,7 +37,7 @@ public class Triangle extends Object3D {
 
         double t = invDet * Q.dot(v1v0);
 
-        return new Intersection[]{new Intersection(ray.origin.add(ray.direction.scale(t)), t, this.color)};
+        return new Intersection[]{new Intersection(ray.origin.add(ray.direction.scale(t)), t, this.addLight(light))};
     }
 
     public Vector3D getA() { return this.A; }
@@ -51,4 +54,17 @@ public class Triangle extends Object3D {
         Vector3D w = Vector3D.subtract(this.getA(), this.getC()).normalize();
         return Vector3D.crossProduct(v, w).normalize();
     }
+
+    public Color addLight(Light light){
+        float lambertian = (float)clamp(this.normal().dot(light.getDirection()), 0.0, 1.0);
+        float[] nLC = Light.normalizeColor(light.getColor());
+        float[] nOC = Light.normalizeColor(super.getColor());
+
+        float[] nLOC = new float[]{nLC[0] * nOC[0], nLC[1] * nOC[1], nLC[2] * nOC[2]};
+
+        return new Color(nLOC[0] * lambertian, nLOC[1] * lambertian, nLOC[2] * lambertian);
+    }
+
+    @Override
+    public String type(){ return "triangle"; }
 }

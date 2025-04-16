@@ -1,6 +1,7 @@
 package edu.up.isgc.raytracer.shapes;
 
 import edu.up.isgc.raytracer.Intersection;
+import edu.up.isgc.raytracer.Light;
 import edu.up.isgc.raytracer.Ray;
 import edu.up.isgc.raytracer.Vector3D;
 
@@ -26,5 +27,8 @@ public abstract class Object3D {
      * @param ray The ray to test for intersection
      * @return Array of intersections (may contain null values for no intersection)
      */
-    public abstract Intersection[] intersect(Ray ray);
+    public abstract Intersection[] intersect(Ray ray, Light light);
+    public abstract String type();
+
+    public Color getColor() { return color; }
 }

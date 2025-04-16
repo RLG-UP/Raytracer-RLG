@@ -7,6 +7,7 @@ package edu.up.isgc.raytracer;
 public class Vector3D {
     public double x, y, z;  // Vector components
     public double value;    // Precomputed magnitude of the vector
+    private static Vector3D zero = new Vector3D(0, 0, 0);
 
     /**
      * Constructs a 3D vector with specified components.
@@ -64,6 +65,7 @@ public class Vector3D {
      */
     public Vector3D normalize() {
         double length = Math.sqrt(x * x + y * y + z * z);
+        if(length == 0) return zero;
         return new Vector3D(x / length, y / length, z / length);
     }
 
@@ -99,8 +101,12 @@ public class Vector3D {
         else return -1;
     }
 
+    public static Vector3D multiply(Vector3D v, Vector3D w) { return new Vector3D(v.x * w.x, v.y * w.y, v.z * w.z); }
+
     public static Vector3D arrayToVector(Double[] array){
         return new Vector3D(array[0], array[1], array[2]);
     }
+
+    public static Vector3D getZero() { return Vector3D.zero; }
 
 }

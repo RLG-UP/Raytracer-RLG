@@ -24,13 +24,13 @@ public class Raytracer {
         int width = 400;
         int height = 400;
         double nearPlane = -1000, farPlane = 1000;
-        //String path = new File("C:\\Users\\rodlo\\Downloads\\MMCG_FOURTH_SEMESTER_RLG\\Raytracer\\ObjFiles\\Ring.obj").getAbsolutePath();
-        //String path = new File("C:\\Users\\rodlo\\Downloads\\MMCG_FOURTH_SEMESTER_RLG\\Raytracer\\ObjFiles\\SmallTeapot.obj").getAbsolutePath();
-        String path = new File("C:\\Users\\rodlo\\Downloads\\MMCG_FOURTH_SEMESTER_RLG\\Raytracer\\ObjFiles\\shark1.obj").getAbsolutePath();
+        String path = new File("C:\\Users\\rodlo\\Downloads\\MMCG_FOURTH_SEMESTER_RLG\\Raytracer\\LocalFiles\\ObjFiles\\Ring.obj").getAbsolutePath();
+        //String path = new File("C:\\Users\\rodlo\\Downloads\\MMCG_FOURTH_SEMESTER_RLG\\Raytracer\\LocalFiles\\ObjFiles\\SmallTeapot.obj").getAbsolutePath();
+        //String path = new File("C:\\Users\\rodlo\\Downloads\\MMCG_FOURTH_SEMESTER_RLG\\Raytracer\\LocalFiles\\ObjFiles\\shark1.obj").getAbsolutePath();
 
         // Create scene with objects
         Scene scene = new Scene();
-        //scene.addObject(new Sphere(new Vector3D(-0.5, 0, -3), 0.3, Color.RED));
+        scene.addObject(new Sphere(new Vector3D(-0.5, 0, -3), 0.6, Color.RED));
         //scene.addObject(new Sphere(new Vector3D(0.4, 0, -3), 0.1, Color.BLUE));
         //scene.addObject(new Triangle(new Vector3D(0.4, 0, -3), new Vector3D(0.4, 0.5, -3), new Vector3D(1.1, 0, -3), Color.GREEN));
         Polygon polygon = new Polygon(path, Color.magenta);
@@ -38,7 +38,8 @@ public class Raytracer {
         scene.addPolygon( polygon );
 
         // Set up camera at the origin
-        Camera camera = new Camera(new Vector3D(0, 0, -200), nearPlane, farPlane);
+        Camera camera = new Camera(new Vector3D(0, 0, -10), nearPlane, farPlane);
+        Light light01 = new Light(1, Color.white, new Vector3D(1,1,1), camera.getPosition());
 
         // Initialize image buffer (width x height x RGB)
         int[][][] image = new int[width][height][3];
@@ -52,7 +53,7 @@ public class Raytracer {
 
                 // Cast ray and find closest intersection
                 Ray ray = camera.generateRay(u, v);
-                Intersection intersection = scene.findClosestIntersection(ray, camera);
+                Intersection intersection = scene.findClosestIntersection(ray, camera, light01);
 
                 if (intersection != null && intersection.color != null) {
                     // Set pixel color to intersected object's color

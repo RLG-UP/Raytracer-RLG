@@ -1,6 +1,7 @@
 package edu.up.isgc.raytracer.world;
 
 import edu.up.isgc.raytracer.Intersection;
+import edu.up.isgc.raytracer.Light;
 import edu.up.isgc.raytracer.Ray;
 import edu.up.isgc.raytracer.shapes.Object3D;
 import edu.up.isgc.raytracer.shapes.Triangle;
@@ -41,23 +42,25 @@ public class Scene {
      * @param ray The ray to test for intersections
      * @return The closest intersection, or null if no intersection found
      */
-    public Intersection findClosestIntersection(Ray ray, Camera camera) {
+    public Intersection findClosestIntersection(Ray ray, Camera camera, Light light) {
         Intersection closestIntersection = null;
         double minDist = Double.MAX_VALUE;
+        Intersection[] intersections;
 
         for (Object3D obj : objects) {
             // Get potential intersections with current object
-            Intersection intersection = obj.intersect(ray)[0] != null ? obj.intersect(ray)[0] :
-                    obj.intersect(ray)[1] != null ? obj.intersect(ray)[1] : null;
+            intersections = obj.intersect(ray, light);
+                if(intersections != null) {
+                    Intersection intersection = intersections[0] != null ? intersections[0] :
+                            intersections[1] != null ? intersections[1] : null;
 
-
-            //&& (intersection.distance >= camera.clipPlanes[0] && intersection.distance <= camera.clipPlanes[0])
-            // Update closest intersection if this one is closer
-            if (intersection != null && intersection.distance < minDist && (intersection.distance >= camera.clipPlanes[0] && intersection.distance <= camera.clipPlanes[1])) {
-                minDist = intersection.distance;
-                closestIntersection = intersection;
-
-            }
+                    //&& (intersection.distance >= camera.clipPlanes[0] && intersection.distance <= camera.clipPlanes[0])
+                    // Update closest intersection if this one is closer
+                    if (intersection != null && intersection.distance < minDist && (intersection.distance >= camera.clipPlanes[0] && intersection.distance <= camera.clipPlanes[1])) {
+                        minDist = intersection.distance;
+                        closestIntersection = intersection;
+                    }
+                }
         }
 
         return closestIntersection;

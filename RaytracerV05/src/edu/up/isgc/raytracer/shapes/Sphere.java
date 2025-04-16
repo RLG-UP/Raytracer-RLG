@@ -1,10 +1,13 @@
 package edu.up.isgc.raytracer.shapes;
 
 import edu.up.isgc.raytracer.Intersection;
+import edu.up.isgc.raytracer.Light;
 import edu.up.isgc.raytracer.Ray;
 import edu.up.isgc.raytracer.Vector3D;
 
 import java.awt.Color;
+
+import static java.lang.Math.clamp;
 
 /**
  * Represents a sphere in 3D space, extending the Object3D class.
@@ -56,10 +59,10 @@ public class Sphere extends Object3D {
      * @return Array of potential intersections (may contain null values)
      */
     @Override
-    public Intersection[] intersect(Ray ray) {
+    public Intersection[] intersect(Ray ray, Light light) {
         Vector3D O = ray.origin;
         Vector3D D = ray.direction;
-        Vector3D L = Vector3D.subtract(O,center);
+        Vector3D L = Vector3D.subtract(center, O);
         double tCA = L.dot(D);
 
         if(tCA < 0) return null;  // Sphere is behind ray origin
@@ -71,9 +74,11 @@ public class Sphere extends Object3D {
                 double t0 = tCA - tHC;
                 double t1 = tCA + tHC;
 
+                Vector3D A = O.add(D.scale(t0));
+                Vector3D B = O.add(D.scale(t1));
                 // Create intersection points
-                Intersection p0 = new Intersection(O.add(D.scale(t0)), t0, this.color);
-                Intersection p1 = new Intersection(O.add(D.scale(t1)), t1, this.color);
+                Intersection p0 = new Intersection(A, t0, this.addLight(light, A));
+                Intersection p1 = new Intersection(B, t1, this.addLight(light, B));
 
                 // Return intersections with valid points
                 return new Intersection[]{
@@ -87,4 +92,17 @@ public class Sphere extends Object3D {
     public Vector3D normal(Vector3D point){
         return Vector3D.subtract(point, center).normalize();
     }
+
+    public Color addLight(Light light, Vector3D point) {
+        float lambertian = (float)clamp(this.normal(point).dot(light.getDirection()), 0.0, 1.0);
+        float[] nLC = Light.normalizeColor(light.getColor());
+        float[] nOC = Light.normalizeColor(super.getColor());
+
+        float[] nLOC = new float[]{nLC[0] * nOC[0], nLC[1] * nOC[1], nLC[2] * nOC[2]};
+
+        return new Color(nLOC[0] * lambertian, nLOC[1] * lambertian, nLOC[2] * lambertian);
+    }
+
+    @Override
+    public String type(){ return "sphere"; }
 }
