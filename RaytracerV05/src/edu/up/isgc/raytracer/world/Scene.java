@@ -1,7 +1,7 @@
 package edu.up.isgc.raytracer.world;
 
 import edu.up.isgc.raytracer.Intersection;
-import edu.up.isgc.raytracer.Light;
+import edu.up.isgc.raytracer.lighting.Light;
 import edu.up.isgc.raytracer.Ray;
 import edu.up.isgc.raytracer.shapes.Object3D;
 import edu.up.isgc.raytracer.shapes.Triangle;

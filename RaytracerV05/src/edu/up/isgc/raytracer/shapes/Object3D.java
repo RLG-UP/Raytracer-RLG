@@ -1,9 +1,8 @@
 package edu.up.isgc.raytracer.shapes;
 
 import edu.up.isgc.raytracer.Intersection;
-import edu.up.isgc.raytracer.Light;
+import edu.up.isgc.raytracer.lighting.Light;
 import edu.up.isgc.raytracer.Ray;
-import edu.up.isgc.raytracer.Vector3D;
 
 import java.awt.Color;
 

@@ -1,7 +1,8 @@
 package edu.up.isgc.raytracer.shapes;
 
 import edu.up.isgc.raytracer.Intersection;
-import edu.up.isgc.raytracer.Light;
+import edu.up.isgc.raytracer.lighting.Directional;
+import edu.up.isgc.raytracer.lighting.Light;
 import edu.up.isgc.raytracer.Ray;
 import edu.up.isgc.raytracer.Vector3D;
 
@@ -94,13 +95,17 @@ public class Sphere extends Object3D {
     }
 
     public Color addLight(Light light, Vector3D point) {
-        float lambertian = (float)clamp(this.normal(point).dot(light.getDirection()), 0.0, 1.0);
-        float[] nLC = Light.normalizeColor(light.getColor());
-        float[] nOC = Light.normalizeColor(super.getColor());
+        if (light.type().equals("directional")) {
+            float lambertian = (float) clamp(this.normal(point).dot(light.getDirection()), 0.0, 1.0);
+            float[] nLC = Light.normalizeColor(light.getColor());
+            float[] nOC = Light.normalizeColor(super.getColor());
 
-        float[] nLOC = new float[]{nLC[0] * nOC[0], nLC[1] * nOC[1], nLC[2] * nOC[2]};
+            float[] nLOC = new float[]{nLC[0] * nOC[0], nLC[1] * nOC[1], nLC[2] * nOC[2]};
 
-        return new Color(nLOC[0] * lambertian, nLOC[1] * lambertian, nLOC[2] * lambertian);
+            return new Color(nLOC[0] * lambertian, nLOC[1] * lambertian, nLOC[2] * lambertian);
+        }
+
+        return null;
     }
 
     @Override

@@ -1,16 +1,17 @@
-package edu.up.isgc.raytracer;
+package edu.up.isgc.raytracer.lighting;
+
+import edu.up.isgc.raytracer.Vector3D;
 
 import java.awt.*;
 
-public class Light {
+public abstract class Light {
     private int intensity;
     private Color color;
-    private Vector3D direction, position;
+    private Vector3D position;
 
-    public Light(int intensity, Color color, Vector3D direction, Vector3D position) {
+    public Light(int intensity, Color color, Vector3D position) {
         this.setIntensity(intensity);
         this.setColor(color);
-        this.setDirection(direction.normalize());
         this.setPosition(position);
     }
 
@@ -38,14 +39,6 @@ public class Light {
         this.color = color;
     }
 
-    public Vector3D getDirection() {
-        return direction;
-    }
-
-    public void setDirection(Vector3D direction) {
-        this.direction = direction;
-    }
-
     public Vector3D getPosition() {
         return position;
     }
@@ -53,4 +46,9 @@ public class Light {
     public void setPosition(Vector3D position) {
         this.position = position;
     }
+
+    public abstract String type();
+
+    public abstract Vector3D getDirection(Vector3D point);
+    public Vector3D getDirection() { return this.getDirection(Vector3D.getZero()); }
 }

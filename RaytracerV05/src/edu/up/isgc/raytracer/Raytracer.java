@@ -1,8 +1,8 @@
 package edu.up.isgc.raytracer;
 
-import edu.up.isgc.raytracer.files.FileRead;
+import edu.up.isgc.raytracer.lighting.Directional;
+import edu.up.isgc.raytracer.lighting.Light;
 import edu.up.isgc.raytracer.shapes.Sphere;
-import edu.up.isgc.raytracer.shapes.models.Face;
 import edu.up.isgc.raytracer.shapes.models.Polygon;
 import edu.up.isgc.raytracer.world.Camera;
 import edu.up.isgc.raytracer.world.Scene;
@@ -11,8 +11,6 @@ import java.awt.Color;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * Main ray tracing engine that renders 3D scenes to 2D images.
@@ -39,7 +37,7 @@ public class Raytracer {
 
         // Set up camera at the origin
         Camera camera = new Camera(new Vector3D(0, 0, -10), nearPlane, farPlane);
-        Light light01 = new Light(1, Color.white, new Vector3D(1,1,1), camera.getPosition());
+        Light light01 = new Directional(1, Color.white, new Vector3D(1,1,1), camera.getPosition());
 
         // Initialize image buffer (width x height x RGB)
         int[][][] image = new int[width][height][3];
@@ -62,9 +60,9 @@ public class Raytracer {
                     image[x][y][2] = intersection.color.getBlue();
                 } else {
                     // Default to white background if no intersection
-                    image[x][y][0] = 255;
-                    image[x][y][1] = 255;
-                    image[x][y][2] = 255;
+                    image[x][y][0] = 0;
+                    image[x][y][1] = 0;
+                    image[x][y][2] = 0;
                 }
             }
         }
