@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="6ed17016-6d9b-4338-a6c5-edcaf7e7bfca" name="Changes" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 5
+}</component>
+  <component name="ProjectId" id="2uVd0zT6Iibv440Xm9SlWSRGbnv" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.Raytracer.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/rodlo/Downloads/MMCG_FOURTH_SEMESTER_RLG/Raytracer/RaytracerV04",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "onboarding.tips.debug.path": "C:/Users/rodlo/Downloads/MMCG_FOURTH_SEMESTER_RLG/RaytracerV01/src/Main.java",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-125ca727e0f0-intellij.indexing.shared.core-IU-243.23654.189" />
+        <option value="bundled-js-predefined-d6986cc7102b-822845ee3bb5-JavaScript-IU-243.23654.189" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="6ed17016-6d9b-4338-a6c5-edcaf7e7bfca" name="Changes" comment="" />
+      <created>1742337458925</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1742337458925</updated>
+      <workItem from="1742337460051" duration="301000" />
+      <workItem from="1742337809563" duration="3699000" />
+      <workItem from="1743093582088" duration="3805000" />
+      <workItem from="1743097826108" duration="2670000" />
+      <workItem from="1743722471876" duration="719000" />
+      <workItem from="1743735309240" duration="770000" />
+      <workItem from="1744150525438" duration="1039000" />
+      <workItem from="1744151712314" duration="396000" />
+      <workItem from="1744152193585" duration="513000" />
+      <workItem from="1744152721768" duration="1469000" />
+      <workItem from="1744227276633" duration="539000" />
+      <workItem from="1744228004156" duration="732000" />
+      <workItem from="1744238320605" duration="4327000" />
+      <workItem from="1744244390222" duration="6092000" />
+      <workItem from="1744295147403" duration="6333000" />
+      <workItem from="1744303813284" duration="2014000" />
+      <workItem from="1744306151529" duration="2555000" />
+      <workItem from="1744322599536" duration="1430000" />
+      <workItem from="1744324245651" duration="2410000" />
+      <workItem from="1744326724702" duration="819000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/Main.java</url>
+          <line>5</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>
