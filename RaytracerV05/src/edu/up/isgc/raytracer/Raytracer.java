@@ -2,6 +2,7 @@ package edu.up.isgc.raytracer;
 
 import edu.up.isgc.raytracer.lighting.Directional;
 import edu.up.isgc.raytracer.lighting.Light;
+import edu.up.isgc.raytracer.lighting.Point;
 import edu.up.isgc.raytracer.shapes.Sphere;
 import edu.up.isgc.raytracer.shapes.models.Polygon;
 import edu.up.isgc.raytracer.world.Camera;
@@ -37,7 +38,8 @@ public class Raytracer {
 
         // Set up camera at the origin
         Camera camera = new Camera(new Vector3D(0, 0, -10), nearPlane, farPlane);
-        Light light01 = new Directional(1, Color.white, new Vector3D(1,1,1), camera.getPosition());
+        //Light light01 = new Directional(1, Color.white, new Vector3D(1,1,1), camera.getPosition());
+        Light light01 = new Point(1, Color.white, new Vector3D(0, 10, -20));
 
         // Initialize image buffer (width x height x RGB)
         int[][][] image = new int[width][height][3];

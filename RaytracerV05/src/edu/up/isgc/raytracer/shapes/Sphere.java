@@ -95,17 +95,15 @@ public class Sphere extends Object3D {
     }
 
     public Color addLight(Light light, Vector3D point) {
+        float lambertian = 0;
         if (light.type().equals("directional")) {
-            float lambertian = (float) clamp(this.normal(point).dot(light.getDirection()), 0.0, 1.0);
-            float[] nLC = Light.normalizeColor(light.getColor());
-            float[] nOC = Light.normalizeColor(super.getColor());
-
-            float[] nLOC = new float[]{nLC[0] * nOC[0], nLC[1] * nOC[1], nLC[2] * nOC[2]};
-
-            return new Color(nLOC[0] * lambertian, nLOC[1] * lambertian, nLOC[2] * lambertian);
+            lambertian = (float) clamp(this.normal(point).dot(light.getDirection()), 0.0, 1.0);
+        }
+        else if(light.type().equals("point")){
+            lambertian = (float) clamp(this.normal(point).dot(light.getDirection(point)), 0.0, 1.0);
         }
 
-        return null;
+        return Light.shine(light.getColor(), super.getColor(), lambertian);
     }
 
     @Override

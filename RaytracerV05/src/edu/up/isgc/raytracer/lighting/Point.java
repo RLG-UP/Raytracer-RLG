@@ -15,7 +15,7 @@ public class Point extends Light{
 
     @Override
     public Vector3D getDirection(Vector3D point){
-        return Vector3D.subtract(super.getPosition(), point);
+        return Vector3D.subtract(super.getPosition(), point).normalize();
     }
 
     public float getAttenuation(float d){
