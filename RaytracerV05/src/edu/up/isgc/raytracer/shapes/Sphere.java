@@ -99,11 +99,11 @@ public class Sphere extends Object3D {
         if (light.type().equals("directional")) {
             lambertian = (float) clamp(this.normal(point).dot(light.getDirection()), 0.0, 1.0);
         }
-        else if(light.type().equals("point")){
-            lambertian = (float) clamp(this.normal(point).dot(light.getDirection(point)), 0.0, 1.0);
+        else if(light.type().equals("point") || light.type().equals("spot")){
+            lambertian = (float) clamp(this.normal(point).dot(light.getDirection(point.normalize())) , 0.0, 1.0);
         }
 
-        return Light.shine(light.getColor(), super.getColor(), lambertian);
+        return Light.shine(light.getColor(), super.getColor(), lambertian * light.getAttenuation());
     }
 
     @Override

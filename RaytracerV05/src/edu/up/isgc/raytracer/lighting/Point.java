@@ -6,7 +6,7 @@ import java.awt.*;
 
 public class Point extends Light{
     private Vector3D direction;
-    public Point(int intensity, Color color, Vector3D position) {
+    public Point(float intensity, Color color, Vector3D position) {
         super(intensity, color, position);
     }
 
@@ -15,10 +15,14 @@ public class Point extends Light{
 
     @Override
     public Vector3D getDirection(Vector3D point){
-        return Vector3D.subtract(super.getPosition(), point).normalize();
+        Vector3D L = Vector3D.subtract(super.getPosition(), point);
+        this.setAttenuation((float) L.value);
+
+        return L.normalize();
     }
 
-    public float getAttenuation(float d){
-        return super.getIntensity()/(d*d);
+    @Override
+    public void setAttenuation(float d){
+       super.attenuation =  this.getIntensity()/(1+d);
     }
 }

@@ -3,6 +3,7 @@ package edu.up.isgc.raytracer;
 import edu.up.isgc.raytracer.lighting.Directional;
 import edu.up.isgc.raytracer.lighting.Light;
 import edu.up.isgc.raytracer.lighting.Point;
+import edu.up.isgc.raytracer.lighting.Spot;
 import edu.up.isgc.raytracer.shapes.Sphere;
 import edu.up.isgc.raytracer.shapes.models.Polygon;
 import edu.up.isgc.raytracer.world.Camera;
@@ -29,7 +30,7 @@ public class Raytracer {
 
         // Create scene with objects
         Scene scene = new Scene();
-        scene.addObject(new Sphere(new Vector3D(-0.5, 0, -3), 0.6, Color.RED));
+        scene.addObject(new Sphere(new Vector3D(0, 2, -1), 2, Color.RED));
         //scene.addObject(new Sphere(new Vector3D(0.4, 0, -3), 0.1, Color.BLUE));
         //scene.addObject(new Triangle(new Vector3D(0.4, 0, -3), new Vector3D(0.4, 0.5, -3), new Vector3D(1.1, 0, -3), Color.GREEN));
         Polygon polygon = new Polygon(path, Color.magenta);
@@ -38,8 +39,10 @@ public class Raytracer {
 
         // Set up camera at the origin
         Camera camera = new Camera(new Vector3D(0, 0, -10), nearPlane, farPlane);
-        //Light light01 = new Directional(1, Color.white, new Vector3D(1,1,1), camera.getPosition());
-        Light light01 = new Point(1, Color.white, new Vector3D(0, 10, -20));
+        //Light light01 = new Directional(1, Color.white, new Vector3D(0,1,0), camera.getPosition());
+        //Light light01 = new Directional(1, Color.white, new Vector3D(0,1,0), new Vector3D(0,10,0));
+        //Light light01 = new Point(1, Color.white, new Vector3D(0, -0.1, -1));
+        Light light01 = new Spot(1, Color.white, new Vector3D(0,1,0), new Vector3D(0, 0, -1.015), 1f, 1f);
 
         // Initialize image buffer (width x height x RGB)
         int[][][] image = new int[width][height][3];

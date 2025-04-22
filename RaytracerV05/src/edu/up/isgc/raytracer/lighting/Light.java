@@ -5,11 +5,12 @@ import edu.up.isgc.raytracer.Vector3D;
 import java.awt.*;
 
 public abstract class Light {
-    private int intensity;
+    private float intensity;
     private Color color;
     private Vector3D position;
+    protected float attenuation;
 
-    public Light(int intensity, Color color, Vector3D position) {
+    public Light(float intensity, Color color, Vector3D position) {
         this.setIntensity(intensity);
         this.setColor(color);
         this.setPosition(position);
@@ -23,11 +24,11 @@ public abstract class Light {
         return new float[] {normalizedColor[0] * 255.0f, normalizedColor[1] * 255.0f, normalizedColor[2] * 255.0f};
     }
 
-    public int getIntensity() {
+    public float getIntensity() {
         return intensity;
     }
 
-    public void setIntensity(int intensity) {
+    public void setIntensity(float intensity) {
         this.intensity = intensity;
     }
 
@@ -49,13 +50,15 @@ public abstract class Light {
 
     public abstract String type();
 
+    public float getAttenuation(){ return this.attenuation; }
+    public abstract void setAttenuation(float d);
+
     public abstract Vector3D getDirection(Vector3D point);
     public Vector3D getDirection() { return this.getDirection(Vector3D.getZero()); }
 
     public static Color shine(Color lightColor, Color objectColor, float lambertian){
         float[] nLC = Light.normalizeColor(lightColor);
         float[] nOC = Light.normalizeColor(objectColor);
-
         float[] nLOC = new float[]{nLC[0] * nOC[0], nLC[1] * nOC[1], nLC[2] * nOC[2]};
 
         return new Color(nLOC[0] * lambertian, nLOC[1] * lambertian, nLOC[2] * lambertian);

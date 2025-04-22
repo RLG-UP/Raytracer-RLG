@@ -60,11 +60,11 @@ public class Triangle extends Object3D {
         if (light.type().equals("directional")) {
             lambertian = (float)clamp(this.normal().dot(light.getDirection()), 0.0, 1.0);
         }
-        else if(light.type().equals("point")){
+        else if(light.type().equals("point") || light.type().equals("spot")){
             lambertian = (float) clamp(this.normal().dot(light.getDirection(this.normal())), 0.0, 1.0);
         }
 
-        return Light.shine(light.getColor(), super.getColor(), lambertian);
+        return Light.shine(light.getColor(), super.getColor(), lambertian * light.getAttenuation());
     }
 
     @Override
