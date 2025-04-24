@@ -42,14 +42,14 @@ public class Scene {
      * @param ray The ray to test for intersections
      * @return The closest intersection, or null if no intersection found
      */
-    public Intersection findClosestIntersection(Ray ray, Camera camera, Light light) {
+    public Intersection findClosestIntersection(Ray ray, Camera camera) {
         Intersection closestIntersection = null;
         double minDist = Double.MAX_VALUE;
         Intersection[] intersections;
 
         for (Object3D obj : objects) {
             // Get potential intersections with current object
-            intersections = obj.intersect(ray, light);
+            intersections = obj.intersect(ray);
                 if(intersections != null) {
                     Intersection intersection = intersections[0] != null ? intersections[0] :
                             intersections[1] != null ? intersections[1] : null;

@@ -39,10 +39,10 @@ public class Raytracer {
 
         // Set up camera at the origin
         Camera camera = new Camera(new Vector3D(0, 0, -10), nearPlane, farPlane);
-        //Light light01 = new Directional(1, Color.white, new Vector3D(0,1,0), camera.getPosition());
+        //Light light01 = new Directional(1, Color.white, new Vector3D(0,10,0), new Vector3D(0, 0, -1.015));
         //Light light01 = new Directional(1, Color.white, new Vector3D(0,1,0), new Vector3D(0,10,0));
-        //Light light01 = new Point(1, Color.white, new Vector3D(0, -0.1, -1));
-        Light light01 = new Spot(1, Color.white, new Vector3D(0,1,0), new Vector3D(0, 0, -1.015), 1f, 1f);
+        Light light01 = new Point(1, Color.white, new Vector3D(0, -0.1, -1));
+        Light light02 = new Spot(1, Color.white, new Vector3D(0,1,0), new Vector3D(0, 0, -1.015), 1f, 1f);
 
         // Initialize image buffer (width x height x RGB)
         int[][][] image = new int[width][height][3];
@@ -56,7 +56,7 @@ public class Raytracer {
 
                 // Cast ray and find closest intersection
                 Ray ray = camera.generateRay(u, v);
-                Intersection intersection = scene.findClosestIntersection(ray, camera, light01);
+                Intersection intersection = scene.findClosestIntersection(ray, camera);
 
                 if (intersection != null && intersection.color != null) {
                     // Set pixel color to intersected object's color

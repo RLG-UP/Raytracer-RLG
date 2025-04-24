@@ -21,7 +21,7 @@ public class Triangle extends Object3D {
     }
 
     @Override
-    public Intersection[] intersect(Ray ray, Light light) {
+    public Intersection[] intersect(Ray ray) {
         Vector3D v2v0 = Vector3D.subtract(this.getC(), this.getA());
         Vector3D v1v0 = Vector3D.subtract(this.getB(), this.getA());
         Vector3D P = Vector3D.crossProduct(ray.direction, v1v0);
@@ -37,7 +37,8 @@ public class Triangle extends Object3D {
 
         double t = invDet * Q.dot(v1v0);
 
-        return new Intersection[]{new Intersection(ray.origin.add(ray.direction.scale(t)), t, this.addLight(light))};
+        Vector3D point = ray.origin.add(ray.direction.scale(t));
+        return new Intersection[]{new Intersection(point, t, this.addLight(point))};
     }
 
     public Vector3D getA() { return this.A; }
@@ -55,16 +56,45 @@ public class Triangle extends Object3D {
         return Vector3D.crossProduct(v, w).normalize();
     }
 
-    public Color addLight(Light light){
+    public Color addLight(Vector3D point){
+        /*
+        Light light = Light.getLights().getFirst();
         float lambertian = 0;
         if (light.type().equals("directional")) {
             lambertian = (float)clamp(this.normal().dot(light.getDirection()), 0.0, 1.0);
         }
         else if(light.type().equals("point") || light.type().equals("spot")){
-            lambertian = (float) clamp(this.normal().dot(light.getDirection(this.normal())), 0.0, 1.0);
+            lambertian = (float) clamp(this.normal().dot(light.getDirection(point.normalize())), 0.0, 1.0);
         }
 
         return Light.shine(light.getColor(), super.getColor(), lambertian * light.getAttenuation());
+
+
+        */
+
+        float lambertian = 0;
+        Color finalColor = new Color(0,0,0);
+        float lightAttenuation = 0;
+
+        for(Light light : Light.getLights()){
+            if (light.type().equals("directional")) {
+                lambertian = (float)clamp(this.normal().dot(light.getDirection()), 0.0, 1.0);
+            }
+            else if(light.type().equals("point") || light.type().equals("spot")){
+                lambertian = (float) clamp(this.normal().dot(light.getDirection(point.normalize())), 0.0, 1.0);
+            }
+
+            lambertian = (float) clamp(lambertian, 0.0, 1.0);
+            Color lightContribution = Light.shine(light.getColor(), super.getColor(), lambertian * light.getAttenuation());
+
+            finalColor = new Color(
+                    clamp(finalColor.getRed()   + lightContribution.getRed(),   0, 255),
+                    clamp(finalColor.getGreen() + lightContribution.getGreen(), 0, 255),
+                    clamp(finalColor.getBlue()  + lightContribution.getBlue(),  0, 255)
+            );
+        }
+        return finalColor;
+
     }
 
     @Override

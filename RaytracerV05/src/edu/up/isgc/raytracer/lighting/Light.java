@@ -3,17 +3,20 @@ package edu.up.isgc.raytracer.lighting;
 import edu.up.isgc.raytracer.Vector3D;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 public abstract class Light {
     private float intensity;
     private Color color;
     private Vector3D position;
     protected float attenuation;
+    protected static ArrayList<Light> lights = new ArrayList<Light>();
 
     public Light(float intensity, Color color, Vector3D position) {
         this.setIntensity(intensity);
         this.setColor(color);
         this.setPosition(position);
+        lights.add(this);
     }
 
     public static float[] normalizeColor(Color color) {
@@ -63,4 +66,6 @@ public abstract class Light {
 
         return new Color(nLOC[0] * lambertian, nLOC[1] * lambertian, nLOC[2] * lambertian);
     }
+
+    public static ArrayList<Light> getLights(){return Light.lights;}
 }

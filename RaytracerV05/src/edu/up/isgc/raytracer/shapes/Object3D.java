@@ -26,7 +26,7 @@ public abstract class Object3D {
      * @param ray The ray to test for intersection
      * @return Array of intersections (may contain null values for no intersection)
      */
-    public abstract Intersection[] intersect(Ray ray, Light light);
+    public abstract Intersection[] intersect(Ray ray);
     public abstract String type();
 
     public Color getColor() { return color; }
