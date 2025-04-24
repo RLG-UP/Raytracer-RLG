@@ -81,7 +81,7 @@ public class Triangle extends Object3D {
                 lambertian = (float)clamp(this.normal().dot(light.getDirection()), 0.0, 1.0);
             }
             else if(light.type().equals("point") || light.type().equals("spot")){
-                lambertian = (float) clamp(this.normal().dot(light.getDirection(point.normalize())), 0.0, 1.0);
+                lambertian = (float) clamp(this.normal().dot(light.getDirection(Vector3D.subtract(point, light.getPosition()).normalize())), 0.0, 1.0);
             }
 
             lambertian = (float) clamp(lambertian, 0.0, 1.0);
