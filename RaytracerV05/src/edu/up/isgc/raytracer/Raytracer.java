@@ -24,13 +24,13 @@ public class Raytracer {
         int width = 400;
         int height = 400;
         double nearPlane = -1000, farPlane = 1000;
-        String path = new File("C:\\Users\\rodlo\\Downloads\\MMCG_FOURTH_SEMESTER_RLG\\Raytracer\\LocalFiles\\ObjFiles\\Ring.obj").getAbsolutePath();
-        //String path = new File("C:\\Users\\rodlo\\Downloads\\MMCG_FOURTH_SEMESTER_RLG\\Raytracer\\LocalFiles\\ObjFiles\\SmallTeapot.obj").getAbsolutePath();
-        //String path = new File("C:\\Users\\rodlo\\Downloads\\MMCG_FOURTH_SEMESTER_RLG\\Raytracer\\LocalFiles\\ObjFiles\\shark1.obj").getAbsolutePath();
+        String path = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\Raytracer\\LocalFiles\\ObjFiles\\Ring.obj").getAbsolutePath();
+        //String path = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\Raytracer\\LocalFiles\\ObjFiles\\SmallTeapot.obj").getAbsolutePath();
+        //String path = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\Raytracer\\LocalFiles\\ObjFiles\\shark1.obj").getAbsolutePath();
 
         // Create scene with objects
         Scene scene = new Scene();
-        //scene.addObject(new Sphere(new Vector3D(0, 2, -1), 2, Color.RED));
+        scene.addObject(new Sphere(new Vector3D(0, 2, -1), 2, Color.RED));
         //scene.addObject(new Sphere(new Vector3D(0.4, 0, -3), 0.1, Color.BLUE));
         //scene.addObject(new Triangle(new Vector3D(0.4, 0, -3), new Vector3D(0.4, 0.5, -3), new Vector3D(1.1, 0, -3), Color.GREEN));
         Polygon polygon = new Polygon(path, Color.magenta);

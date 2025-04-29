@@ -1,6 +1,7 @@
 package edu.up.isgc.raytracer.files;
 
 import edu.up.isgc.raytracer.shapes.models.Face;
+import edu.up.isgc.raytracer.shapes.models.NormalVertex;
 import edu.up.isgc.raytracer.shapes.models.Vertex;
 
 import java.io.BufferedReader;
@@ -17,6 +18,7 @@ public class FileRead {
     public static ArrayList<ArrayList<String>> readFile(String filePath) {
         ArrayList<String> vertexList = new ArrayList<>();
         ArrayList<String> faceList = new ArrayList<>();
+        ArrayList<String> vertexNormalList = new ArrayList<>();
 
         File file = new File(filePath);
         Pattern vertex = Pattern.compile("^v[^a-zA-Z]*");
@@ -30,6 +32,7 @@ public class FileRead {
                 //System.out.println(line);
                 if(line.matches(vertex.pattern())) { vertexList.add(line); }
                 else if(line.matches(face.pattern())){ faceList.add(line); }
+                else if(line.matches(normal.pattern())){ vertexNormalList.add(line); }
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -37,6 +40,7 @@ public class FileRead {
         ArrayList<ArrayList<String>> objLines = new ArrayList<>();
         objLines.add(vertexList);
         objLines.add(faceList);
+        objLines.add(vertexNormalList);
 
         return objLines;
     }
@@ -47,7 +51,7 @@ public class FileRead {
             Double[] coords = normalizeDouble(line);
             if (coords != null) {
                 //System.out.println("Vertex " + (index+1) + ": " + coords[0] + " " + coords[1] + " " + coords[2]);
-                map.put(index++, coords); // Use sequential index as key
+                map.put(Integer.valueOf(index++), coords); // Use sequential index as key
             }
         }
         return map;
@@ -62,12 +66,12 @@ public class FileRead {
 
             //if(!(map.containsKey(Arrays.hashCode(coords)))){
                 //System.out.println(coords[0] + " " + coords[1] + " " + coords[2]);
-                if(coords.length == 3) map.put(Arrays.hashCode(coords), coords);
+                if(coords.length == 3) map.put(Integer.valueOf(Arrays.hashCode(coords)), coords);
                 if(coords.length == 4){
                     Integer[] coords1 = new Integer[]{coords[0], coords[1], coords[2]};
                     Integer[] coords2 = new Integer[]{coords[0], coords[2], coords[3]};
-                    map.put(Arrays.hashCode(coords1), coords1);
-                    map.put(Arrays.hashCode(coords2), coords2);
+                    map.put(Integer.valueOf(Arrays.hashCode(coords1)), coords1);
+                    map.put(Integer.valueOf(Arrays.hashCode(coords2)), coords2);
                 }
             //}
 
@@ -77,11 +81,20 @@ public class FileRead {
 
     public static Double[] normalizeDouble(String line) {
         Pattern pattern = Pattern.compile("^v\\s+(-?\\d*\\.\\d+)\\s+(-?\\d*\\.\\d+)\\s+(-?\\d*\\.\\d+)");
+        Pattern patternNormal = Pattern.compile("^vn\\s+(-?\\d*\\.\\d+)\\s+(-?\\d*\\.\\d+)\\s+(-?\\d*\\.\\d+)");
         Matcher matcher = pattern.matcher(line);
+        Matcher matcherNormal = patternNormal.matcher(line);
         if (matcher.find()) {
-            double v1 = Double.parseDouble(matcher.group(1));
-            double v2 = Double.parseDouble(matcher.group(2));
-            double v3 = Double.parseDouble(matcher.group(3));
+            Double v1 = (Double) Double.parseDouble(matcher.group(1));
+            Double v2 = (Double) Double.parseDouble(matcher.group(2));
+            Double v3 = (Double) Double.parseDouble(matcher.group(3));
+
+            //System.out.println("Vertex Values: " + v1 + ", " + v2 + ", " + v3);
+            return new Double[]{v1, v2, v3};
+        } else if (matcherNormal.find()) {
+            Double v1 = (Double) Double.parseDouble(matcherNormal.group(1));
+            Double v2 = (Double) Double.parseDouble(matcherNormal.group(2));
+            Double v3 = (Double) Double.parseDouble(matcherNormal.group(3));
 
             //System.out.println("Vertex Values: " + v1 + ", " + v2 + ", " + v3);
             return new Double[]{v1, v2, v3};
@@ -97,17 +110,17 @@ public class FileRead {
         Matcher matcher = pattern.matcher(line.trim());
         Matcher matcherQuad = patternQuad.matcher(line.trim());
         if(matcherQuad.find()){
-            int v1 = Integer.parseInt(matcherQuad.group(1));
-            int v2 = Integer.parseInt(matcherQuad.group(2));
-            int v3 = Integer.parseInt(matcherQuad.group(3));
-            int v4 = Integer.parseInt(matcherQuad.group(4));
+            Integer v1 = (Integer) Integer.parseInt(matcherQuad.group(1));
+            Integer v2 = (Integer) Integer.parseInt(matcherQuad.group(2));
+            Integer v3 = (Integer) Integer.parseInt(matcherQuad.group(3));
+            Integer v4 = (Integer) Integer.parseInt(matcherQuad.group(4));
 
             return new Integer[]{v1, v2, v3, v4};
         }
         else if (matcher.find()) {
-            int v1 = Integer.parseInt(matcher.group(1));
-            int v2 = Integer.parseInt(matcher.group(2));
-            int v3 = Integer.parseInt(matcher.group(3));
+            Integer v1 = (Integer) Integer.parseInt(matcher.group(1));
+            Integer v2 = (Integer) Integer.parseInt(matcher.group(2));
+            Integer v3 = (Integer) Integer.parseInt(matcher.group(3));
 
             //System.out.println("Vertex indices: " + v1 + ", " + v2 + ", " + v3);
             return new Integer[]{v1, v2, v3};
@@ -120,6 +133,7 @@ public class FileRead {
     public static void extractComponents(ArrayList<ArrayList<String>> list){
         // Clear previous data
         Vertex.getVertexes().clear();
+        NormalVertex.getNormalVertexes().clear();
         Face.getFaces().clear();
 
         // Store vertices in order (index matches OBJ index - 1)
@@ -130,8 +144,12 @@ public class FileRead {
         //System.out.println("Vertex count: " + Vertex.getVertexes().size());
 
         // Store faces
-        for(Integer[] face : createFaceMap(list.getLast()).values()){
+        for(Integer[] face : createFaceMap(list.get(1)).values()){
             Face.addFace(face);
+        }
+
+        for(Double[] normalVertex : createVertexMap(list.getLast()).values()){
+            NormalVertex.addNormalVertex(normalVertex);
         }
     }
 

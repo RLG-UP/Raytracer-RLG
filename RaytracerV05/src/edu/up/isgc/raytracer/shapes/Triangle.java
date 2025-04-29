@@ -12,12 +12,23 @@ import static java.lang.Math.clamp;
 
 public class Triangle extends Object3D {
     private Vector3D A, B, C;
+    private Vector3D nA, nB, nC;
 
     public Triangle(Vector3D A, Vector3D B, Vector3D C, Color color){
         super(color);
         this.setA(A);
         this.setB(B);
         this.setC(C);
+    }
+
+    public Triangle(Vector3D A, Vector3D B, Vector3D C, Vector3D nA, Vector3D nB, Vector3D nC, Color color){
+        super(color);
+        this.setA(A);
+        this.setB(B);
+        this.setC(C);
+        this.setnA(nA);
+        this.setnB(nB);
+        this.setnC(nC);
     }
 
     @Override
@@ -49,6 +60,15 @@ public class Triangle extends Object3D {
 
     public Vector3D getC() { return this.C; }
     public void setC(Vector3D c) { this.C = c; }
+
+    public Vector3D getnA() { return nA; }
+    public void setnA(Vector3D nA) { this.nA = nA; }
+
+    public Vector3D getnB() { return nB; }
+    public void setnB(Vector3D nB) { this.nB = nB; }
+
+    public Vector3D getnC() { return nC; }
+    public void setnC(Vector3D nC) { this.nC = nC; }
 
     public Vector3D normal(){
         Vector3D v = Vector3D.subtract(this.getB(), this.getA()).normalize();
