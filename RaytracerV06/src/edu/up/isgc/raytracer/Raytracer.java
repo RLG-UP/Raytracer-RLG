@@ -24,8 +24,8 @@ public class Raytracer {
         int width = 400;
         int height = 400;
         double nearPlane = -1000, farPlane = 1000;
-        //String path = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\Raytracer\\LocalFiles\\ObjFiles\\Ring.obj").getAbsolutePath();
-        String path = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\Raytracer\\LocalFiles\\ObjFiles\\SmallTeapot.obj").getAbsolutePath();
+        String path = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\Raytracer\\LocalFiles\\ObjFiles\\Ring.obj").getAbsolutePath();
+        //String path = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\Raytracer\\LocalFiles\\ObjFiles\\SmallTeapot.obj").getAbsolutePath();
         //String path = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\Raytracer\\LocalFiles\\ObjFiles\\shark1.obj").getAbsolutePath();
 
         // Create scene with objects
@@ -38,7 +38,7 @@ public class Raytracer {
         scene.addPolygon( polygon );
 
         // Set up camera at the origin
-        Camera camera = new Camera(new Vector3D(0, 0, -10), nearPlane, farPlane);
+        Camera camera = new Camera(new Vector3D(0, 0, -300), nearPlane, farPlane);
         //Light light01 = new Directional(1, Color.white, new Vector3D(0,10,0), new Vector3D(0, 0, -1.015));
         //Light light01 = new Directional(1, Color.white, new Vector3D(0,1,0), new Vector3D(0,10,0));
         //Light light01 = new Point(1, Color.white, new Vector3D(0, 1, 1));
