@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -57,21 +58,32 @@ public class FileRead {
         return map;
     }
 
-    public static HashMap<Integer, Integer[]> createFaceMap(ArrayList<String> lines) {
-        HashMap<Integer, Integer[]> map = new HashMap<>();
+    public static HashMap<Integer, Integer[][]> createFaceMap(ArrayList<String> lines) {
+        HashMap<Integer, Integer[][]> map = new HashMap<>();
         Integer[] coords;
+        Integer[] textures;
+        Integer[] normals;
 
         for(String line : lines) {
-            coords = FileRead.normalizeInteger(line);
+            coords = Objects.requireNonNull(FileRead.normalizeInteger(line))[0];
+            textures = Objects.requireNonNull(FileRead.normalizeInteger(line))[1];
+            normals = Objects.requireNonNull(FileRead.normalizeInteger(line))[2];
 
             //if(!(map.containsKey(Arrays.hashCode(coords)))){
                 //System.out.println(coords[0] + " " + coords[1] + " " + coords[2]);
-                if(coords.length == 3) map.put(Integer.valueOf(Arrays.hashCode(coords)), coords);
+                if(coords.length == 3) map.put(Integer.valueOf(Arrays.hashCode(coords)), new Integer[][]{coords, textures, normals});
                 if(coords.length == 4){
                     Integer[] coords1 = new Integer[]{coords[0], coords[1], coords[2]};
                     Integer[] coords2 = new Integer[]{coords[0], coords[2], coords[3]};
-                    map.put(Integer.valueOf(Arrays.hashCode(coords1)), coords1);
-                    map.put(Integer.valueOf(Arrays.hashCode(coords2)), coords2);
+
+                    Integer[] textures1 = new Integer[]{textures[0], textures[1], textures[2]};
+                    Integer[] textures2 = new Integer[]{textures[0], textures[2], textures[3]};
+
+                    Integer[] normals1 = new Integer[]{normals[0], normals[1], normals[2]};
+                    Integer[] normals2 = new Integer[]{normals[0], normals[2], normals[3]};
+
+                    map.put(Integer.valueOf(Arrays.hashCode(coords1)), new Integer[][]{coords1, textures1, normals1});
+                    map.put(Integer.valueOf(Arrays.hashCode(coords2)), new Integer[][]{coords2, textures2, normals2});
                 }
             //}
 
@@ -104,30 +116,51 @@ public class FileRead {
         }
     }
 
-    public static Integer[] normalizeInteger(String line) {
-        Pattern pattern = Pattern.compile("^f\\s+(\\d+)(?:/\\d*(?:/\\d*)?)?\\s+(\\d+)(?:/\\d*(?:/\\d*)?)?\\s+(\\d+)(?:/\\d*(?:/\\d*)?)?");
-        Pattern patternQuad = Pattern.compile("^f\\s+(\\d+)(?:/\\d*(?:/\\d*)?)?\\s+(\\d+)(?:/\\d*(?:/\\d*)?)?\\s+(\\d+)(?:/\\d*(?:/\\d*)?)?\\s+(\\d+)(?:/\\d*(?:/\\d*)?)?");
+    public static Integer[][] normalizeInteger(String line) {
+        Pattern pattern = Pattern.compile("^f\\s+(\\d+)(?:/(\\d*)(?:/(\\d*))?)?\\s+(\\d+)(?:/(\\d*)(?:/(\\d*))?)?\\s+(\\d+)(?:/(\\d*)(?:/(\\d*))?)?");
+        Pattern patternQuad = Pattern.compile("^f\\s+(\\d+)(?:/(\\d*)(?:/(\\d*))?)?\\s+(\\d+)(?:/(\\d*)(?:/(\\d*))?)?\\s+(\\d+)(?:/(\\d*)(?:/(\\d*))?)?\\s+(\\d+)(?:/(\\d*)(?:/(\\d*))?)?");
         Matcher matcher = pattern.matcher(line.trim());
         Matcher matcherQuad = patternQuad.matcher(line.trim());
         if(matcherQuad.find()){
             Integer v1 = (Integer) Integer.parseInt(matcherQuad.group(1));
-            Integer v2 = (Integer) Integer.parseInt(matcherQuad.group(2));
-            Integer v3 = (Integer) Integer.parseInt(matcherQuad.group(3));
-            Integer v4 = (Integer) Integer.parseInt(matcherQuad.group(4));
+            Integer v2 = (Integer) Integer.parseInt(matcherQuad.group(4));
+            Integer v3 = (Integer) Integer.parseInt(matcherQuad.group(7));
+            Integer v4 = (Integer) Integer.parseInt(matcherQuad.group(10));
 
-            return new Integer[]{v1, v2, v3, v4};
+            Integer t1 = (Integer) Integer.parseInt( FileRead.toParsable(matcherQuad.group(2)) );
+            Integer t2 = (Integer) Integer.parseInt( FileRead.toParsable(matcherQuad.group(5)) );
+            Integer t3 = (Integer) Integer.parseInt( FileRead.toParsable(matcherQuad.group(8)) );
+            Integer t4 = (Integer) Integer.parseInt( FileRead.toParsable(matcherQuad.group(11)) );
+
+            Integer nV1 = (Integer) Integer.parseInt( FileRead.toParsable(matcherQuad.group(3)) );
+            Integer nV2 = (Integer) Integer.parseInt( FileRead.toParsable(matcherQuad.group(6)) );
+            Integer nV3 = (Integer) Integer.parseInt( FileRead.toParsable(matcherQuad.group(9)) );
+            Integer nV4 = (Integer) Integer.parseInt( FileRead.toParsable(matcherQuad.group(12)) );
+
+            return new Integer[][]{{v1, v2, v3, v4},{t1, t2, t3, t4}, {nV1, nV2, nV3, nV4}};
         }
         else if (matcher.find()) {
-            Integer v1 = (Integer) Integer.parseInt(matcher.group(1));
-            Integer v2 = (Integer) Integer.parseInt(matcher.group(2));
-            Integer v3 = (Integer) Integer.parseInt(matcher.group(3));
+            Integer v1 = (Integer) Integer.parseInt(matcherQuad.group(1));
+            Integer v2 = (Integer) Integer.parseInt(matcherQuad.group(4));
+            Integer v3 = (Integer) Integer.parseInt(matcherQuad.group(7));
 
-            //System.out.println("Vertex indices: " + v1 + ", " + v2 + ", " + v3);
-            return new Integer[]{v1, v2, v3};
+            Integer t1 = (Integer) Integer.parseInt( FileRead.toParsable(matcherQuad.group(2)) );
+            Integer t2 = (Integer) Integer.parseInt( FileRead.toParsable(matcherQuad.group(5)) );
+            Integer t3 = (Integer) Integer.parseInt( FileRead.toParsable(matcherQuad.group(8)) );
+
+            Integer nV1 = (Integer) Integer.parseInt( FileRead.toParsable(matcherQuad.group(3)) );
+            Integer nV2 = (Integer) Integer.parseInt( FileRead.toParsable(matcherQuad.group(6)) );
+            Integer nV3 = (Integer) Integer.parseInt( FileRead.toParsable(matcherQuad.group(9)) );
+
+            return new Integer[][]{{v1, v2, v3},{t1, t2, t3}, {nV1, nV2, nV3}};
         } else {
             System.err.println("NO MATCH for line: " + line);
             return null;
         }
+    }
+
+    public static String toParsable(String line) {
+        return !Objects.equals(line, "")? line : "0";
     }
 
     public static void extractComponents(ArrayList<ArrayList<String>> list){
@@ -144,7 +177,7 @@ public class FileRead {
         //System.out.println("Vertex count: " + Vertex.getVertexes().size());
 
         // Store faces
-        for(Integer[] face : createFaceMap(list.get(1)).values()){
+        for(Integer[][] face : createFaceMap(list.get(1)).values()){
             Face.addFace(face);
         }
 

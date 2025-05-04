@@ -26,24 +26,50 @@ public class Polygon {
         //System.out.println("Total vertices: " + Vertex.getVertexes().size());
         //System.out.println("Total faces: " + Face.getFaces().size());
 
-        for(Integer[] face : Face.getFaces()){
+        for(Integer[][] face : Face.getWholeFaces()){
             if(face != null) {
                 try {
-                    int index1 = face[0] - 1;
-                    int index2 = face[1] - 1;
-                    int index3 = face[2] - 1;
+                    int coord1 = face[0][0] - 1;
+                    int coord2 = face[0][1] - 1;
+                    int coord3 = face[0][2] - 1;
+
+                    int texture1 = face[1][0] - 1;
+                    int texture2 = face[1][1] - 1;
+                    int texture3 = face[1][2] - 1;
+
+                    int normal1 = face[2][0] - 1;
+                    int normal2 = face[2][1] - 1;
+                    int normal3 = face[2][2] - 1;
 
                     // Debug output
                     //System.out.println("Processing face with indices: " + index1 + ", " + index2 + ", " + index3);
 
-                    Double[] v1 = Vertex.getVertexes().get(index1);
-                    Double[] v2 = Vertex.getVertexes().get(index2);
-                    Double[] v3 = Vertex.getVertexes().get(index3);
+                    Double[] v1 = Vertex.getVertexes().get(coord1);
+                    Double[] v2 = Vertex.getVertexes().get(coord2);
+                    Double[] v3 = Vertex.getVertexes().get(coord3);
+
+
+                    Double[] nV1 = NormalVertex.getNormalVertexes().get(normal1);
+                    Double[] nV2 = NormalVertex.getNormalVertexes().get(normal2);
+                    Double[] nV3 = NormalVertex.getNormalVertexes().get(normal3);
+
+                    /*
+                    shape.add(new Triangle(
+                            new Vector3D(v1[0], v1[1], v1[2]),
+                            new Vector3D(v2[0], v2[1], v2[2]),
+                            new Vector3D(v3[0], v3[1], v3[2]),
+                            color
+                    ));
+
+                     */
 
                     shape.add(new Triangle(
                             new Vector3D(v1[0], v1[1], v1[2]),
                             new Vector3D(v2[0], v2[1], v2[2]),
                             new Vector3D(v3[0], v3[1], v3[2]),
+                            new Vector3D(nV1[0], nV1[1], nV1[2]),
+                            new Vector3D(nV2[0], nV2[1], nV2[2]),
+                            new Vector3D(nV3[0], nV3[1], nV3[2]),
                             color
                     ));
                 } catch (IndexOutOfBoundsException e) {
