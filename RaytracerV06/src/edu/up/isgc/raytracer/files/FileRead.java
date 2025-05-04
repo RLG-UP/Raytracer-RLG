@@ -2,6 +2,7 @@ package edu.up.isgc.raytracer.files;
 
 import edu.up.isgc.raytracer.shapes.models.Face;
 import edu.up.isgc.raytracer.shapes.models.NormalVertex;
+import edu.up.isgc.raytracer.shapes.models.Texture;
 import edu.up.isgc.raytracer.shapes.models.Vertex;
 
 import java.io.BufferedReader;
@@ -19,6 +20,7 @@ public class FileRead {
     public static ArrayList<ArrayList<String>> readFile(String filePath) {
         ArrayList<String> vertexList = new ArrayList<>();
         ArrayList<String> faceList = new ArrayList<>();
+        ArrayList<String> textureList = new ArrayList<>();
         ArrayList<String> vertexNormalList = new ArrayList<>();
 
         File file = new File(filePath);
@@ -33,6 +35,7 @@ public class FileRead {
                 //System.out.println(line);
                 if(line.matches(vertex.pattern())) { vertexList.add(line); }
                 else if(line.matches(face.pattern())){ faceList.add(line); }
+                else if(line.matches(texture.pattern())){ textureList.add(line); }
                 else if(line.matches(normal.pattern())){ vertexNormalList.add(line); }
             }
         } catch (IOException e) {
@@ -41,6 +44,7 @@ public class FileRead {
         ArrayList<ArrayList<String>> objLines = new ArrayList<>();
         objLines.add(vertexList);
         objLines.add(faceList);
+        objLines.add(textureList);
         objLines.add(vertexNormalList);
 
         return objLines;
@@ -94,8 +98,11 @@ public class FileRead {
     public static Double[] normalizeDouble(String line) {
         Pattern pattern = Pattern.compile("^v\\s+(-?\\d*\\.\\d+)\\s+(-?\\d*\\.\\d+)\\s+(-?\\d*\\.\\d+)");
         Pattern patternNormal = Pattern.compile("^vn\\s+(-?\\d*\\.\\d+)\\s+(-?\\d*\\.\\d+)\\s+(-?\\d*\\.\\d+)");
+        Pattern patternTexture = Pattern.compile("^vt\\s+(-?\\d*\\.\\d+)\\s+(-?\\d*\\.\\d+)\\s+(-?\\d*\\.\\d+)");
         Matcher matcher = pattern.matcher(line);
         Matcher matcherNormal = patternNormal.matcher(line);
+        Matcher matcherTexture = patternTexture.matcher(line);
+
         if (matcher.find()) {
             Double v1 = (Double) Double.parseDouble(matcher.group(1));
             Double v2 = (Double) Double.parseDouble(matcher.group(2));
@@ -107,6 +114,13 @@ public class FileRead {
             Double v1 = (Double) Double.parseDouble(matcherNormal.group(1));
             Double v2 = (Double) Double.parseDouble(matcherNormal.group(2));
             Double v3 = (Double) Double.parseDouble(matcherNormal.group(3));
+
+            //System.out.println("Vertex Values: " + v1 + ", " + v2 + ", " + v3);
+            return new Double[]{v1, v2, v3};
+        } else if (matcherTexture.find()) {
+            Double v1 = (Double) Double.parseDouble(matcherTexture.group(1));
+            Double v2 = (Double) Double.parseDouble(matcherTexture.group(2));
+            Double v3 = (Double) Double.parseDouble(matcherTexture.group(3));
 
             //System.out.println("Vertex Values: " + v1 + ", " + v2 + ", " + v3);
             return new Double[]{v1, v2, v3};
@@ -140,17 +154,17 @@ public class FileRead {
             return new Integer[][]{{v1, v2, v3, v4},{t1, t2, t3, t4}, {nV1, nV2, nV3, nV4}};
         }
         else if (matcher.find()) {
-            Integer v1 = (Integer) Integer.parseInt(matcherQuad.group(1));
-            Integer v2 = (Integer) Integer.parseInt(matcherQuad.group(4));
-            Integer v3 = (Integer) Integer.parseInt(matcherQuad.group(7));
+            Integer v1 = (Integer) Integer.parseInt(matcher.group(1));
+            Integer v2 = (Integer) Integer.parseInt(matcher.group(4));
+            Integer v3 = (Integer) Integer.parseInt(matcher.group(7));
 
-            Integer t1 = (Integer) Integer.parseInt( FileRead.toParsable(matcherQuad.group(2)) );
-            Integer t2 = (Integer) Integer.parseInt( FileRead.toParsable(matcherQuad.group(5)) );
-            Integer t3 = (Integer) Integer.parseInt( FileRead.toParsable(matcherQuad.group(8)) );
+            Integer t1 = (Integer) Integer.parseInt( FileRead.toParsable(matcher.group(2)) );
+            Integer t2 = (Integer) Integer.parseInt( FileRead.toParsable(matcher.group(5)) );
+            Integer t3 = (Integer) Integer.parseInt( FileRead.toParsable(matcher.group(8)) );
 
-            Integer nV1 = (Integer) Integer.parseInt( FileRead.toParsable(matcherQuad.group(3)) );
-            Integer nV2 = (Integer) Integer.parseInt( FileRead.toParsable(matcherQuad.group(6)) );
-            Integer nV3 = (Integer) Integer.parseInt( FileRead.toParsable(matcherQuad.group(9)) );
+            Integer nV1 = (Integer) Integer.parseInt( FileRead.toParsable(matcher.group(3)) );
+            Integer nV2 = (Integer) Integer.parseInt( FileRead.toParsable(matcher.group(6)) );
+            Integer nV3 = (Integer) Integer.parseInt( FileRead.toParsable(matcher.group(9)) );
 
             return new Integer[][]{{v1, v2, v3},{t1, t2, t3}, {nV1, nV2, nV3}};
         } else {
@@ -168,6 +182,7 @@ public class FileRead {
         Vertex.getVertexes().clear();
         NormalVertex.getNormalVertexes().clear();
         Face.getFaces().clear();
+        Texture.getTexture().clear();
 
         // Store vertices in order (index matches OBJ index - 1)
         for(Double[] vertex : createVertexMap(list.getFirst()).values()){
@@ -176,14 +191,20 @@ public class FileRead {
 
         //System.out.println("Vertex count: " + Vertex.getVertexes().size());
 
+
         // Store faces
         for(Integer[][] face : createFaceMap(list.get(1)).values()){
             Face.addFace(face);
         }
 
+        for(Double[] texture : createVertexMap(list.get(2)).values()){
+            Texture.addTexture(texture);
+        }
+
         for(Double[] normalVertex : createVertexMap(list.getLast()).values()){
             NormalVertex.addNormalVertex(normalVertex);
         }
+
     }
 
     public static void compileObj(String filePath) {
