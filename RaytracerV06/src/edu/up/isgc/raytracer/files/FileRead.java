@@ -193,9 +193,6 @@ public class FileRead {
 
 
         // Store faces
-        for(Integer[][] face : createFaceMap(list.get(1)).values()){
-            Face.addFace(face);
-        }
 
         for(Double[] texture : createVertexMap(list.get(2)).values()){
             Texture.addTexture(texture);
@@ -205,6 +202,9 @@ public class FileRead {
             NormalVertex.addNormalVertex(normalVertex);
         }
 
+        for(Integer[][] face : createFaceMap(list.get(1)).values()){
+            Face.addFace(face);
+        }
     }
 
     public static void compileObj(String filePath) {

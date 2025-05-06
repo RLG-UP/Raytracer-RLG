@@ -109,4 +109,6 @@ public class Vector3D {
 
     public static Vector3D getZero() { return Vector3D.zero; }
 
+    public String toString() { return "(" + x + "," + y + "," + z + ")"; }
+
 }

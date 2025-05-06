@@ -8,7 +8,7 @@ import edu.up.isgc.raytracer.Vector3D;
  * The camera's position determines the origin point for all rays.
  */
 public class Camera {
-    public Vector3D position;  // The position of the camera in 3D space
+    public static Vector3D position;  // The position of the camera in 3D space
     private static double epsilon = 0.0000001;
     public double[] clipPlanes = new double[2];
 
@@ -35,6 +35,7 @@ public class Camera {
 
     public static double getEpsilon(){ return Camera.epsilon; }
     public static void setEpsilon(double epsilon){ Camera.epsilon = epsilon; }
+    public static Vector3D getCameraPosition() { return Camera.position; }
 
     public Vector3D getPosition() { return this.position; }
 }

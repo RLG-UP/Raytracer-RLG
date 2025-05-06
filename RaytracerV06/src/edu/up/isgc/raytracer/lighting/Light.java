@@ -67,27 +67,28 @@ public abstract class Light {
         return new Color(nLOC[0] * lambertian, nLOC[1] * lambertian, nLOC[2] * lambertian);
     }
 
-    public static Vector3D ericson(Vector3D point, Vector3D v1, Vector3D v2, Vector3D v3) {
+    public static Vector3D ericson(Vector3D point, Vector3D v1, Vector3D v2, Vector3D v3, Vector3D n1, Vector3D n2, Vector3D n3) {
         Vector3D e1 = Vector3D.subtract(v2,v1);
         Vector3D e2 = Vector3D.subtract(v3,v1);
         Vector3D eP = Vector3D.subtract(point,v1);
 
-        Double d11 = e1.dot(e1);
-        Double d12 = e1.dot(e2);
-        Double d22 = e2.dot(e2);
-        Double d1P = e1.dot(eP);
-        Double d2P = e2.dot(eP);
+        double d11 = e1.dot(e1);
+        double d12 = e1.dot(e2);
+        double d22 = e2.dot(e2);
+        double d1P = e1.dot(eP);
+        double d2P = e2.dot(eP);
 
-        Double denominator = (d11*d22)-(d12*d12);
-        Double v = ( (d22*d1P)-(d12*d2P) )/denominator;
-        Double w = ( (d11*d2P)-(d12*d1P) )/denominator;
-        Double u = 1-v-w;
+        double denominator = (d11*d22)-(d12*d12);
+        double v = ( (d22*d1P)-(d12*d2P) )/denominator;
+        double w = ( (d11*d2P)-(d12*d1P) )/denominator;
+        double u = 1-v-w;
 
-        Vector3D vV = v1.scale(v);
-        Vector3D wV = v2.scale(w);
-        Vector3D uV = v3.scale(u);
+        Vector3D uN = n1.scale(u);
+        Vector3D vN = n2.scale(v);
+        Vector3D wN = n3.scale(w);
 
-        return vV.add(wV).add(uV);
+        //return uN.add(vN).add(wN).normalize();
+        return n1.add(n2).add(n3).scale(1.0/3.0).normalize();
     }
 
     public static ArrayList<Light> getLights(){return Light.lights;}

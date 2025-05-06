@@ -98,10 +98,14 @@ public class Triangle extends Object3D {
 
         for(Light light : Light.getLights()){
             if (light.type().equals("directional")) {
-                lambertian = (float)clamp(this.normal().dot(light.getDirection()), 0.0, 1.0);
+                //lambertian = (float)clamp(this.normal().dot(light.getDirection()), 0.0, 1.0);
+                lambertian = (float)clamp(Light.ericson(point, this.getA(), this.getC(), this.getB(),  this.getnA(), this.getnC(), this.getnB()).dot(light.getDirection()), 0.0, 1.0);
             }
             else if(light.type().equals("point") || light.type().equals("spot")){
-                lambertian = (float) clamp(this.normal().dot(light.getDirection(Vector3D.subtract(point, light.getPosition()).normalize())), 0.0, 1.0);
+                //lambertian = (float) clamp(this.normal().dot(light.getDirection(Vector3D.subtract(point, light.getPosition())).normalize()), 0.0, 1.0);
+                Vector3D N = Light.ericson(point, this.getA(), this.getB(), this.getC(), this.getnA().normalize(), this.getnB().normalize(), this.getnC().normalize());
+                if(N.dot(Vector3D.subtract(Camera.getCameraPosition(), this.normal()).normalize()) < 0) N = N.scale(-1);
+                lambertian = (float) clamp(N.dot(light.getDirection(Vector3D.subtract(point, light.getPosition())).normalize()), 0.0, 1.0);
             }
 
             lambertian = (float) clamp(lambertian, 0.0, 1.0);
