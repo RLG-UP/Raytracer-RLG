@@ -13,6 +13,7 @@ import static java.lang.Math.clamp;
 public class Triangle extends Object3D {
     private Vector3D A, B, C;
     private Vector3D nA, nB, nC;
+    private double u, v, w;
 
     public Triangle(Vector3D A, Vector3D B, Vector3D C, Color color){
         super(color);
@@ -39,12 +40,13 @@ public class Triangle extends Object3D {
         double det = v2v0.dot(P);
         double invDet = 1.0 / det;
         Vector3D T = Vector3D.subtract(ray.origin, this.getA());
-        double u = invDet * T.dot(P);
+        u = invDet * T.dot(P);
 
         if(u < 0 || u > 1) return Intersection.nullIntersection();
         Vector3D Q = Vector3D.crossProduct(T, v2v0);
-        double v = invDet * ray.direction.dot(Q);
+        v = invDet * ray.direction.dot(Q);
         if( v< 0 || (u+v) > (1 + Camera.getEpsilon())) return Intersection.nullIntersection();
+        w = 1-u-v;
 
         double t = invDet * Q.dot(v1v0);
 
@@ -103,9 +105,10 @@ public class Triangle extends Object3D {
             }
             else if(light.type().equals("point") || light.type().equals("spot")){
                 //lambertian = (float) clamp(this.normal().dot(light.getDirection(Vector3D.subtract(point, light.getPosition())).normalize()), 0.0, 1.0);
-                Vector3D N = Light.ericson(point, this.getA(), this.getB(), this.getC(), this.getnA().normalize(), this.getnB().normalize(), this.getnC().normalize());
-                if(N.dot(Vector3D.subtract(Camera.getCameraPosition(), this.normal()).normalize()) < 0) N = N.scale(-1);
-                lambertian = (float) clamp(N.dot(light.getDirection(Vector3D.subtract(point, light.getPosition())).normalize()), 0.0, 1.0);
+                //Vector3D N = Light.ericson(point, this.getA(), this.getB(), this.getC(), this.getnA().normalize(), this.getnB().normalize(), this.getnC().normalize());
+                Vector3D N = this.getnA().scale(this.w).add(this.getnB().scale(this.v)).add(this.getnC().scale(this.u)).normalize();
+                //if(N.dot(Vector3D.subtract(Camera.getCameraPosition(), this.normal()).normalize()) < 0) N = N.scale(-1);
+                lambertian = (float) clamp(N.dot(light.getDirection(Vector3D.subtract(light.getPosition(), point)).normalize()), 0.0, 1.0);
             }
 
             lambertian = (float) clamp(lambertian, 0.0, 1.0);

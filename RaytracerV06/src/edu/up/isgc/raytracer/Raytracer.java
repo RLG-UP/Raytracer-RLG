@@ -5,6 +5,7 @@ import edu.up.isgc.raytracer.lighting.Light;
 import edu.up.isgc.raytracer.lighting.Point;
 import edu.up.isgc.raytracer.lighting.Spot;
 import edu.up.isgc.raytracer.shapes.Sphere;
+import edu.up.isgc.raytracer.shapes.Triangle;
 import edu.up.isgc.raytracer.shapes.models.Polygon;
 import edu.up.isgc.raytracer.world.Camera;
 import edu.up.isgc.raytracer.world.Scene;
