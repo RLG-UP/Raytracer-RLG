@@ -101,7 +101,9 @@ public class Triangle extends Object3D {
         for(Light light : Light.getLights()){
             if (light.type().equals("directional")) {
                 //lambertian = (float)clamp(this.normal().dot(light.getDirection()), 0.0, 1.0);
-                lambertian = (float)clamp(Light.ericson(point, this.getA(), this.getC(), this.getB(),  this.getnA(), this.getnC(), this.getnB()).dot(light.getDirection()), 0.0, 1.0);
+                Vector3D N = this.getnA().scale(this.w).add(this.getnB().scale(this.v)).add(this.getnC().scale(this.u)).normalize();
+                //lambertian = (float)clamp(Light.ericson(point, this.getA(), this.getC(), this.getB(),  this.getnA(), this.getnC(), this.getnB()).dot(light.getDirection()), 0.0, 1.0);
+                lambertian = (float)clamp(N.dot(light.getDirection()), 0.0, 1.0);
             }
             else if(light.type().equals("point") || light.type().equals("spot")){
                 //lambertian = (float) clamp(this.normal().dot(light.getDirection(Vector3D.subtract(point, light.getPosition())).normalize()), 0.0, 1.0);
