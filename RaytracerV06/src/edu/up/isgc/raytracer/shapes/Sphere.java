@@ -5,6 +5,7 @@ import edu.up.isgc.raytracer.lighting.Directional;
 import edu.up.isgc.raytracer.lighting.Light;
 import edu.up.isgc.raytracer.Ray;
 import edu.up.isgc.raytracer.Vector3D;
+import edu.up.isgc.raytracer.world.Camera;
 
 import java.awt.Color;
 
@@ -99,16 +100,24 @@ public class Sphere extends Object3D {
         Color finalColor = new Color(0,0,0);
         float lightAttenuation = 0;
 
+        float ks = 1f;
+        float p = 10000;
+        float Is;
+        Vector3D N = this.normal(point);
+
         for(Light light : Light.getLights()){
+            Vector3D l = light.getDirection(point.normalize()).normalize();
+            Vector3D h = Vector3D.subtract(Camera.getCameraPosition(), point).normalize().add(l).normalize();
             if (light.type().equals("directional")) {
-                lambertian += (float) this.normal(point).dot(light.getDirection());
+                lambertian += (float) N.dot(light.getDirection()) * light.getAttenuation();
             }
             else if(light.type().equals("point") || light.type().equals("spot")){
-                lambertian += (float) this.normal(point).dot(light.getDirection(point.normalize()));
+                lambertian += (float) N.dot(l) * light.getAttenuation();
             }
 
-            lambertian = (float) clamp(lambertian, 0.0, 1.0);
-            Color lightContribution = Light.shine(light.getColor(), super.getColor(), lambertian * light.getAttenuation());
+            Is = (float) ( ks * Math.pow(clamp(N.dot(h), 0,1), p) );
+            lambertian = (float) clamp(lambertian + Is, 0.0, 1.0);
+            Color lightContribution = Light.shine(light.getColor(), super.getColor(), lambertian );
 
             finalColor = new Color(
                     clamp(finalColor.getRed()   + lightContribution.getRed(),   0, 255),
