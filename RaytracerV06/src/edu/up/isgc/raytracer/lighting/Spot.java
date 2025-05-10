@@ -21,14 +21,30 @@ public class Spot extends Light{
     public String type(){ return "spot"; }
 
     @Override
-    public Vector3D getDirection(Vector3D point){
+    public Vector3D getDirection(Vector3D point) {
         Vector3D L = Vector3D.subtract(this.getPosition(), point);
+        Vector3D Lnormalized = L.normalize();
 
-        float angle = (float) acos(this.direction.dot(L.normalize()));
-        float spotFactor = clamp((this.getOuterAngle() - angle)/(this.getOuterAngle()-this.getInnerAngle()), 0, 1);
-        this.setAttenuation((float) L.value * spotFactor);
+        // Calculate spot factor
+        float cosAngle = (float) clamp(this.direction.dot(Lnormalized), -1, 1);
+        float angle = (float) Math.acos(cosAngle);
 
-        return L.normalize();
+        float spotFactor;
+        if (angle <= this.getInnerAngle()) {
+            spotFactor = 1.0f;
+        } else if (angle >= this.getOuterAngle()) {
+            spotFactor = 0.0f;
+        } else {
+            spotFactor = (this.getOuterAngle() - angle) /
+                    (this.getOuterAngle() - this.getInnerAngle());
+        }
+
+        // Calculate attenuation separately (don't modify class field)
+        float distance = (float)L.value;
+        float attenuation = spotFactor / (1.0f + 0.1f * distance + 0.01f * distance * distance);
+
+        this.setAttenuation(attenuation);
+        return this.direction.normalize();
     }
 
     @Override

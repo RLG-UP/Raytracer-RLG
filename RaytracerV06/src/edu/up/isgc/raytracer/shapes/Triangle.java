@@ -100,7 +100,7 @@ public class Triangle extends Object3D {
 
         for(Light light : Light.getLights()){
             float ks = 1f;
-            float p = 10000;
+            float p = 100;
             float Is;
             Vector3D N = Vector3D.getZero();
             Vector3D l = light.getDirection(Vector3D.subtract(light.getPosition(), point)).normalize();
@@ -117,7 +117,7 @@ public class Triangle extends Object3D {
                 //Vector3D N = Light.ericson(point, this.getA(), this.getB(), this.getC(), this.getnA().normalize(), this.getnB().normalize(), this.getnC().normalize());
                 N = this.getnA().scale(this.w).add(this.getnB().scale(this.v)).add(this.getnC().scale(this.u)).normalize();
                 //if(N.dot(Vector3D.subtract(Camera.getCameraPosition(), this.normal()).normalize()) < 0) N = N.scale(-1);
-                lambertian = (float) clamp(N.dot(l)* light.getAttenuation(), 0.0, 1.0);
+                lambertian = (float) clamp(N.dot(l) * light.getAttenuation(), 0.0, 1.0);
             }
 
             Is = (float) ( ks * Math.pow(clamp(N.dot(h), 0,1), p) );

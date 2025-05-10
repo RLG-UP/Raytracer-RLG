@@ -95,13 +95,14 @@ public class Sphere extends Object3D {
         return Vector3D.subtract(point, center).normalize();
     }
 
+
     public Color addLight(Vector3D point) {
         float lambertian = 0;
         Color finalColor = new Color(0,0,0);
         float lightAttenuation = 0;
 
         float ks = 1f;
-        float p = 10000;
+        float p = 100;
         float Is;
         Vector3D N = this.normal(point);
 
@@ -127,6 +128,61 @@ public class Sphere extends Object3D {
         }
         return finalColor;
     }
+
+
+
+/*
+    public Color addLight(Vector3D point) {
+        float lambertian = 0;
+        Color finalColor = new Color(0, 0, 0);
+
+        // For spheres, the normal is simply the normalized vector from center to surface point
+        Vector3D N = Vector3D.subtract(point, center).normalize().scale(-1);
+
+        for (Light light : Light.getLights()) {
+            float ks = 1f;
+            float p = 100;
+            float Is;
+            Vector3D l = Vector3D.getZero(); // Light direction
+            Vector3D h; // Halfway vector
+
+            if (light.type().equals("directional")) {
+                l = light.getDirection().normalize();
+                lambertian = (float) clamp(N.dot(l), 0.0, 1.0);
+            }
+            else if (light.type().equals("point") || light.type().equals("spot")) {
+                // For point/spot lights, direction is from surface to light
+                l = Vector3D.subtract(light.getPosition(), point).normalize();
+                lambertian = (float) clamp(N.dot(l) * light.getAttenuation(), 0.0, 1.0);
+            }
+
+            // Calculate halfway vector for specular highlights
+            Vector3D viewDir = Vector3D.subtract(Camera.getCameraPosition(), point).normalize();
+            h = viewDir.add(l).normalize();
+
+            // Specular component
+            Is = (float) (ks * Math.pow(clamp(N.dot(h), 0, 1), p));
+
+            // Combine diffuse and specular
+            float totalLight = (float) clamp(lambertian + Is, 0.0, 1.0);
+
+            // Calculate light contribution
+            Color lightContribution = Light.shine(light.getColor(), super.getColor(), totalLight);
+
+            // Accumulate light contributions
+            finalColor = new Color(
+                    clamp(finalColor.getRed() + lightContribution.getRed(), 0, 255),
+                    clamp(finalColor.getGreen() + lightContribution.getGreen(), 0, 255),
+                    clamp(finalColor.getBlue() + lightContribution.getBlue(), 0, 255)
+            );
+        }
+
+        return finalColor;
+    }
+
+     */
+
+
 
     @Override
     public String type(){ return "sphere"; }
