@@ -79,47 +79,28 @@ public class Triangle extends Object3D {
     }
 
     public Color addLight(Vector3D point){
-        /*
-        Light light = Light.getLights().getFirst();
-        float lambertian = 0;
-        if (light.type().equals("directional")) {
-            lambertian = (float)clamp(this.normal().dot(light.getDirection()), 0.0, 1.0);
-        }
-        else if(light.type().equals("point") || light.type().equals("spot")){
-            lambertian = (float) clamp(this.normal().dot(light.getDirection(point.normalize())), 0.0, 1.0);
-        }
-
-        return Light.shine(light.getColor(), super.getColor(), lambertian * light.getAttenuation());
-
-
-        */
-
         float lambertian = 0;
         Color finalColor = new Color(0,0,0);
         float lightAttenuation = 0;
 
-        for(Light light : Light.getLights()){
-            float ks = 1f;
-            float p = 100;
-            float Is;
-            Vector3D N = Vector3D.getZero();
-            Vector3D l = light.getDirection(Vector3D.subtract(light.getPosition(), point)).normalize();
-            Vector3D h = Vector3D.subtract(Camera.getCameraPosition(), point).normalize().add(l).normalize();
+        Vector3D N = this.getnA().scale(this.w).add(this.getnB().scale(this.v)).add(this.getnC().scale(this.u)).normalize();
+        float ks = 1f;
+        float p = 100;
 
+        for(Light light : Light.getLights()){
+            float Is;
+            Vector3D l = Vector3D.getZero();
             if (light.type().equals("directional")) {
-                //lambertian = (float)clamp(this.normal().dot(light.getDirection()), 0.0, 1.0);
-                N = this.getnA().scale(this.w).add(this.getnB().scale(this.v)).add(this.getnC().scale(this.u)).normalize();
+                l = light.getDirection();
                 //lambertian = (float)clamp(Light.ericson(point, this.getA(), this.getC(), this.getB(),  this.getnA(), this.getnC(), this.getnB()).dot(light.getDirection()), 0.0, 1.0);
-                lambertian = (float)clamp(N.dot(light.getDirection()), 0.0, 1.0);
+                lambertian = (float) clamp(N.dot(l), 0.0, 1.0);
             }
             else if(light.type().equals("point") || light.type().equals("spot")){
-                //lambertian = (float) clamp(this.normal().dot(light.getDirection(Vector3D.subtract(point, light.getPosition())).normalize()), 0.0, 1.0);
-                //Vector3D N = Light.ericson(point, this.getA(), this.getB(), this.getC(), this.getnA().normalize(), this.getnB().normalize(), this.getnC().normalize());
-                N = this.getnA().scale(this.w).add(this.getnB().scale(this.v)).add(this.getnC().scale(this.u)).normalize();
-                //if(N.dot(Vector3D.subtract(Camera.getCameraPosition(), this.normal()).normalize()) < 0) N = N.scale(-1);
+                l = light.getDirection(Vector3D.subtract(light.getPosition(), point)).normalize();
                 lambertian = (float) clamp(N.dot(l) * light.getAttenuation(), 0.0, 1.0);
             }
 
+            Vector3D h = Vector3D.subtract(Camera.getCameraPosition(), point).normalize().add(l).normalize();
             Is = (float) ( ks * Math.pow(clamp(N.dot(h), 0,1), p) );
             lambertian = (float) clamp(lambertian + Is, 0.0, 1.0);
 

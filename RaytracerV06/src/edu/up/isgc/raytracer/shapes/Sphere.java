@@ -101,24 +101,28 @@ public class Sphere extends Object3D {
         Color finalColor = new Color(0,0,0);
         float lightAttenuation = 0;
 
+        Vector3D N = this.normal(point);
         float ks = 1f;
         float p = 100;
-        float Is;
-        Vector3D N = this.normal(point);
 
         for(Light light : Light.getLights()){
-            Vector3D l = light.getDirection(point.normalize()).normalize();
-            Vector3D h = Vector3D.subtract(Camera.getCameraPosition(), point).normalize().add(l).normalize();
+            float Is;
+            Vector3D l = Vector3D.getZero();
             if (light.type().equals("directional")) {
-                lambertian += (float) N.dot(light.getDirection()) * light.getAttenuation();
+                l = light.getDirection();
+                //lambertian = (float)clamp(Light.ericson(point, this.getA(), this.getC(), this.getB(),  this.getnA(), this.getnC(), this.getnB()).dot(light.getDirection()), 0.0, 1.0);
+                lambertian = (float) clamp(N.dot(l), 0.0, 1.0);
             }
             else if(light.type().equals("point") || light.type().equals("spot")){
-                lambertian += (float) N.dot(l) * light.getAttenuation();
+                l = light.getDirection(Vector3D.subtract(light.getPosition(), point)).normalize();
+                lambertian = (float) clamp(N.dot(l) * light.getAttenuation(), 0.0, 1.0);
             }
 
+            Vector3D h = Vector3D.subtract(Camera.getCameraPosition(), point).normalize().add(l).normalize();
             Is = (float) ( ks * Math.pow(clamp(N.dot(h), 0,1), p) );
             lambertian = (float) clamp(lambertian + Is, 0.0, 1.0);
-            Color lightContribution = Light.shine(light.getColor(), super.getColor(), lambertian );
+
+            Color lightContribution = Light.shine(light.getColor(), super.getColor(), lambertian);
 
             finalColor = new Color(
                     clamp(finalColor.getRed()   + lightContribution.getRed(),   0, 255),
@@ -127,8 +131,8 @@ public class Sphere extends Object3D {
             );
         }
         return finalColor;
-    }
 
+    }
 
 
 /*
