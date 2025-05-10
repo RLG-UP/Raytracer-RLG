@@ -96,7 +96,7 @@ public class Triangle extends Object3D {
                 lambertian = (float) clamp(N.dot(l), 0.0, 1.0);
             }
             else if(light.type().equals("point") || light.type().equals("spot")){
-                l = light.getDirection(Vector3D.subtract(light.getPosition(), point)).normalize();
+                l = light.getDirection(point).normalize();
                 lambertian = (float) clamp(N.dot(l) * light.getAttenuation(), 0.0, 1.0);
             }
 

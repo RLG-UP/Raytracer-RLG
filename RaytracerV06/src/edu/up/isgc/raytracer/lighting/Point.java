@@ -18,7 +18,7 @@ public class Point extends Light{
         Vector3D L = Vector3D.subtract(super.getPosition(), point);
         this.setAttenuation((float) L.value);
 
-        return L.normalize();
+        return L.normalize().scale(-1);
     }
 
     @Override
