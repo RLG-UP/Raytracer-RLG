@@ -141,6 +141,43 @@ public class Sphere extends Object3D {
     }
 
     public Color addLight(Vector3D point) {
+        float lambertian = 0;
+        Color finalColor = new Color(0,0,0);
+        float lightAttenuation = 0;
+
+        Vector3D N = this.normal(point);
+        float ks = 1f;
+        float p = 100;
+
+        for(Light light : Light.getLights()){
+            float Is;
+            Vector3D l = Vector3D.getZero();
+            if (light.type().equals("directional")) {
+                l = light.getDirection();
+                lambertian = (float) clamp(N.dot(l), 0.0, 1.0);
+            }
+            else if(light.type().equals("point") || light.type().equals("spot")){
+                l = light.getDirection(point).normalize();
+                lambertian = (float) clamp(N.dot(l) * light.getAttenuation(), 0.0, 1.0);
+            }
+
+            //lambertian = (float) clamp(lambertian, 0.0, 1.0);
+            Vector3D h = Vector3D.subtract(Camera.getCameraPosition(), point).normalize().add(l).normalize();
+            Is = (float) ( ks * Math.pow(clamp(N.dot(h), 0,1), p) );
+            lambertian = (float) clamp(lambertian + Is, 0.0, 1.0);
+            Color lightContribution = Light.shine(light.getColor(), super.getColor(), lambertian);
+
+            finalColor = new Color(
+                    clamp(finalColor.getRed()   + lightContribution.getRed(),   0, 255),
+                    clamp(finalColor.getGreen() + lightContribution.getGreen(), 0, 255),
+                    clamp(finalColor.getBlue()  + lightContribution.getBlue(),  0, 255)
+            );
+        }
+        return finalColor;
+    }
+
+    /*
+    public Color addLight(Vector3D point) {
         Vector3D[] testPoints = {
                 new Vector3D(1, 0, 0),   // Right side
                 new Vector3D(0, 1, 0),    // Top
@@ -187,6 +224,8 @@ public class Sphere extends Object3D {
         return finalColor;
 
     }
+
+     */
 
     /*
 

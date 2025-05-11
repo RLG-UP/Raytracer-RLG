@@ -88,7 +88,6 @@ public class Triangle extends Object3D {
         float p = 100;
 
         for(Light light : Light.getLights()){
-            float Is;
             Vector3D l = Vector3D.getZero();
             if (light.type().equals("directional")) {
                 l = light.getDirection();
@@ -101,8 +100,10 @@ public class Triangle extends Object3D {
             }
 
             Vector3D h = Vector3D.subtract(Camera.getCameraPosition(), point).normalize().add(l).normalize();
-            Is = (float) ( ks * Math.pow(clamp(N.dot(h), 0,1), p) );
-            lambertian = (float) clamp(lambertian + Is, 0.0, 1.0);
+            float blinn = (float) ( ks * Math.pow(clamp(N.dot(h), 0,1), p) );
+            float ka = (float) ( 0.1 + (0.1 * lambertian) );
+            float ambient = (float) ka * Light.getAmbientLight();
+            lambertian = (float) clamp(ambient + lambertian + blinn, 0.0, 1.0);
 
             Color lightContribution = Light.shine(light.getColor(), super.getColor(), lambertian);
 

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import static java.lang.Math.clamp;
 
 public abstract class Light {
+    private static float ambientLight = 1.0f;
     private float intensity;
     private Color color;
     private Vector3D position;
@@ -29,6 +30,9 @@ public abstract class Light {
     public static float[] returnColor(float[] normalizedColor) {
         return new float[] {normalizedColor[0] * 255.0f, normalizedColor[1] * 255.0f, normalizedColor[2] * 255.0f};
     }
+
+    public static float getAmbientLight() { return ambientLight; }
+    public static void setAmbientLight(float ambientLight) { Light.ambientLight = ambientLight; }
 
     public float getIntensity() {
         return intensity;
