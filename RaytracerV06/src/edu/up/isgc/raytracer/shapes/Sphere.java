@@ -60,6 +60,7 @@ public class Sphere extends Object3D {
      * @param ray The ray to test for intersection
      * @return Array of potential intersections (may contain null values)
      */
+    /*
     @Override
     public Intersection[] intersect(Ray ray) {
         Vector3D O = ray.origin;
@@ -78,6 +79,15 @@ public class Sphere extends Object3D {
 
                 Vector3D A = O.add(D.scale(t0));
                 Vector3D B = O.add(D.scale(t1));
+                System.out.println("t0: " + t0 + " | A: " + A);
+                System.out.println("t1: " + t1 + " | B: " + B);
+
+                // Check if points lie on the sphere's surface
+                double distA = Vector3D.subtract(A, center).value;
+                double distB = Vector3D.subtract(B, center).value;
+                System.out.println("Distance A to center: " + distA + " (Expected: " + radius + ")");
+                System.out.println("Distance B to center: " + distB + " (Expected: " + radius + ")");
+
                 // Create intersection points
                 Intersection p0 = new Intersection(A, t0, this.addLight(A));
                 Intersection p1 = new Intersection(B, t1, this.addLight(B));
@@ -91,10 +101,94 @@ public class Sphere extends Object3D {
         }
     }
 
+     */
+
+    public Intersection[] intersect(Ray ray) {
+        Vector3D O = ray.origin;
+        Vector3D D = ray.direction;
+        Vector3D L = Vector3D.subtract(center, O);
+        double tCA = L.dot(D);
+
+        if(tCA < 0) return null;  // Sphere is behind ray origin
+
+        double dSquared = L.dot(L) - (tCA * tCA);
+        if(dSquared > radius * radius) return null;  // No intersection
+
+        double tHC = Math.sqrt((radius * radius) - dSquared);
+        double t0 = tCA - tHC;
+        double t1 = tCA + tHC;
+
+        Vector3D A = O.add(D.scale(t0));
+        Vector3D B = O.add(D.scale(t1));
+
+        // Check if points lie on the sphere's surface
+        double distA = Vector3D.subtract(A, center).value;
+        double distB = Vector3D.subtract(B, center).value;
+
+        // Create intersection points
+        Intersection p0 = new Intersection(A, t0, this.addLight(A));
+        Intersection p1 = new Intersection(B, t1, this.addLight(B));
+
+        // Return intersections with valid points
+        return new Intersection[]{
+                t0 > 0 ? p0 : null,
+                t1 > 0 ? p1 : null
+        };
+    }
+
     public Vector3D normal(Vector3D point){
         return Vector3D.subtract(point, center).normalize();
     }
 
+    public Color addLight(Vector3D point) {
+        Vector3D[] testPoints = {
+                new Vector3D(1, 0, 0),   // Right side
+                new Vector3D(0, 1, 0),    // Top
+                new Vector3D(0, 0, 1)     // Front
+        };
+
+        for (Vector3D p : testPoints) {
+            Vector3D N = normal(p);
+            Vector3D L = new Vector3D(1, 1, 1).normalize();
+            System.out.printf("Point %s | N·L: %.2f\n", p, N.dot(L));
+        }
+        float lambertian = 0;
+        Color finalColor = new Color(0,0,0);
+        float lightAttenuation = 0;
+
+        Vector3D N = this.normal(point);
+        float ks = 1f;
+        float p = 100;
+
+        for(Light light : Light.getLights()){
+            float Is;
+            Vector3D l = Vector3D.getZero();
+            if (light.type().equals("directional")) {
+                l = light.getDirection();
+                //lambertian = (float)clamp(Light.ericson(point, this.getA(), this.getC(), this.getB(),  this.getnA(), this.getnC(), this.getnB()).dot(light.getDirection()), 0.0, 1.0);
+                lambertian = (float) clamp(N.dot(l) * light.getIntensity(), 0.0, 1.0);
+            }
+            else if(light.type().equals("point") || light.type().equals("spot")){
+                l = light.getDirection(point).normalize().scale(-1);
+                lambertian = (float) clamp(N.dot(l) * light.getAttenuation(), 0.0, 1.0);
+            }
+
+            Vector3D h = Vector3D.subtract(Camera.getCameraPosition(), point).normalize().add(l).normalize();
+            //Is = (float) ( ks * Math.pow(clamp(N.dot(h), 0,1), p) );
+            lambertian = (float) clamp(lambertian , 0.0, 1.0);
+            Color lightContribution = Light.shine(light.getColor(), super.getColor(), lambertian);
+
+            finalColor = new Color(
+                    clamp(finalColor.getRed()   + lightContribution.getRed(),   0, 255),
+                    clamp(finalColor.getGreen() + lightContribution.getGreen(), 0, 255),
+                    clamp(finalColor.getBlue()  + lightContribution.getBlue(),  0, 255)
+            );
+        }
+        return finalColor;
+
+    }
+
+    /*
 
     public Color addLight(Vector3D point) {
         float lambertian = 0;
@@ -111,10 +205,10 @@ public class Sphere extends Object3D {
             if (light.type().equals("directional")) {
                 l = light.getDirection();
                 //lambertian = (float)clamp(Light.ericson(point, this.getA(), this.getC(), this.getB(),  this.getnA(), this.getnC(), this.getnB()).dot(light.getDirection()), 0.0, 1.0);
-                lambertian = (float) clamp(N.dot(l), 0.0, 1.0);
+                lambertian = (float) clamp(N.dot(l) * light.getIntensity(), 0.0, 1.0);
             }
             else if(light.type().equals("point") || light.type().equals("spot")){
-                l = light.getDirection(Vector3D.subtract(light.getPosition(), point)).normalize();
+                l = light.getDirection(point).normalize().scale(-1);
                 lambertian = (float) clamp(N.dot(l) * light.getAttenuation(), 0.0, 1.0);
             }
 
@@ -134,57 +228,46 @@ public class Sphere extends Object3D {
 
     }
 
+     */
 
-/*
-    public Color addLight(Vector3D point) {
+    /*
+
+        public Color addLight(Vector3D point) {
         float lambertian = 0;
-        Color finalColor = new Color(0, 0, 0);
+        Color finalColor = new Color(0,0,0);
+        float lightAttenuation = 0;
 
-        // For spheres, the normal is simply the normalized vector from center to surface point
-        Vector3D N = Vector3D.subtract(point, center).normalize().scale(-1);
+        float ks = 1f;
+        float p = 100;
+        float Is;
+        Vector3D N = this.normal(point);
 
-        for (Light light : Light.getLights()) {
-            float ks = 1f;
-            float p = 100;
-            float Is;
-            Vector3D l = Vector3D.getZero(); // Light direction
-            Vector3D h; // Halfway vector
-
+        for(Light light : Light.getLights()){
+            Vector3D l = light.getDirection(point.normalize()).normalize();
+            Vector3D h = Vector3D.subtract(Camera.getCameraPosition(), point).normalize().add(l).normalize();
             if (light.type().equals("directional")) {
-                l = light.getDirection().normalize();
-                lambertian = (float) clamp(N.dot(l), 0.0, 1.0);
+                lambertian += (float) N.dot(light.getDirection()) * light.getAttenuation();
             }
-            else if (light.type().equals("point") || light.type().equals("spot")) {
-                // For point/spot lights, direction is from surface to light
-                l = Vector3D.subtract(light.getPosition(), point).normalize();
-                lambertian = (float) clamp(N.dot(l) * light.getAttenuation(), 0.0, 1.0);
+            else if(light.type().equals("point") || light.type().equals("spot")){
+                lambertian += (float) N.dot(l.scale(-1)) * light.getAttenuation();
             }
 
-            // Calculate halfway vector for specular highlights
-            Vector3D viewDir = Vector3D.subtract(Camera.getCameraPosition(), point).normalize();
-            h = viewDir.add(l).normalize();
+            Is = (float) ( ks * Math.pow(clamp(N.dot(h), 0,1), p) );
+            lambertian = (float) clamp(lambertian + Is, 0.0, 1.0);
+            Color lightContribution = Light.shine(light.getColor(), super.getColor(), lambertian );
 
-            // Specular component
-            Is = (float) (ks * Math.pow(clamp(N.dot(h), 0, 1), p));
-
-            // Combine diffuse and specular
-            float totalLight = (float) clamp(lambertian + Is, 0.0, 1.0);
-
-            // Calculate light contribution
-            Color lightContribution = Light.shine(light.getColor(), super.getColor(), totalLight);
-
-            // Accumulate light contributions
             finalColor = new Color(
-                    clamp(finalColor.getRed() + lightContribution.getRed(), 0, 255),
+                    clamp(finalColor.getRed()   + lightContribution.getRed(),   0, 255),
                     clamp(finalColor.getGreen() + lightContribution.getGreen(), 0, 255),
-                    clamp(finalColor.getBlue() + lightContribution.getBlue(), 0, 255)
+                    clamp(finalColor.getBlue()  + lightContribution.getBlue(),  0, 255)
             );
         }
-
         return finalColor;
     }
-
      */
+
+
+
 
 
 
