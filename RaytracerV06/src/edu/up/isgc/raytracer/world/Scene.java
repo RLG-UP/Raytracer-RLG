@@ -14,7 +14,7 @@ import java.util.ArrayList;
  * Manages object collection and intersection calculations.
  */
 public class Scene {
-    private ArrayList<Object3D> objects;  // Collection of 3D objects in the scene
+    private static ArrayList<Object3D> objects;  // Collection of 3D objects in the scene
 
     /**
      * Constructs an empty scene.
@@ -59,10 +59,61 @@ public class Scene {
                     if (intersection != null && intersection.distance < minDist && (intersection.distance >= camera.clipPlanes[0] && intersection.distance <= camera.clipPlanes[1])) {
                         minDist = intersection.distance;
                         closestIntersection = intersection;
+                        closestIntersection.object = obj;
                     }
                 }
         }
 
         return closestIntersection;
     }
+
+    /*
+    public static Intersection findRayIntersection(Ray ray) {
+        Intersection closestIntersection = null;
+        double minDist = Double.MAX_VALUE;
+        Intersection[] intersections;
+
+        for (Object3D obj : Scene.objects) {
+            // Get potential intersections with current object
+            intersections = obj.intersect(ray);
+                if(intersections != null) {
+                    Intersection intersection = intersections[0] != null ? intersections[0] :
+                            intersections[1] != null ? intersections[1] : null;
+
+                    //&& (intersection.distance >= camera.clipPlanes[0] && intersection.distance <= camera.clipPlanes[0])
+                    // Update closest intersection if this one is closer
+                    if (intersection != null && intersection.distance < minDist) {
+                        minDist = intersection.distance;
+                        closestIntersection = intersection;
+                        closestIntersection.object = obj;
+                    }
+                }
+        }
+
+
+        return closestIntersection;
+    }
+
+     */
+    public static Intersection findRayIntersection(Ray ray) {
+        Intersection closestIntersection = null;
+        double minDist = Double.MAX_VALUE;
+
+        for (Object3D obj : Scene.objects) {
+            Intersection[] intersections = obj.intersect(ray);
+
+            if (intersections != null) {
+                for (Intersection intersection : intersections) {
+                    if (intersection != null && intersection.distance < minDist && intersection.distance > Camera.getEpsilon()) {
+                        minDist = intersection.distance;
+                        closestIntersection = intersection;
+                        closestIntersection.object = obj;
+                    }
+                }
+            }
+        }
+
+        return closestIntersection;
+    }
+
 }

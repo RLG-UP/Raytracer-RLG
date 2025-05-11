@@ -17,4 +17,5 @@ public class Ray {
         this.origin = origin;
         this.direction = direction.normalize();
     }
+
 }

@@ -1,5 +1,7 @@
 package edu.up.isgc.raytracer;
 
+import edu.up.isgc.raytracer.shapes.Object3D;
+
 import java.awt.Color;
 
 /**
@@ -10,6 +12,7 @@ public class Intersection {
     public Vector3D point;     // The 3D coordinates of the intersection point
     public double distance;    // Distance from ray origin to intersection point
     public Color color;        // Color of the intersected object at this point
+    public Object3D object;
 
     /**
      * Constructs an intersection with the specified properties.

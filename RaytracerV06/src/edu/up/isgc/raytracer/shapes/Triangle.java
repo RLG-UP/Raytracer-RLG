@@ -5,6 +5,7 @@ import edu.up.isgc.raytracer.world.Camera;
 import edu.up.isgc.raytracer.Intersection;
 import edu.up.isgc.raytracer.Ray;
 import edu.up.isgc.raytracer.Vector3D;
+import edu.up.isgc.raytracer.world.Scene;
 
 import java.awt.*;
 
@@ -51,7 +52,13 @@ public class Triangle extends Object3D {
         double t = invDet * Q.dot(v1v0);
 
         Vector3D point = ray.origin.add(ray.direction.scale(t));
-        return new Intersection[]{new Intersection(point, t, this.addLight(point))};
+        //return new Intersection[]{new Intersection(point, t, this.addLight(point))};
+        return new Intersection[]{new Intersection(point, t, super.getColor())};
+    }
+
+    @Override
+    public Object3D returnZero(){
+        return new Triangle(Vector3D.getZero(), Vector3D.getZero(), Vector3D.getZero(), null);
     }
 
     public Vector3D getA() { return this.A; }
@@ -78,8 +85,83 @@ public class Triangle extends Object3D {
         return Vector3D.crossProduct(v, w).normalize();
     }
 
+    @Override
+    public Color addLight(Vector3D point) {
+        float lambertian = 0;
+        float blinn = 0;
+        Color finalColor = new Color(0, 0, 0);
+        float lightAttenuation = 0;
+
+        Vector3D N = this.getnA().scale(this.w).add(this.getnB().scale(this.v)).add(this.getnC().scale(this.u)).normalize();
+        float ks = 1f;
+        float p = 100;
+
+        for (Light light : Light.getLights()) {
+            Vector3D l = Vector3D.getZero();
+            double lightDistance = Double.MAX_VALUE;
+
+            if (light.type().equals("directional")) {
+                l = light.getDirection().normalize();
+            } else if (light.type().equals("point") || light.type().equals("spot")) {
+                l = light.getDirection(point).normalize();
+                lightDistance = Vector3D.subtract(light.getPosition(), point).value;
+            }
+
+            Vector3D shadowOrigin = point.add(N.scale(Camera.getEpsilon()));
+            Ray shadowRay = new Ray(shadowOrigin, l);
+
+            System.out.println("\n--- Shadow Debug Info ---");
+            System.out.println("Light type: " + light.type());
+            System.out.println("Ray origin: " + shadowOrigin);
+            System.out.println("Ray direction: " + l);
+
+            Intersection shadowPoint = Scene.findRayIntersection(shadowRay);
+            boolean inShadow = false;
+
+            if (shadowPoint != null) {
+                System.out.println("Hit object at distance: " + shadowPoint.distance);
+                if (light.type().equals("directional")) {
+                    inShadow = true;
+                } else {
+                    inShadow = shadowPoint.distance < lightDistance - Camera.getEpsilon();
+                }
+            } else {
+                System.out.println("No object hit by shadow ray.");
+            }
+
+            float ka = 0.1f;
+            float ambient = ka * Light.getAmbientLight();
+
+            if (!inShadow) {
+                lambertian = (float) clamp(N.dot(l) * light.getAttenuation(), 0.0, 1.0);
+                Vector3D h = Vector3D.subtract(Camera.getCameraPosition(), point).normalize().add(l).normalize();
+                blinn = (float) (ks * Math.pow(clamp(N.dot(h), 0, 1), p));
+                System.out.println("Lambertian: " + lambertian + ", Blinn: " + blinn);
+            } else {
+                lambertian = 0;
+                blinn = 0;
+                System.out.println("In Shadow at point: " + point);
+            }
+
+            float intensity = (float) clamp(ambient + lambertian + blinn, 0.0, 1.0);
+            Color lightContribution = Light.shine(light.getColor(), super.getColor(), intensity);
+
+            finalColor = new Color(
+                    clamp(finalColor.getRed() + lightContribution.getRed(), 0, 255),
+                    clamp(finalColor.getGreen() + lightContribution.getGreen(), 0, 255),
+                    clamp(finalColor.getBlue() + lightContribution.getBlue(), 0, 255)
+            );
+        }
+
+        return finalColor;
+    }
+
+
+
+    /*
     public Color addLight(Vector3D point){
         float lambertian = 0;
+        float blinn = 0;
         Color finalColor = new Color(0,0,0);
         float lightAttenuation = 0;
 
@@ -92,19 +174,25 @@ public class Triangle extends Object3D {
             if (light.type().equals("directional")) {
                 l = light.getDirection();
                 //lambertian = (float)clamp(Light.ericson(point, this.getA(), this.getC(), this.getB(),  this.getnA(), this.getnC(), this.getnB()).dot(light.getDirection()), 0.0, 1.0);
-                lambertian = (float) clamp(N.dot(l), 0.0, 1.0);
+                //lambertian = (float) clamp(N.dot(l), 0.0, 1.0);
             }
             else if(light.type().equals("point") || light.type().equals("spot")){
                 l = light.getDirection(point).normalize();
-                lambertian = (float) clamp(N.dot(l) * light.getAttenuation(), 0.0, 1.0);
             }
 
-            Vector3D h = Vector3D.subtract(Camera.getCameraPosition(), point).normalize().add(l).normalize();
-            float blinn = (float) ( ks * Math.pow(clamp(N.dot(h), 0,1), p) );
+            Intersection shadowPoint = super.castShadow(point, l);
             float ka = (float) ( 0.1 + (0.1 * lambertian) );
             float ambient = (float) ka * Light.getAmbientLight();
-            lambertian = (float) clamp(ambient + lambertian + blinn, 0.0, 1.0);
 
+            if(shadowPoint == null) {
+                lambertian = (float) clamp(N.dot(l) * light.getAttenuation(), 0.0, 1.0);
+                Vector3D h = Vector3D.subtract(Camera.getCameraPosition(), point).normalize().add(l).normalize();
+                blinn = (float) (ks * Math.pow(clamp(N.dot(h), 0, 1), p));
+            }else{
+                System.out.println("Shadow Point");
+            }
+
+            lambertian = (float) clamp(ambient + lambertian + blinn, 0.0, 1.0);
             Color lightContribution = Light.shine(light.getColor(), super.getColor(), lambertian);
 
             finalColor = new Color(
@@ -116,6 +204,8 @@ public class Triangle extends Object3D {
         return finalColor;
 
     }
+
+     */
 
     @Override
     public String type(){ return "triangle"; }

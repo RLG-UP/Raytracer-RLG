@@ -1,8 +1,11 @@
 package edu.up.isgc.raytracer.shapes;
 
 import edu.up.isgc.raytracer.Intersection;
+import edu.up.isgc.raytracer.Vector3D;
 import edu.up.isgc.raytracer.lighting.Light;
 import edu.up.isgc.raytracer.Ray;
+import edu.up.isgc.raytracer.world.Camera;
+import edu.up.isgc.raytracer.world.Scene;
 
 import java.awt.Color;
 
@@ -28,6 +31,14 @@ public abstract class Object3D {
      */
     public abstract Intersection[] intersect(Ray ray);
     public abstract String type();
+    public abstract Color addLight(Vector3D point);
+    public abstract Object3D returnZero();
 
     public Color getColor() { return color; }
+
+    public Intersection castShadow(Vector3D point, Vector3D lightDirection) {
+        Vector3D offsetPoint = point.add(lightDirection.normalize().scale(Camera.getEpsilon())); // Avoid self-intersection
+        Ray shadowRay = new Ray(offsetPoint, lightDirection.normalize());
+        return Scene.findRayIntersection(shadowRay);
+    }
 }

@@ -126,8 +126,8 @@ public class Sphere extends Object3D {
         double distB = Vector3D.subtract(B, center).value;
 
         // Create intersection points
-        Intersection p0 = new Intersection(A, t0, this.addLight(A));
-        Intersection p1 = new Intersection(B, t1, this.addLight(B));
+        Intersection p0 = new Intersection(A, t0, super.getColor());
+        Intersection p1 = new Intersection(B, t1, super.getColor());
 
         // Return intersections with valid points
         return new Intersection[]{
@@ -140,6 +140,7 @@ public class Sphere extends Object3D {
         return Vector3D.subtract(point, center).normalize();
     }
 
+    @Override
     public Color addLight(Vector3D point) {
         float lambertian = 0;
         Color finalColor = new Color(0,0,0);
@@ -174,6 +175,10 @@ public class Sphere extends Object3D {
             );
         }
         return finalColor;
+    }
+
+    public Object3D returnZero(){
+        return new Sphere(Vector3D.getZero(), 0.0, null);
     }
 
     /*
