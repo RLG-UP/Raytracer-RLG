@@ -103,6 +103,7 @@ public class Sphere extends Object3D {
 
      */
 
+
     public Intersection[] intersect(Ray ray) {
         Vector3D O = ray.origin;
         Vector3D D = ray.direction;
@@ -135,6 +136,78 @@ public class Sphere extends Object3D {
                 t1 > 0 ? p1 : null
         };
     }
+
+    /*
+    public Intersection[] intersect(Ray ray) {
+        Vector3D O = ray.origin;
+        Vector3D D = ray.direction;
+        Vector3D L = Vector3D.subtract(center, O);
+
+        double tCA = L.dot(D);
+        double dSquared = L.dot(L) - (tCA * tCA);
+        double rSquared = radius * radius;
+
+        if (dSquared > rSquared) return null; // Misses the sphere
+
+        double tHC = Math.sqrt(rSquared - dSquared);
+        double t0 = tCA - tHC;
+        double t1 = tCA + tHC;
+
+        Intersection p0 = null;
+        Intersection p1 = null;
+
+        if (t0 > Camera.getEpsilon()) {
+            Vector3D A = O.add(D.scale(t0));
+            p0 = new Intersection(A, t0, super.getColor());
+        }
+        if (t1 > Camera.getEpsilon()) {
+            Vector3D B = O.add(D.scale(t1));
+            p1 = new Intersection(B, t1, super.getColor());
+        }
+
+        if (p0 == null && p1 == null) return null; // Both behind or too close
+
+        return new Intersection[]{ p0, p1 };
+    }
+
+     */
+
+    /*
+    public Intersection[] intersect(Ray ray) {
+        Vector3D O = ray.origin;
+        Vector3D D = ray.direction.normalize();
+        Vector3D L = Vector3D.subtract(center, O);
+        double tCA = L.dot(D);
+
+        double dSquared = L.dot(L) - tCA * tCA;
+        double radiusSquared = radius * radius;
+
+        if (dSquared > radiusSquared) {
+            //System.out.println("Ray misses the sphere");
+            return null;
+        }
+
+        double tHC = Math.sqrt(radiusSquared - dSquared);
+        double t0 = tCA - tHC;
+        double t1 = tCA + tHC;
+
+        Vector3D A = O.add(D.scale(t0));
+        Vector3D B = O.add(D.scale(t1));
+
+        Intersection p0 = new Intersection(A, t0, super.getColor());
+        Intersection p1 = new Intersection(B, t1, super.getColor());
+
+        //System.out.println(" -> Sphere hit: t0 = " + t0 + ", t1 = " + t1);
+
+        return new Intersection[] {
+                t0 > Camera.getEpsilon() ? p0 : null,
+                t1 > Camera.getEpsilon() ? p1 : null
+        };
+    }
+
+     */
+
+
 
     public Vector3D normal(Vector3D point){
         return Vector3D.subtract(point, center).normalize();

@@ -1,6 +1,7 @@
 package edu.up.isgc.raytracer.world;
 
 import edu.up.isgc.raytracer.Intersection;
+import edu.up.isgc.raytracer.Vector3D;
 import edu.up.isgc.raytracer.lighting.Light;
 import edu.up.isgc.raytracer.Ray;
 import edu.up.isgc.raytracer.shapes.Object3D;
@@ -95,16 +96,23 @@ public class Scene {
     }
 
      */
+
     public static Intersection findRayIntersection(Ray ray) {
         Intersection closestIntersection = null;
         double minDist = Double.MAX_VALUE;
 
         for (Object3D obj : Scene.objects) {
+
             Intersection[] intersections = obj.intersect(ray);
 
             if (intersections != null) {
                 for (Intersection intersection : intersections) {
+                    //System.out.println("Intersection: " + intersection);
                     if (intersection != null && intersection.distance < minDist && intersection.distance > Camera.getEpsilon()) {
+                        System.out.println("Testing intersection with object: " + obj.getClass().getSimpleName());
+                        System.out.println("Intersection at: " + intersection.point + ", distance = " + intersection.distance);
+
+                        System.out.println(" -> Valid hit at distance: " + intersection.distance);
                         minDist = intersection.distance;
                         closestIntersection = intersection;
                         closestIntersection.object = obj;
@@ -115,5 +123,21 @@ public class Scene {
 
         return closestIntersection;
     }
+
+    public static boolean isInShadow(Vector3D surfacePoint, Vector3D normal, Light light, Scene scene) {
+        Vector3D lightDir = Vector3D.subtract(light.getPosition(), surfacePoint).normalize();
+        Vector3D shadowOrigin = surfacePoint.add(normal.scale(Camera.getEpsilon()));
+        Ray shadowRay = new Ray(shadowOrigin, lightDir);
+
+        Intersection shadowHit = Scene.findRayIntersection(shadowRay);
+
+        if (shadowHit != null) {
+            double lightDistance = Vector3D.subtract(light.getPosition(), surfacePoint).value;
+            return shadowHit.distance < lightDistance; // only count it if it's between point and light
+        }
+
+        return false;
+    }
+
 
 }

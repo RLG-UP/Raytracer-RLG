@@ -110,10 +110,13 @@ public class Triangle extends Object3D {
             Vector3D shadowOrigin = point.add(N.scale(Camera.getEpsilon()));
             Ray shadowRay = new Ray(shadowOrigin, l);
 
+            /*
             System.out.println("\n--- Shadow Debug Info ---");
             System.out.println("Light type: " + light.type());
             System.out.println("Ray origin: " + shadowOrigin);
             System.out.println("Ray direction: " + l);
+
+             */
 
             Intersection shadowPoint = Scene.findRayIntersection(shadowRay);
             boolean inShadow = false;
@@ -126,7 +129,7 @@ public class Triangle extends Object3D {
                     inShadow = shadowPoint.distance < lightDistance - Camera.getEpsilon();
                 }
             } else {
-                System.out.println("No object hit by shadow ray.");
+                //System.out.println("No object hit by shadow ray.");
             }
 
             float ka = 0.1f;
@@ -136,7 +139,7 @@ public class Triangle extends Object3D {
                 lambertian = (float) clamp(N.dot(l) * light.getAttenuation(), 0.0, 1.0);
                 Vector3D h = Vector3D.subtract(Camera.getCameraPosition(), point).normalize().add(l).normalize();
                 blinn = (float) (ks * Math.pow(clamp(N.dot(h), 0, 1), p));
-                System.out.println("Lambertian: " + lambertian + ", Blinn: " + blinn);
+                //System.out.println("Lambertian: " + lambertian + ", Blinn: " + blinn);
             } else {
                 lambertian = 0;
                 blinn = 0;

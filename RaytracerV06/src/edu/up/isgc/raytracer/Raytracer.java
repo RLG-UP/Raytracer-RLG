@@ -31,7 +31,7 @@ public class Raytracer {
 
         // Create scene with objects
         Scene scene = new Scene();
-        scene.addObject(new Sphere(new Vector3D(0, -3, 0), 3, Color.RED));
+        scene.addObject(new Sphere(new Vector3D(0, 1, 0), 1, Color.RED));
         //scene.addObject(new Sphere(new Vector3D(0, 0, -2), 0.1, Color.BLUE));
         //scene.addObject(new Triangle(new Vector3D(0.4, 0, -3), new Vector3D(0.4, 0.5, -3), new Vector3D(1.1, 0, -3), Color.GREEN));
         Polygon polygon = new Polygon(path, Color.magenta);
@@ -39,11 +39,33 @@ public class Raytracer {
         scene.addPolygon( polygon );
 
         // Set up camera at the origin
-        Camera camera = new Camera(new Vector3D(0, 0, -5), nearPlane, farPlane);
-        Light light01 = new Directional(1, Color.white, new Vector3D(0,-10,0), new Vector3D(0, 0, 0));
+        Camera camera = new Camera(new Vector3D(0, 0, -6), nearPlane, farPlane);
+        //Light light01 = new Directional(1, Color.white, new Vector3D(0,1,0), new Vector3D(0, 0, 0));
         //Light light02 = new Directional(1, Color.white, new Vector3D(0,10,1), new Vector3D(0,0,0));
-        //Light light03 = new Point(1f, Color.white, new Vector3D(0, 5, -7));
-        //Light light04 = new Spot(1f, Color.white, new Vector3D(0,0,-6), new Vector3D(0,0,0), 1f, 1f);
+        Light light03 = new Point(1f, Color.white, new Vector3D(0, 1, -11));
+        //Light light04 = new Spot(1f, Color.white, new Vector3D(0,10,0), new Vector3D(0,0,0), 1f, 1f);
+
+        /*
+        // Instead of top of sphere, pick the front of the sphere
+        Vector3D surfacePoint = new Vector3D(0, 0, -4);  // slightly in front of the sphere
+        Vector3D normal = new Vector3D(0, 0, 1);         // facing the camera
+
+        // Cast shadow ray to the light behind the sphere
+        Vector3D shadowRayDir = Vector3D.subtract(light03.getPosition(), surfacePoint).normalize();
+        Vector3D shadowOrigin = surfacePoint.add(normal.scale(Camera.getEpsilon())); // epsilon in view direction
+        Ray shadowRay = new Ray(shadowOrigin, shadowRayDir);
+
+
+        // Check for shadow intersection
+        Intersection shadowHit = Scene.findRayIntersection(shadowRay);
+
+        if (shadowHit != null) {
+            System.out.println("Shadow ray hit: " + shadowHit.point + " at distance " + shadowHit.distance);
+        } else {
+            System.out.println("No object hit by shadow ray — no shadow cast.");
+        }
+
+         */
 
         // Initialize image buffer (width x height x RGB)
         int[][][] image = new int[width][height][3];
