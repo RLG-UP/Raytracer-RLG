@@ -128,34 +128,50 @@ public class Vector3D {
         this.z = scaleMatrix[2][0];
     }
 
-    public void rotate(float rX, float rY, float rZ) {
-        float[][] rotateMatrix = Vector3D.getIdentityMatrix();
-        float[][] rotateXMatrix = Vector3D.getIdentityMatrix();
-        float[][] rotateYMatrix = Vector3D.getIdentityMatrix();
-        float[][] rotateZMatrix = Vector3D.getIdentityMatrix();
+    public void rotate(float rX, float rY, float rZ, boolean inRadians) {
+        float[][] rotateMatrix = this.turnToPilarMatrix();
 
-        rotateXMatrix[1][1] = (float) Math.cos(rX);
-        rotateXMatrix[1][2] = (float) ( (-1.0f) * Math.sin(rX) );
-        rotateXMatrix[2][1] = (float) Math.sin(rX);
-        rotateXMatrix[2][2] = (float) Math.cos(rX);
-        
-        rotateYMatrix[0][0] = (float) Math.cos(rX);
-        rotateYMatrix[0][2] = (float) Math.sin(rX);
-        rotateYMatrix[2][0] = (float) ( (-1.0f) * Math.sin(rX) );
-        rotateYMatrix[2][2] = (float) Math.cos(rX);
+        if(!inRadians){
+            rX = (float) Math.toRadians(rX);
+            rY = (float) Math.toRadians(rY);
+            rZ = (float) Math.toRadians(rZ);
+        }
 
-        rotateZMatrix[0][0] = (float) Math.cos(rX);
-        rotateZMatrix[0][1] = (float) ( (-1.0f) * Math.sin(rX) );
-        rotateZMatrix[1][0] = (float) Math.sin(rX);
-        rotateZMatrix[1][1] = (float) Math.cos(rX);
+        if(rX != 0) {
+            float[][] rotateXMatrix = Vector3D.getIdentityMatrix();
+            rotateXMatrix[1][1] = (float) Math.cos(rX);
+            rotateXMatrix[1][2] = (float) ((-1.0f) * Math.sin(rX));
+            rotateXMatrix[2][1] = (float) Math.sin(rX);
+            rotateXMatrix[2][2] = (float) Math.cos(rX);
+            rotateMatrix = matrixMultiply(rotateXMatrix, rotateMatrix);
+        }
 
-        rotateMatrix = matrixMultiply(rotateXMatrix, this.turnToPilarMatrix());
+        if(rY != 0) {
+            float[][] rotateYMatrix = Vector3D.getIdentityMatrix();
+            rotateYMatrix[0][0] = (float) Math.cos(rY);
+            rotateYMatrix[0][2] = (float) Math.sin(rY);
+            rotateYMatrix[2][0] = (float) ((-1.0f) * Math.sin(rY));
+            rotateYMatrix[2][2] = (float) Math.cos(rY);
+            rotateMatrix = matrixMultiply(rotateYMatrix, rotateMatrix);
+        }
+
+        if(rZ != 0) {
+            float[][] rotateZMatrix = Vector3D.getIdentityMatrix();
+            rotateZMatrix[0][0] = (float) Math.cos(rZ);
+            rotateZMatrix[0][1] = (float) ((-1.0f) * Math.sin(rZ));
+            rotateZMatrix[1][0] = (float) Math.sin(rZ);
+            rotateZMatrix[1][1] = (float) Math.cos(rZ);
+            rotateMatrix = matrixMultiply(rotateZMatrix, rotateMatrix);
+        }
 
         this.x = rotateMatrix[0][0];
         this.y = rotateMatrix[1][0];
         this.z = rotateMatrix[2][0];
     }
 
+    public void rotate(float rX, float rY, float rZ) { this.rotate(rX, rY, rZ, false); }
+
+    /*
     public static float[][] matrixMultiply(float[][] a, float[][] b) {
         float[][] c = new float[a[0].length][b.length];
         for(int i = 0; i < a.length; i++){
@@ -165,6 +181,26 @@ public class Vector3D {
         }
         return c;
     }
+
+     */
+
+    public static float[][] matrixMultiply(float[][] a, float[][] b) {
+        int aRows = a.length;
+        int aCols = a[0].length;
+        int bCols = b[0].length;
+
+        float[][] result = new float[aRows][bCols];
+
+        for (int i = 0; i < aRows; i++) {
+            for (int j = 0; j < bCols; j++) {
+                for (int k = 0; k < aCols; k++) {
+                    result[i][j] += a[i][k] * b[k][j];
+                }
+            }
+        }
+        return result;
+    }
+
 
     public float[][] turnToDiagonalMatrix(){
         return new float[][] {
