@@ -94,7 +94,7 @@ public class Triangle extends Object3D {
 
         float ka = 0.1f; // ambient reflection coefficient
         float ks = 0.5f; // specular reflection coefficient
-        float p = 100f;  // shininess factor
+        float p = 10f;  // shininess factor
 
         for (Light light : Light.getLights()) {
             Vector3D l = Vector3D.getZero();

@@ -105,11 +105,10 @@ public class Sphere extends Object3D {
      */
 
     //This is the intersection BEFORE TRYING TO REFACTOR IT
-    /*
 
     public Intersection[] intersect(Ray ray) {
         Vector3D O = ray.origin;
-        Vector3D D = ray.direction.normalize();
+        Vector3D D = ray.direction.normalize().scale(-1);
         Vector3D L = Vector3D.subtract(center, O);
         double tCA = L.dot(D);
 
@@ -121,6 +120,12 @@ public class Sphere extends Object3D {
         double tHC = Math.sqrt((radius * radius) - dSquared);
         double t0 = tCA - tHC;
         double t1 = tCA + tHC;
+
+        if(Math.min(t0,t1) == t1){
+            double copy = t0;
+            t0 = t1;
+            t1 = copy;
+        }
 
         Vector3D A = O.add(D.scale(t0));
         Vector3D B = O.add(D.scale(t1));
@@ -140,16 +145,17 @@ public class Sphere extends Object3D {
         };
     }
 
-     */
 
 
+
+    /*
     public Intersection[] intersect(Ray ray) {
         Vector3D O = ray.origin;
         Vector3D D = ray.direction.normalize(); // ← very important
-        Vector3D L = Vector3D.subtract(O, center);
+        Vector3D L = Vector3D.subtract(center, O);
         double tCA = L.dot(D);
 
-        double d2 = L.dot(L) - tCA * tCA;
+        double d2 = L.dot(L) - (tCA * tCA);
         double r2 = radius * radius;
 
         if (d2 > r2) return null;
@@ -173,6 +179,8 @@ public class Sphere extends Object3D {
 
         return new Intersection[] { p0, p1 };
     }
+
+     */
 
 
     /*
