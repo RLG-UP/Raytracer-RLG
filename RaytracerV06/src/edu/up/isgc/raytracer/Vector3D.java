@@ -8,6 +8,10 @@ public class Vector3D {
     public double x, y, z;  // Vector components
     public double value;    // Precomputed magnitude of the vector
     private static Vector3D zero = new Vector3D(0, 0, 0);
+    public static final double doubleOne = 1.0000000000000000000000;
+    public static final double doubleZero = 0.0000000000000000000000;
+    public static final float floatOne = 1.0000000000000000000000f;
+    public static final float floatZero = 0.0000000000000000000000f;
 
     /**
      * Constructs a 3D vector with specified components.
@@ -99,6 +103,93 @@ public class Vector3D {
         }
         else if(this.value > v.value) return 1;
         else return -1;
+    }
+
+    public void translate(float tX, float tY, float tZ) {
+        float[][] translationMatrix = Vector3D.getIdentityMatrix();
+        translationMatrix[0][3] = tX;
+        translationMatrix[1][3] = tY;
+        translationMatrix[2][3] = tZ;
+
+        translationMatrix = matrixMultiply(translationMatrix, this.turnToPilarMatrix());
+
+        this.x = translationMatrix[0][0];
+        this.y = translationMatrix[1][0];
+        this.z = translationMatrix[2][0];
+    }
+
+    public void scale(float sX, float sY, float sZ) {
+        float[][] scaleMatrix = new Vector3D(sX, sY, sZ).turnToDiagonalMatrix();
+
+        scaleMatrix= matrixMultiply(scaleMatrix, this.turnToPilarMatrix());
+
+        this.x = scaleMatrix[0][0];
+        this.y = scaleMatrix[1][0];
+        this.z = scaleMatrix[2][0];
+    }
+
+    public void rotate(float rX, float rY, float rZ) {
+        float[][] rotateMatrix = Vector3D.getIdentityMatrix();
+        float[][] rotateXMatrix = Vector3D.getIdentityMatrix();
+        float[][] rotateYMatrix = Vector3D.getIdentityMatrix();
+        float[][] rotateZMatrix = Vector3D.getIdentityMatrix();
+
+        rotateXMatrix[1][1] = (float) Math.cos(rX);
+        rotateXMatrix[1][2] = (float) ( (-1.0f) * Math.sin(rX) );
+        rotateXMatrix[2][1] = (float) Math.sin(rX);
+        rotateXMatrix[2][2] = (float) Math.cos(rX);
+        
+        rotateYMatrix[0][0] = (float) Math.cos(rX);
+        rotateYMatrix[0][2] = (float) Math.sin(rX);
+        rotateYMatrix[2][0] = (float) ( (-1.0f) * Math.sin(rX) );
+        rotateYMatrix[2][2] = (float) Math.cos(rX);
+
+        rotateZMatrix[0][0] = (float) Math.cos(rX);
+        rotateZMatrix[0][1] = (float) ( (-1.0f) * Math.sin(rX) );
+        rotateZMatrix[1][0] = (float) Math.sin(rX);
+        rotateZMatrix[1][1] = (float) Math.cos(rX);
+
+        rotateMatrix = matrixMultiply(rotateXMatrix, this.turnToPilarMatrix());
+
+        this.x = rotateMatrix[0][0];
+        this.y = rotateMatrix[1][0];
+        this.z = rotateMatrix[2][0];
+    }
+
+    public static float[][] matrixMultiply(float[][] a, float[][] b) {
+        float[][] c = new float[a[0].length][b.length];
+        for(int i = 0; i < a.length; i++){
+            for(int j = 0; j < b.length; j++){
+                c[i][j] += a[i][j] * b[j][i];
+            }
+        }
+        return c;
+    }
+
+    public float[][] turnToDiagonalMatrix(){
+        return new float[][] {
+                {(float) this.x, Vector3D.floatZero, Vector3D.floatZero, Vector3D.floatZero},
+                {Vector3D.floatZero, (float) this.y, Vector3D.floatZero, Vector3D.floatZero},
+                {Vector3D.floatZero, Vector3D.floatZero, (float) this.z, Vector3D.floatZero},
+                {Vector3D.floatZero, Vector3D.floatZero, Vector3D.floatZero, Vector3D.floatOne}};
+    }
+
+    public float[][] turnToPilarMatrix(){
+        return new float[][] {
+                {(float) this.x},
+                {(float) this.y},
+                {(float) this.z},
+                {Vector3D.floatOne}
+        };
+    }
+
+    public static float[][] getIdentityMatrix(){
+        return new float[][] {
+                {Vector3D.floatOne, Vector3D.floatZero, Vector3D.floatZero, Vector3D.floatZero},
+                {Vector3D.floatZero, Vector3D.floatOne, Vector3D.floatZero, Vector3D.floatZero},
+                {Vector3D.floatZero, Vector3D.floatZero, Vector3D.floatOne, Vector3D.floatZero},
+                {Vector3D.floatZero, Vector3D.floatZero, Vector3D.floatZero, Vector3D.floatOne}
+        };
     }
 
     public static Vector3D multiply(Vector3D v, Vector3D w) { return new Vector3D(v.x * w.x, v.y * w.y, v.z * w.z); }
