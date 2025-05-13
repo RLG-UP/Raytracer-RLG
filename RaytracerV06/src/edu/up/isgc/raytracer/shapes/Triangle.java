@@ -33,28 +33,273 @@ public class Triangle extends Object3D {
         this.setnC(nC);
     }
 
+
+    //INTERSECT METHOD BEFORE REFACTOR
+
+    /*
     @Override
     public Intersection[] intersect(Ray ray) {
-        Vector3D v2v0 = Vector3D.subtract(this.getC(), this.getA()).scale(-1);
-        Vector3D v1v0 = Vector3D.subtract(this.getB(), this.getA()).scale(-1);
-        Vector3D P = Vector3D.crossProduct(ray.direction, v1v0);
+        Vector3D v2v0 = Vector3D.subtract(this.getC(), this.getA());
+        Vector3D v1v0 = Vector3D.subtract(this.getB(), this.getA());
+        Vector3D D = ray.direction.normalize();
+        Vector3D P = Vector3D.crossProduct(D, v1v0);
         double det = v2v0.dot(P);
         double invDet = 1.0 / det;
-        Vector3D T = Vector3D.subtract(ray.origin, this.getA()).scale(-1);
+        Vector3D T = Vector3D.subtract(ray.origin, this.getA());
         u = invDet * T.dot(P);
 
         if(u < 0 || u > 1) return Intersection.nullIntersection();
+
         Vector3D Q = Vector3D.crossProduct(T, v2v0);
-        v = invDet * ray.direction.dot(Q);
+        v = invDet * D.dot(Q);
         if( v< 0 || (u+v) > (1 + Camera.getEpsilon())) return Intersection.nullIntersection();
         w = 1-u-v;
 
         double t = invDet * Q.dot(v1v0);
 
-        Vector3D point = ray.origin.add(ray.direction.scale(t));
+        Vector3D point = ray.origin.add(D.scale(t));
         //return new Intersection[]{new Intersection(point, t, this.addLight(point))};
         return new Intersection[]{new Intersection(point, t, super.getColor())};
     }
+
+     */
+
+
+
+    /*
+    @Override
+    public Intersection[] intersect(Ray ray) {
+        final double EPSILON = 1e-8;
+
+        Vector3D v0 = this.getA();
+        Vector3D v1 = this.getB();
+        Vector3D v2 = this.getC();
+
+        Vector3D edge1 = Vector3D.subtract(v1, v0);
+        Vector3D edge2 = Vector3D.subtract(v2, v0);
+
+        Vector3D pvec = Vector3D.crossProduct(ray.direction, edge2);
+        double det = edge1.dot(pvec);
+
+        // Use absolute value check to avoid missing intersections due to small determinant
+        if (Math.abs(det) < EPSILON) return Intersection.nullIntersection();
+
+        double invDet = 1.0 / det;
+        Vector3D tvec = Vector3D.subtract(ray.origin, v0);
+        double u = tvec.dot(pvec) * invDet;
+
+        if (u < 0.0 || u > 1.0) return Intersection.nullIntersection();
+
+        Vector3D qvec = Vector3D.crossProduct(tvec, edge1);
+        double v = ray.direction.dot(qvec) * invDet;
+
+        if (v < 0.0 || (u + v) > 1.0) return Intersection.nullIntersection();
+
+        double t = edge2.dot(qvec) * invDet;
+
+        if (t < EPSILON) return Intersection.nullIntersection();
+
+        // Save barycentric coordinates
+        this.u = u;
+        this.v = v;
+        this.w = 1.0 - u - v;
+
+        Vector3D intersectionPoint = ray.origin.add(ray.direction.scale(t));
+
+        // Lighting-aware rendering: if you have lighting logic, apply it here
+        return new Intersection[] {
+                new Intersection(intersectionPoint, t, super.getColor()) // <- or super.getColor()
+        };
+    }
+
+     */
+
+    //THIS IS THE METHOD WITH THE COLOR PROBLEM BUT ALMOST THERE
+
+    @Override
+    public Intersection[] intersect(Ray ray) {
+        Intersection intersection = new Intersection(null, -1, null);
+        Vector3D D = ray.direction.normalize().scale(-1);
+        Vector3D[] vert = new Vector3D[]{this.getA(), this.getB(), this.getC()};
+        Vector3D v2v0 = Vector3D.subtract(vert[2], vert[0]);
+        Vector3D v1v0 = Vector3D.subtract(vert[1], vert[0]);
+        Vector3D vectorP = Vector3D.crossProduct(D, v1v0);
+        double det = v2v0.dot(vectorP);
+        double invDet = 1.0 / det;
+        Vector3D vectorT = Vector3D.subtract(ray.origin, vert[0]);
+        double u = invDet * vectorT.dot(vectorP);
+
+        if (!(u < 0 || u > 1)) {
+            Vector3D vectorQ = Vector3D.crossProduct(vectorT, v2v0);
+            double v = invDet * D.dot(vectorQ);
+            if (!(v < 0 || (u + v) > (1.0 + Camera.getEpsilon()))) {
+                this.u = u;
+                this.v = v;
+                this.w = 1-u-v;
+                double t = invDet * vectorQ.dot(v1v0);
+                intersection.point = ray.origin.add(D.scale(t));
+                intersection.distance = t;
+                intersection.color = super.getColor();
+                return new Intersection[] {intersection};
+            }
+        }
+        return Intersection.nullIntersection();
+
+    }
+
+
+    /*
+    @Override
+    public Intersection[] intersect(Ray ray) {
+        final double EPSILON = 1e-8;
+
+        Vector3D v0 = this.getA();
+        Vector3D v1 = this.getB();
+        Vector3D v2 = this.getC();
+
+        Vector3D edge2 = Vector3D.subtract(v1, v0);
+        Vector3D edge1 = Vector3D.subtract(v2, v0);
+
+        Vector3D pvec = Vector3D.crossProduct(ray.direction, edge2);
+        double det = edge1.dot(pvec);
+
+        if (Math.abs(det) < EPSILON) {
+            return Intersection.nullIntersection(); // Ray is parallel to triangle
+        }
+
+        double invDet = 1.0 / det;
+        Vector3D tvec = Vector3D.subtract(ray.origin, v0);
+        double u = tvec.dot(pvec) * invDet;
+
+        if (u < 0.0 || u > 1.0) {
+            return Intersection.nullIntersection();
+        }
+
+        Vector3D qvec = Vector3D.crossProduct(tvec, edge1);
+        double v = ray.direction.dot(qvec) * invDet;
+
+        if (v < 0.0 || (u + v) > 1.0) {
+            return Intersection.nullIntersection();
+        }
+
+        double t = edge2.dot(qvec) * invDet;
+
+        if (t < EPSILON) {
+            return Intersection.nullIntersection(); // Intersection behind ray origin
+        }
+
+        double w = 1.0 - u - v;
+
+        Vector3D intersectionPoint = ray.origin.add(ray.direction.scale(t));
+
+        // If you're using interpolated normals or color, store u, v, w somewhere
+        this.u = u;
+        this.v = v;
+        this.w = w;
+
+        return new Intersection[] {
+                new Intersection(intersectionPoint, t, super.getColor())
+        };
+    }
+
+     */
+
+
+
+
+
+    /*
+
+    public Intersection[] intersect(Ray ray) {
+        Vector3D v0 = this.getA();  // First vertex
+        Vector3D v1 = this.getB();  // Second vertex
+        Vector3D v2 = this.getC();  // Third vertex
+
+        Vector3D edge1 = Vector3D.subtract(v1, v0);
+        Vector3D edge2 = Vector3D.subtract(v2, v0);
+
+        Vector3D h = Vector3D.crossProduct(ray.direction.scale(-1), edge2);
+        double det = edge1.dot(h);
+
+        final double EPSILON = 1e-8;
+        if (Math.abs(det) < EPSILON) {
+            return Intersection.nullIntersection();  // Ray is parallel to triangle
+        }
+
+        double invDet = 1.0 / det;
+        Vector3D s = Vector3D.subtract(ray.origin, v0);
+        u = invDet * s.dot(h);
+        if (u < 0.0 || u > 1.0) {
+            return Intersection.nullIntersection();
+        }
+
+        Vector3D q = Vector3D.crossProduct(s, edge1);
+        v = invDet * ray.direction.scale(-1).dot(q);
+        if (v < 0.0 || u + v > 1.0) {
+            return Intersection.nullIntersection();
+        }
+        w = 1-u-v;
+
+        double t = invDet * edge2.dot(q);
+        if (t < EPSILON) {
+            return Intersection.nullIntersection();  // Intersection behind the ray origin
+        }
+
+        Vector3D intersectionPoint = ray.origin.add(ray.direction.scale(t));
+        return new Intersection[] {
+                new Intersection(intersectionPoint, t, super.getColor())
+        };
+    }
+
+     */
+
+    /*
+    @Override
+    public Intersection[] intersect(Ray ray) {
+        Vector3D v0 = this.getA();
+        Vector3D v1 = this.getB();
+        Vector3D v2 = this.getC();
+
+        Vector3D edge1 = Vector3D.subtract(v1, v0);
+        Vector3D edge2 = Vector3D.subtract(v2, v0);
+
+        Vector3D h = Vector3D.crossProduct(ray.direction, edge2);
+        double a = edge1.dot(h);
+        final double EPSILON = 1e-8;
+
+        if (Math.abs(a) < EPSILON) {
+            return Intersection.nullIntersection();  // Ray is parallel to triangle
+        }
+
+        double f = 1.0 / a;
+        Vector3D s = Vector3D.subtract(ray.origin, v0);
+        u = f * s.dot(h);
+
+        if (u < 0.0 || u > 1.0) {
+            return Intersection.nullIntersection();
+        }
+
+        Vector3D q = Vector3D.crossProduct(s, edge1);
+        v = f * ray.direction.dot(q);
+
+        if (v < 0.0 || u + v > 1.0) {
+            return Intersection.nullIntersection();
+        }
+
+        double t = f * edge2.dot(q);
+        if (t < EPSILON) {
+            return Intersection.nullIntersection();  // Behind the ray or too close
+        }
+
+        w = 1.0 - u - v;
+        Vector3D intersectionPoint = ray.origin.add(ray.direction.scale(t));
+        return new Intersection[] { new Intersection(intersectionPoint, t, super.getColor()) };
+    }
+
+     */
+
+
+
 
     @Override
     public Object3D returnZero(){
@@ -91,16 +336,17 @@ public class Triangle extends Object3D {
     public Color addLight(Vector3D point) {
         Color finalColor = new Color(0, 0, 0);
         Vector3D N = this.getnA().scale(this.w).add(this.getnB().scale(this.v)).add(this.getnC().scale(this.u)).normalize();
+        //Vector3D N = this.getnA().scale((double) 1 /3).add(this.getnB().scale((double) 1 /3)).add(this.getnC().scale((double) 1 /3)).normalize();
 
-        float ka = 0.1f; // ambient reflection coefficient
-        float ks = 0.5f; // specular reflection coefficient
-        float p = 10f;  // shininess factor
+        float ks = 1f;
+        float p = 100f;
+        float ka = 0.1f;  // Ambient constant
+        float ambientIntensity = ka * Light.getAmbientLight();
 
         for (Light light : Light.getLights()) {
             Vector3D l = Vector3D.getZero();
             double lightDistance = Double.MAX_VALUE;
 
-            // Determine light direction
             if (light.type().equals("directional")) {
                 l = light.getDirection().normalize();
             } else if (light.type().equals("point") || light.type().equals("spot")) {
@@ -108,36 +354,30 @@ public class Triangle extends Object3D {
                 lightDistance = Vector3D.subtract(light.getPosition(), point).value;
             }
 
-            // Shadow check
-            Vector3D shadowOrigin = point.add(N.scale(Camera.getEpsilon()));
-            Ray shadowRay = new Ray(shadowOrigin, l);
             boolean inShadow = Scene.isInShadow(point, N, light, this);
 
-            // Ambient always contributes
-            float ambient = ka * Light.getAmbientLight();
-            float lambertian = 0f;
-            float blinn = 0f;
+            float lambertian = 0;
+            float blinn = 0;
 
             if (!inShadow) {
                 lambertian = (float) Math.max(N.dot(l) * light.getAttenuation(), 0.0);
-                Vector3D h = Vector3D.subtract(Camera.getCameraPosition(), point).scale(-1).normalize().add(l).normalize();
-                blinn = (float) (ks * Math.pow(Math.max(N.dot(h), 0), p));
+                Vector3D h = Vector3D.subtract(Camera.getCameraPosition(), point).normalize().add(l).normalize();
+                blinn = (float) (ks * Math.pow(Math.max(N.dot(h), 0.0), p));
             }
 
-            // Total contribution from this light
-            Color amb = Light.shine(light.getColor(), super.getColor(), ambient, true);
-            Color diff = Light.shine(light.getColor(), super.getColor(), lambertian, true);
-            Color spec = Light.shine(light.getColor(), super.getColor(), blinn, false); // Specular doesn't depend on object color
+            // Individual components
+            Color ambient  = Light.shine(light.getColor(), super.getColor(), ambientIntensity, true);
+            Color diffuse  = Light.shine(light.getColor(), super.getColor(), lambertian, true);
+            Color specular = Light.shine(light.getColor(), super.getColor(), blinn, false); // specular is independent of object color
 
+            // Combine them
+            Color lightContribution = new Color(
+                    clamp(ambient.getRed() + diffuse.getRed() + specular.getRed(), 0, 255),
+                    clamp(ambient.getGreen() + diffuse.getGreen() + specular.getGreen(), 0, 255),
+                    clamp(ambient.getBlue() + diffuse.getBlue() + specular.getBlue(), 0, 255)
+            );
 
-            // Sum and clamp to prevent overflow
-            int r = clamp(amb.getRed() + diff.getRed() + spec.getRed(), 0, 255);
-            int g = clamp(amb.getGreen() + diff.getGreen() + spec.getGreen(), 0, 255);
-            int b = clamp(amb.getBlue() + diff.getBlue() + spec.getBlue(), 0, 255);
-
-            Color lightContribution = new Color(r, g, b);
-
-            // Accumulate light from all lights
+            // Accumulate contribution
             finalColor = new Color(
                     clamp(finalColor.getRed() + lightContribution.getRed(), 0, 255),
                     clamp(finalColor.getGreen() + lightContribution.getGreen(), 0, 255),

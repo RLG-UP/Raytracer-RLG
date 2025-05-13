@@ -25,25 +25,25 @@ public class Raytracer {
         int width = 400;
         int height = 400;
         double nearPlane = -1000, farPlane = 1000;
-        //String path = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\Raytracer\\LocalFiles\\ObjFiles\\Ring.obj").getAbsolutePath();
+        String path = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\Raytracer\\LocalFiles\\ObjFiles\\Ring.obj").getAbsolutePath();
         //String path = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\Raytracer\\LocalFiles\\ObjFiles\\SmallTeapot.obj").getAbsolutePath();
         //String path = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\Raytracer\\LocalFiles\\ObjFiles\\shark1.obj").getAbsolutePath();
 
         // Create scene with objects
         Scene scene = new Scene();
-        scene.addObject(new Sphere(new Vector3D(0, 0, 0), 1, Color.RED));
+        scene.addObject(new Sphere(new Vector3D(0, 3, 0), 3, Color.RED));
         //scene.addObject(new Sphere(new Vector3D(0, 0, -2), 0.1, Color.BLUE));
         //scene.addObject(new Triangle(new Vector3D(0.4, 0, -3), new Vector3D(0.4, 0.5, -3), new Vector3D(1.1, 0, -3), Color.GREEN));
-        //Polygon polygon = new Polygon(path, Color.MAGENTA);
+        Polygon polygon = new Polygon(path, Color.MAGENTA);
 
-        //scene.addPolygon( polygon );
+        scene.addPolygon( polygon );
 
         // Set up camera at the origin
         Camera camera = new Camera(new Vector3D(0, 0, -6), nearPlane, farPlane);
         //Light light01 = new Directional(1, Color.white, new Vector3D(-2,5,-1), new Vector3D(0, 0, 0));
-        Light light02 = new Directional(1, Color.white, new Vector3D(0,10,0), new Vector3D(0,0,0));
+        Light light02 = new Directional(1, Color.white, new Vector3D(0,-10,-10), new Vector3D(0,0,0));
         //Light light03 = new Point(1f, Color.white, new Vector3D(0, 1, -11));
-        //Light light04 = new Spot(1f, Color.white, new Vector3D(0,0,-10), new Vector3D(0,0,0), 1f, 1f);
+        Light light04 = new Spot(1f, Color.white, new Vector3D(0,10,0), new Vector3D(0,0,0), 1f, 1f);
 
         /*
         // Instead of top of sphere, pick the front of the sphere

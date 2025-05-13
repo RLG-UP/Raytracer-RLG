@@ -106,6 +106,7 @@ public class Sphere extends Object3D {
 
     //This is the intersection BEFORE TRYING TO REFACTOR IT
 
+
     public Intersection[] intersect(Ray ray) {
         Vector3D O = ray.origin;
         Vector3D D = ray.direction.normalize().scale(-1);
