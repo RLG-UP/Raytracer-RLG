@@ -119,6 +119,13 @@ public class Vector3D {
     }
 
     public void scale(float sX, float sY, float sZ) {
+        this.x *= sX;
+        this.y *= sY;
+        this.z *= sZ;
+    }
+
+    /*
+    public void scale(float sX, float sY, float sZ) {
         float[][] scaleMatrix = new Vector3D(sX, sY, sZ).turnToDiagonalMatrix();
 
         scaleMatrix= matrixMultiply(scaleMatrix, this.turnToPilarMatrix());
@@ -127,6 +134,8 @@ public class Vector3D {
         this.y = scaleMatrix[1][0];
         this.z = scaleMatrix[2][0];
     }
+
+     */
 
     public void rotate(float rX, float rY, float rZ, boolean inRadians) {
         float[][] rotateMatrix = this.turnToPilarMatrix();

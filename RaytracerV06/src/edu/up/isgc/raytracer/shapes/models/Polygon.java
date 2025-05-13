@@ -14,6 +14,7 @@ import java.util.Arrays;
 public class Polygon {
     private ArrayList<Triangle> shape;
     private Color color;
+    private Vector3D position;
 
     public Polygon(ArrayList<Triangle> shape){
         this.setShape(shape);
@@ -87,6 +88,7 @@ public class Polygon {
                 }
             }
         }
+        this.setPosition(Vector3D.getZero());
         this.setShape(shape);
     }
 
@@ -104,6 +106,88 @@ public class Polygon {
 
     public void setColor(Color color) {
         this.color = color;
+    }
+
+    public void translate(float tX, float tY, float tZ){
+        for(Triangle t : shape){
+            t.getA().translate(tX, tY, tZ);
+            t.getB().translate(tX, tY, tZ);
+            t.getC().translate(tX, tY, tZ);
+
+            this.getPosition().translate(tX, tY, tZ);
+        }
+    }
+
+    public void scale(float sX, float sY, float sZ){
+        for(Triangle t : shape){
+            t.getA().scale(sX, sY, sZ);
+            t.getB().scale(sX, sY, sZ);
+            t.getC().scale(sX, sY, sZ);
+
+            float nSX = 1/sX, nSY = 1/sY, nSZ = 1/sZ;
+            t.getnA().scale(nSX, nSY, nSZ);
+            t.getnB().scale(nSX, nSY, nSZ);
+            t.getnC().scale(nSX, nSY, nSZ);
+
+            t.setnA(t.getnA().normalize());
+            t.setnB(t.getnB().normalize());
+            t.setnC(t.getnC().normalize());
+        }
+    }
+
+    public void rotateInPlace(float rX, float rY, float rZ, boolean inRadians){
+        float x = (float) this.getPosition().x;
+        float y = (float) this.getPosition().y;
+        float z = (float) this.getPosition().z;
+
+        for(Triangle t : shape){
+
+            t.getA().translate(-x, -y, -z);
+            t.getB().translate(-x, -y, -z);
+            t.getC().translate(-x, -y, -z);
+
+            t.getA().rotate(rX, rY, rZ, inRadians);
+            t.getB().rotate(rX, rY, rZ, inRadians);
+            t.getC().rotate(rX, rY, rZ, inRadians);
+
+            t.getnA().rotate(rX, rY, rZ);
+            t.getnB().rotate(rX, rY, rZ);
+            t.getnC().rotate(rX, rY, rZ);
+
+            t.setnA(t.getnA().normalize());
+            t.setnB(t.getnB().normalize());
+            t.setnC(t.getnC().normalize());
+
+            t.getA().translate(x, y, z);
+            t.getB().translate(x, y, z);
+            t.getC().translate(x, y, z);
+        }
+    }
+
+    public void rotate(float rX, float rY, float rZ, boolean inRadians){
+        for(Triangle t : shape){
+            t.getA().rotate(rX, rY, rZ, inRadians);
+            t.getB().rotate(rX, rY, rZ, inRadians);
+            t.getC().rotate(rX, rY, rZ, inRadians);
+
+            t.getnA().rotate(rX, rY, rZ, inRadians);
+            t.getnB().rotate(rX, rY, rZ, inRadians);
+            t.getnC().rotate(rX, rY, rZ, inRadians);
+
+            t.setnA(t.getnA().normalize());
+            t.setnB(t.getnB().normalize());
+            t.setnC(t.getnC().normalize());
+        }
+    }
+
+    public void rotate(float rX, float rY, float rZ){ this.rotate(rX, rY, rZ, false); }
+
+    public Vector3D getPosition() {
+        return position;
+    }
+
+    public void setPosition(Vector3D position) {
+        this.position = position;
     }
 }
 
