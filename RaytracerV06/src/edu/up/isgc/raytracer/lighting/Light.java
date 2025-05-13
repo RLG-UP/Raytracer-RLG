@@ -77,16 +77,22 @@ public abstract class Light {
 
      */
 
-    public static Color shine(Color lightColor, Color objectColor, float intensity) {
-        float[] nLC = Light.normalizeColor(lightColor);
-        float[] nOC = Light.normalizeColor(objectColor);
+    // New version: separate diffuse/specular and object color logic
+    public static Color shine(Color lightColor, Color objectColor, float intensity, boolean applyObjectColor) {
+        float[] nLC = normalizeColor(lightColor);
+        float[] nOC = normalizeColor(objectColor);
 
-        float r = clamp(nLC[0] * nOC[0] * intensity, 0, 1.0f);
-        float g = clamp(nLC[1] * nOC[1] * intensity, 0, 1.0f);
-        float b = clamp(nLC[2] * nOC[2] * intensity, 0, 1.0f);
+        float r = nLC[0] * (applyObjectColor ? nOC[0] : 1.0f) * intensity;
+        float g = nLC[1] * (applyObjectColor ? nOC[1] : 1.0f) * intensity;
+        float b = nLC[2] * (applyObjectColor ? nOC[2] : 1.0f) * intensity;
 
-        return new Color((int) (r * 255), (int) (g * 255), (int) (b * 255));
+        return new Color(
+                clamp((int)(r * 255), 0, 255),
+                clamp((int)(g * 255), 0, 255),
+                clamp((int)(b * 255), 0, 255)
+        );
     }
+
 
 
 

@@ -89,19 +89,18 @@ public class Triangle extends Object3D {
 
     @Override
     public Color addLight(Vector3D point) {
-        float lambertian = 0;
-        float blinn = 0;
         Color finalColor = new Color(0, 0, 0);
-        float intensity = 0;
-
         Vector3D N = this.getnA().scale(this.w).add(this.getnB().scale(this.v)).add(this.getnC().scale(this.u)).normalize();
-        float ks = 1f;
-        float p = 10000;
+
+        float ka = 0.1f; // ambient reflection coefficient
+        float ks = 1.0f; // specular reflection coefficient
+        float p = 100f;  // shininess factor
 
         for (Light light : Light.getLights()) {
             Vector3D l = Vector3D.getZero();
             double lightDistance = Double.MAX_VALUE;
 
+            // Determine light direction
             if (light.type().equals("directional")) {
                 l = light.getDirection().normalize();
             } else if (light.type().equals("point") || light.type().equals("spot")) {
@@ -109,66 +108,46 @@ public class Triangle extends Object3D {
                 lightDistance = Vector3D.subtract(light.getPosition(), point).value;
             }
 
+            // Shadow check
             Vector3D shadowOrigin = point.add(N.scale(Camera.getEpsilon()));
             Ray shadowRay = new Ray(shadowOrigin, l);
-
-            /*
-            System.out.println("\n--- Shadow Debug Info ---");
-            System.out.println("Light type: " + light.type());
-            System.out.println("Ray origin: " + shadowOrigin);
-            System.out.println("Ray direction: " + l);
-
-             */
-
-            //Intersection shadowPoint = Scene.findRayIntersection(shadowRay);
             boolean inShadow = Scene.isInShadow(point, N, light, this);
 
-            /*
-            if (shadowPoint != null) {
-                System.out.println("Hit object at distance: " + shadowPoint.distance);
-                if (light.type().equals("directional")) {
-                    inShadow = true;
-                } else {
-                    inShadow = shadowPoint.distance < lightDistance - Camera.getEpsilon();
-                }
-            } else {
-                //System.out.println("No object hit by shadow ray.");
-            }
-
-             */
-
-            float ka = 0.1f;
+            // Ambient always contributes
             float ambient = ka * Light.getAmbientLight();
+            float lambertian = 0f;
+            float blinn = 0f;
 
             if (!inShadow) {
                 lambertian = (float) Math.max(N.dot(l) * light.getAttenuation(), 0.0);
                 Vector3D h = Vector3D.subtract(Camera.getCameraPosition(), point).normalize().add(l).normalize();
                 blinn = (float) (ks * Math.pow(Math.max(N.dot(h), 0), p));
-                //System.out.println("Lambertian: " + lambertian + ", Blinn: " + blinn);
-            } else {
-                lambertian = 0;
-                blinn = 0;
-                //System.out.println("In Shadow at point: " + point);
             }
 
-            intensity = (float) Math.max(ambient + lambertian + blinn, 0.0);
-            Color lightContribution = Light.shine(light.getColor(), super.getColor(), intensity);
+            // Total contribution from this light
+            Color amb = Light.shine(light.getColor(), super.getColor(), ambient, true);
+            Color diff = Light.shine(light.getColor(), super.getColor(), lambertian, true);
+            Color spec = Light.shine(light.getColor(), super.getColor(), blinn, false); // Specular doesn't depend on object color
 
-            Color amb = Light.shine(light.getColor(), super.getColor(), ambient);
-            Color lamb = Light.shine(light.getColor(), super.getColor(), lambertian);
-            Color specular = Light.shine(light.getColor(), super.getColor(), blinn);
 
-            lightContribution = new Color(clamp(amb.getRed() + lamb.getRed() + specular.getRed(), 0,255), clamp(amb.getGreen() + lamb.getGreen() + specular.getGreen(), 0, 255), clamp(amb.getBlue() + lamb.getBlue() + specular.getBlue(), 0, 255));
+            // Sum and clamp to prevent overflow
+            int r = clamp(amb.getRed() + diff.getRed() + spec.getRed(), 0, 255);
+            int g = clamp(amb.getGreen() + diff.getGreen() + spec.getGreen(), 0, 255);
+            int b = clamp(amb.getBlue() + diff.getBlue() + spec.getBlue(), 0, 255);
 
+            Color lightContribution = new Color(r, g, b);
+
+            // Accumulate light from all lights
             finalColor = new Color(
-                    clamp(finalColor.getRed() + (lightContribution.getRed()), 0, 255),
-                    clamp(finalColor.getGreen() + (lightContribution.getGreen()), 0, 255),
-                    clamp(finalColor.getBlue() + (lightContribution.getBlue()), 0, 255)
+                    clamp(finalColor.getRed() + lightContribution.getRed(), 0, 255),
+                    clamp(finalColor.getGreen() + lightContribution.getGreen(), 0, 255),
+                    clamp(finalColor.getBlue() + lightContribution.getBlue(), 0, 255)
             );
         }
 
         return finalColor;
     }
+
 
 
 

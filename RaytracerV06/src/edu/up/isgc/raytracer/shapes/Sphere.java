@@ -6,6 +6,7 @@ import edu.up.isgc.raytracer.lighting.Light;
 import edu.up.isgc.raytracer.Ray;
 import edu.up.isgc.raytracer.Vector3D;
 import edu.up.isgc.raytracer.world.Camera;
+import edu.up.isgc.raytracer.world.Scene;
 
 import java.awt.Color;
 
@@ -212,6 +213,8 @@ public class Sphere extends Object3D {
         return Vector3D.subtract(point, center).normalize();
     }
 
+    //HERE IS THE ADDLIGHT BEFORE TRYING TO REWORK THE SPHERE ONE
+    /*
     @Override
     public Color addLight(Vector3D point) {
         float lambertian = 0;
@@ -248,6 +251,64 @@ public class Sphere extends Object3D {
         }
         return finalColor;
     }
+
+     */
+
+    @Override
+    public Color addLight(Vector3D point) {
+        Color finalColor = new Color(0, 0, 0);
+
+        Vector3D N = this.normal(point);  // Normal at point on sphere
+        float ks = 1f;
+        float p = 100f;
+        float ka = 0.1f;  // Ambient constant
+        float ambientIntensity = ka * Light.getAmbientLight();
+
+        for (Light light : Light.getLights()) {
+            Vector3D l = Vector3D.getZero();
+            double lightDistance = Double.MAX_VALUE;
+
+            if (light.type().equals("directional")) {
+                l = light.getDirection().normalize();
+            } else if (light.type().equals("point") || light.type().equals("spot")) {
+                l = light.getDirection(point).normalize();
+                lightDistance = Vector3D.subtract(light.getPosition(), point).value;
+            }
+
+            boolean inShadow = Scene.isInShadow(point, N, light, this);
+
+            float lambertian = 0;
+            float blinn = 0;
+
+            if (!inShadow) {
+                lambertian = (float) Math.max(N.dot(l) * light.getAttenuation(), 0.0);
+                Vector3D h = Vector3D.subtract(Camera.getCameraPosition(), point).normalize().add(l).normalize();
+                blinn = (float) (ks * Math.pow(Math.max(N.dot(h), 0.0), p));
+            }
+
+            // Individual components
+            Color ambient  = Light.shine(light.getColor(), super.getColor(), ambientIntensity, true);
+            Color diffuse  = Light.shine(light.getColor(), super.getColor(), lambertian, true);
+            Color specular = Light.shine(light.getColor(), super.getColor(), blinn, false); // specular is independent of object color
+
+            // Combine them
+            Color lightContribution = new Color(
+                    clamp(ambient.getRed() + diffuse.getRed() + specular.getRed(), 0, 255),
+                    clamp(ambient.getGreen() + diffuse.getGreen() + specular.getGreen(), 0, 255),
+                    clamp(ambient.getBlue() + diffuse.getBlue() + specular.getBlue(), 0, 255)
+            );
+
+            // Accumulate contribution
+            finalColor = new Color(
+                    clamp(finalColor.getRed() + lightContribution.getRed(), 0, 255),
+                    clamp(finalColor.getGreen() + lightContribution.getGreen(), 0, 255),
+                    clamp(finalColor.getBlue() + lightContribution.getBlue(), 0, 255)
+            );
+        }
+
+        return finalColor;
+    }
+
 
     public Object3D returnZero(){
         return new Sphere(Vector3D.getZero(), 0.0, null);
