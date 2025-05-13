@@ -79,22 +79,24 @@ public class Triangle extends Object3D {
     public Vector3D getnC() { return nC; }
     public void setnC(Vector3D nC) { this.nC = nC; }
 
+
     public Vector3D normal(){
         Vector3D v = Vector3D.subtract(this.getB(), this.getA()).normalize();
         Vector3D w = Vector3D.subtract(this.getA(), this.getC()).normalize();
         return Vector3D.crossProduct(v, w).normalize();
     }
 
+
     @Override
     public Color addLight(Vector3D point) {
         float lambertian = 0;
         float blinn = 0;
         Color finalColor = new Color(0, 0, 0);
-        float lightAttenuation = 0;
+        float intensity = 0;
 
         Vector3D N = this.getnA().scale(this.w).add(this.getnB().scale(this.v)).add(this.getnC().scale(this.u)).normalize();
         float ks = 1f;
-        float p = 100;
+        float p = 10000;
 
         for (Light light : Light.getLights()) {
             Vector3D l = Vector3D.getZero();
@@ -118,9 +120,10 @@ public class Triangle extends Object3D {
 
              */
 
-            Intersection shadowPoint = Scene.findRayIntersection(shadowRay);
-            boolean inShadow = false;
+            //Intersection shadowPoint = Scene.findRayIntersection(shadowRay);
+            boolean inShadow = Scene.isInShadow(point, N, light, this);
 
+            /*
             if (shadowPoint != null) {
                 System.out.println("Hit object at distance: " + shadowPoint.distance);
                 if (light.type().equals("directional")) {
@@ -132,32 +135,41 @@ public class Triangle extends Object3D {
                 //System.out.println("No object hit by shadow ray.");
             }
 
+             */
+
             float ka = 0.1f;
             float ambient = ka * Light.getAmbientLight();
 
             if (!inShadow) {
-                lambertian = (float) clamp(N.dot(l) * light.getAttenuation(), 0.0, 1.0);
+                lambertian = (float) Math.max(N.dot(l) * light.getAttenuation(), 0.0);
                 Vector3D h = Vector3D.subtract(Camera.getCameraPosition(), point).normalize().add(l).normalize();
-                blinn = (float) (ks * Math.pow(clamp(N.dot(h), 0, 1), p));
+                blinn = (float) (ks * Math.pow(Math.max(N.dot(h), 0), p));
                 //System.out.println("Lambertian: " + lambertian + ", Blinn: " + blinn);
             } else {
                 lambertian = 0;
                 blinn = 0;
-                System.out.println("In Shadow at point: " + point);
+                //System.out.println("In Shadow at point: " + point);
             }
 
-            float intensity = (float) clamp(ambient + lambertian + blinn, 0.0, 1.0);
+            intensity = (float) Math.max(ambient + lambertian + blinn, 0.0);
             Color lightContribution = Light.shine(light.getColor(), super.getColor(), intensity);
 
+            Color amb = Light.shine(light.getColor(), super.getColor(), ambient);
+            Color lamb = Light.shine(light.getColor(), super.getColor(), lambertian);
+            Color specular = Light.shine(light.getColor(), super.getColor(), blinn);
+
+            lightContribution = new Color(clamp(amb.getRed() + lamb.getRed() + specular.getRed(), 0,255), clamp(amb.getGreen() + lamb.getGreen() + specular.getGreen(), 0, 255), clamp(amb.getBlue() + lamb.getBlue() + specular.getBlue(), 0, 255));
+
             finalColor = new Color(
-                    clamp(finalColor.getRed() + lightContribution.getRed(), 0, 255),
-                    clamp(finalColor.getGreen() + lightContribution.getGreen(), 0, 255),
-                    clamp(finalColor.getBlue() + lightContribution.getBlue(), 0, 255)
+                    clamp(finalColor.getRed() + (lightContribution.getRed()), 0, 255),
+                    clamp(finalColor.getGreen() + (lightContribution.getGreen()), 0, 255),
+                    clamp(finalColor.getBlue() + (lightContribution.getBlue()), 0, 255)
             );
         }
 
         return finalColor;
     }
+
 
 
 

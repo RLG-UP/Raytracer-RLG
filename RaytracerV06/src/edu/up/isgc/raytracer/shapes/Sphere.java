@@ -208,7 +208,6 @@ public class Sphere extends Object3D {
      */
 
 
-
     public Vector3D normal(Vector3D point){
         return Vector3D.subtract(point, center).normalize();
     }

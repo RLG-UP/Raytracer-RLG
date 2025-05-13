@@ -66,13 +66,29 @@ public abstract class Light {
     public abstract Vector3D getDirection(Vector3D point);
     public Vector3D getDirection() { return this.getDirection(Vector3D.getZero()); }
 
+    /*
     public static Color shine(Color lightColor, Color objectColor, float lambertian){
         float[] nLC = Light.normalizeColor(lightColor);
         float[] nOC = Light.normalizeColor(objectColor);
         float[] nLOC = new float[]{nLC[0] * nOC[0], nLC[1] * nOC[1], nLC[2] * nOC[2]};
 
-        return new Color(nLOC[0] * lambertian, nLOC[1] * lambertian, nLOC[2] * lambertian);
+        return new Color(clamp(nLOC[0] * lambertian, 0,1.0f), clamp(nLOC[1] * lambertian,0,1.0f), clamp(nLOC[2] * lambertian,0,1.0f));
     }
+
+     */
+
+    public static Color shine(Color lightColor, Color objectColor, float intensity) {
+        float[] nLC = Light.normalizeColor(lightColor);
+        float[] nOC = Light.normalizeColor(objectColor);
+
+        float r = clamp(nLC[0] * nOC[0] * intensity, 0, 1.0f);
+        float g = clamp(nLC[1] * nOC[1] * intensity, 0, 1.0f);
+        float b = clamp(nLC[2] * nOC[2] * intensity, 0, 1.0f);
+
+        return new Color((int) (r * 255), (int) (g * 255), (int) (b * 255));
+    }
+
+
 
     public static Vector3D ericson(Vector3D point, Vector3D v1, Vector3D v2, Vector3D v3, Vector3D n1, Vector3D n2, Vector3D n3) {
 

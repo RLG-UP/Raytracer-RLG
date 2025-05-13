@@ -9,7 +9,7 @@ import edu.up.isgc.raytracer.Vector3D;
  */
 public class Camera {
     public static Vector3D position;  // The position of the camera in 3D space
-    private static double epsilon = 0.0000001;
+    private static double epsilon = 0.00001;
     public double[] clipPlanes = new double[2];
 
     /**

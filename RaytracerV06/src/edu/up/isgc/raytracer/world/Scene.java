@@ -8,6 +8,7 @@ import edu.up.isgc.raytracer.shapes.Object3D;
 import edu.up.isgc.raytracer.shapes.Triangle;
 import edu.up.isgc.raytracer.shapes.models.Polygon;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 /**
@@ -97,6 +98,7 @@ public class Scene {
 
      */
 
+    /*
     public static Intersection findRayIntersection(Ray ray) {
         Intersection closestIntersection = null;
         double minDist = Double.MAX_VALUE;
@@ -124,7 +126,55 @@ public class Scene {
         return closestIntersection;
     }
 
-    public static boolean isInShadow(Vector3D surfacePoint, Vector3D normal, Light light, Scene scene) {
+     */
+
+    /*
+    public static Intersection findRayIntersection(Ray ray, Object3D ignoreShape) {
+        Intersection closestHit = null;
+
+        for (Object3D shape : Scene.objects) {
+            if (shape == ignoreShape) continue;
+            if(shape == null) continue;
+
+            Intersection hit = shape.intersect(ray)[0];
+
+            if (hit != null && (closestHit == null || hit.distance < closestHit.distance)) {
+                closestHit = hit;
+            }
+        }
+
+        return closestHit;
+    }
+
+     */
+    public static Intersection findRayIntersection(Ray ray, Object3D ignoreShape) {
+        Intersection closestHit = null;
+
+        for (Object3D shape : Scene.objects) {
+            if (shape == null || shape == ignoreShape) continue;
+
+            Intersection[] hits = shape.intersect(ray);
+            if (hits == null) continue;
+
+            for (Intersection hit : hits) {
+                if (hit == null) continue;
+
+                if (hit.distance > Camera.getEpsilon() &&
+                        (closestHit == null || hit.distance < closestHit.distance)) {
+                    closestHit = hit;
+                    closestHit.object = shape;
+                }
+
+            }
+        }
+        return closestHit;
+    }
+
+
+
+
+    /*
+    public static boolean isInShadow(Vector3D surfacePoint, Vector3D normal, Light light) {
         Vector3D lightDir = Vector3D.subtract(light.getPosition(), surfacePoint).normalize();
         Vector3D shadowOrigin = surfacePoint.add(normal.scale(Camera.getEpsilon()));
         Ray shadowRay = new Ray(shadowOrigin, lightDir);
@@ -138,6 +188,25 @@ public class Scene {
 
         return false;
     }
+
+     */
+
+    public static boolean isInShadow(Vector3D surfacePoint, Vector3D normal, Light light, Object3D ignoreShape) {
+        Vector3D lightDir = Vector3D.subtract(light.getPosition(), surfacePoint).normalize().scale(-1);
+        Vector3D shadowOrigin = surfacePoint.add(normal.scale(Camera.getEpsilon()));
+        Ray shadowRay = new Ray(shadowOrigin, lightDir);
+
+        Intersection shadowHit = Scene.findRayIntersection(shadowRay, ignoreShape);
+
+        if (shadowHit != null && shadowHit.object != ignoreShape) {
+            //System.out.println("The object " + ignoreShape + " casted a ray and hit " + shadowHit.object);
+            double lightDistance = Vector3D.subtract(light.getPosition(), surfacePoint).value;
+            return shadowHit.distance < lightDistance - Camera.getEpsilon(); // small margin
+        }
+
+        return false;
+    }
+
 
 
 }
