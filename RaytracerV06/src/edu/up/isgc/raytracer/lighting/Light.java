@@ -77,6 +77,7 @@ public abstract class Light {
 
      */
 
+    /*
     // New version: separate diffuse/specular and object color logic
     public static Color shine(Color lightColor, Color objectColor, float intensity, boolean applyObjectColor) {
         float[] nLC = normalizeColor(lightColor);
@@ -92,6 +93,27 @@ public abstract class Light {
                 clamp((int)(b * 255), 0, 255)
         );
     }
+
+     */
+
+    public static Color shine(Color lightColor, Color objectColor, float intensity, boolean applyObjectColor) {
+        float[] nLC = normalizeColor(lightColor);
+        float[] nOC = normalizeColor(objectColor);
+
+        // Blend object color into specular a little, even if applyObjectColor is false
+        float blendFactor = applyObjectColor ? 1.0f : 0.3f; // 0.3f gives a colored tint to specular
+
+        float r = (nLC[0] * (blendFactor * nOC[0] + (1 - blendFactor))) * intensity;
+        float g = (nLC[1] * (blendFactor * nOC[1] + (1 - blendFactor))) * intensity;
+        float b = (nLC[2] * (blendFactor * nOC[2] + (1 - blendFactor))) * intensity;
+
+        return new Color(
+                clamp((int)(r * 255), 0, 255),
+                clamp((int)(g * 255), 0, 255),
+                clamp((int)(b * 255), 0, 255)
+        );
+    }
+
 
 
 

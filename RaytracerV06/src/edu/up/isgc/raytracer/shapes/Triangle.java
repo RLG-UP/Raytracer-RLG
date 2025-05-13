@@ -93,7 +93,7 @@ public class Triangle extends Object3D {
         Vector3D N = this.getnA().scale(this.w).add(this.getnB().scale(this.v)).add(this.getnC().scale(this.u)).normalize();
 
         float ka = 0.1f; // ambient reflection coefficient
-        float ks = 1.0f; // specular reflection coefficient
+        float ks = 0.5f; // specular reflection coefficient
         float p = 100f;  // shininess factor
 
         for (Light light : Light.getLights()) {
