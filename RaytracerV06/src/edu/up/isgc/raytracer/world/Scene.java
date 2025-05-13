@@ -11,6 +11,8 @@ import edu.up.isgc.raytracer.shapes.models.Polygon;
 import java.awt.*;
 import java.util.ArrayList;
 
+import static java.lang.Math.clamp;
+
 /**
  * Represents a 3D scene containing multiple objects to be rendered.
  * Manages object collection and intersection calculations.
@@ -206,6 +208,69 @@ public class Scene {
 
         return false;
     }
+
+    /*
+    public static Color castReflection(Vector3D surfacePoint, Vector3D normal, Object3D ignoreShape, int recursionLimit) {
+        Color c = Color.black;
+        Vector3D d = Vector3D.subtract(Camera.getCameraPosition(), surfacePoint).normalize();
+        Vector3D rayOrigin = surfacePoint.add(normal.scale(Camera.getEpsilon()));
+        Ray reflectionRay = new Ray(rayOrigin, d);
+
+        Intersection rayHit = Scene.findRayIntersection(reflectionRay, ignoreShape);
+
+        if (rayHit != null && rayHit.object != ignoreShape && recursionLimit > 0) {
+            recursionLimit--;
+            Color reflectionColor = castReflection(rayHit.point, rayHit.getNormal(), rayHit.object, recursionLimit)
+            c = new Color(clamp(c.getRed() + reflectionColor.getRed(), 0, 255),
+                    clamp(c.getGreen() + reflectionColor.getGreen(), 0, 255),
+                    clamp(c.getBlue() + reflectionColor.getBlue(), 0, 255));
+            return c;
+
+            //System.out.println("The object " + ignoreShape + " casted a ray and hit " + shadowHit.object);
+            //double D = Vector3D.subtract(Camera.getCameraPosition(), surfacePoint).value;
+            //return shadowHit.distance < D - Camera.getEpsilon(); // small margin
+        }
+
+        return c;
+        //return false;
+    }
+
+     */
+
+    public static Color castReflection(Vector3D surfacePoint, Vector3D normal, Object3D ignoreShape, int recursionLimit) {
+        if (recursionLimit <= 0) {
+            return Color.BLACK;
+        }
+
+        // Step 1: Compute reflected direction
+        Vector3D incoming = Vector3D.subtract(surfacePoint, Camera.getCameraPosition()).normalize().scale(-1);
+        Vector3D reflected = Vector3D.subtract(incoming, normal.scale(2 * incoming.dot(normal))).normalize();
+
+        // Step 2: Offset origin to avoid self-hit
+        Vector3D rayOrigin = surfacePoint.add(normal.scale(Camera.getEpsilon()));
+        Ray reflectionRay = new Ray(rayOrigin, reflected);
+
+        // Step 3: Check intersection
+        Intersection hit = Scene.findRayIntersection(reflectionRay, ignoreShape);
+
+        if (hit != null && hit.object != null) {
+            // Get base color of object hit
+            Color localColor = hit.object.getColor(); // Or calculate with lighting, if available
+
+            // Recurse
+            Color reflectedColor = castReflection(hit.point, hit.getNormal(), hit.object, recursionLimit - 1);
+
+            // Combine local and reflected colors
+            int r = clamp((int)(localColor.getRed() * 0.5 + reflectedColor.getRed() * 0.5), 0, 255);
+            int g = clamp((int)(localColor.getGreen() * 0.5 + reflectedColor.getGreen() * 0.5), 0, 255);
+            int b = clamp((int)(localColor.getBlue() * 0.5 + reflectedColor.getBlue() * 0.5), 0, 255);
+
+            return new Color(r, g, b);
+        }
+
+        return Color.BLACK;
+    }
+
 
 
 

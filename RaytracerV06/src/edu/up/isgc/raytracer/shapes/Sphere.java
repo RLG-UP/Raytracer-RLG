@@ -50,7 +50,7 @@ public class Sphere extends Object3D {
             double t = (-b - Math.sqrt(discriminant)) / (2.0 * a);
             if (t > 0) {
                 Vector3D hitPoint = ray.origin.add(ray.direction.scale(t));
-                return new Intersection(hitPoint, t, this.color);
+                return new Intersection(hitPoint, t, this.color, this.normal(hitPoint));
             }
         }
         return null;
@@ -136,8 +136,8 @@ public class Sphere extends Object3D {
         double distB = Vector3D.subtract(B, center).value;
 
         // Create intersection points
-        Intersection p0 = new Intersection(A, t0, super.getColor());
-        Intersection p1 = new Intersection(B, t1, super.getColor());
+        Intersection p0 = new Intersection(A, t0, super.getColor(), this.normal(A));
+        Intersection p1 = new Intersection(B, t1, super.getColor(), this.normal(B));
 
         // Return intersections with valid points
         return new Intersection[]{
@@ -306,8 +306,9 @@ public class Sphere extends Object3D {
 
         Vector3D N = this.normal(point);  // Normal at point on sphere
         float ks = 1f;
-        float p = 100f;
+        float p = 10f;
         float ka = 0.1f;  // Ambient constant
+        float reflectivity = 0.5f;
         float ambientIntensity = ka * Light.getAmbientLight();
 
         for (Light light : Light.getLights()) {
@@ -344,6 +345,7 @@ public class Sphere extends Object3D {
                     clamp(ambient.getBlue() + diffuse.getBlue() + specular.getBlue(), 0, 255)
             );
 
+
             // Accumulate contribution
             finalColor = new Color(
                     clamp(finalColor.getRed() + lightContribution.getRed(), 0, 255),
@@ -352,6 +354,12 @@ public class Sphere extends Object3D {
             );
         }
 
+        Color reflectContribution = Scene.castReflection(point, N, this, 5);
+        finalColor = new Color(
+                clamp(Math.round( finalColor.getRed() * (1 - reflectivity) + (reflectivity * reflectContribution.getRed()) ), 0, 255),
+                clamp(Math.round( finalColor.getGreen() * (1 - reflectivity) + (reflectivity * reflectContribution.getGreen()) ), 0, 255),
+                clamp(Math.round( finalColor.getBlue() * (1 - reflectivity) + (reflectivity * reflectContribution.getBlue()) ), 0, 255)
+        );
         return finalColor;
     }
 

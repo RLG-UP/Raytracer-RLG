@@ -13,6 +13,7 @@ public class Intersection {
     public double distance;    // Distance from ray origin to intersection point
     public Color color;        // Color of the intersected object at this point
     public Object3D object;
+    private Vector3D normal = Vector3D.getZero();
 
     /**
      * Constructs an intersection with the specified properties.
@@ -26,5 +27,15 @@ public class Intersection {
         this.color = color;
     }
 
+    public Intersection(Vector3D point, double distance, Color color, Vector3D normal) {
+        this.point = point;
+        this.distance = distance;
+        this.color = color;
+        this.setNormal(normal);
+    }
+
     public static Intersection[] nullIntersection() { return new Intersection[]{null, null}; }
+
+    public void setNormal(Vector3D normal) { this.normal = normal.normalize(); }
+    public Vector3D getNormal() { return this.normal; }
 }

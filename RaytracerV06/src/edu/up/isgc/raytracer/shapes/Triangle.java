@@ -119,7 +119,7 @@ public class Triangle extends Object3D {
     @Override
     public Intersection[] intersect(Ray ray) {
         Intersection intersection = new Intersection(null, -1, null);
-        Vector3D D = ray.direction.normalize().scale(-1);
+        Vector3D D = ray.direction.normalize();
         Vector3D[] vert = new Vector3D[]{this.getA(), this.getB(), this.getC()};
         Vector3D v2v0 = Vector3D.subtract(vert[2], vert[0]);
         Vector3D v1v0 = Vector3D.subtract(vert[1], vert[0]);
@@ -140,6 +140,7 @@ public class Triangle extends Object3D {
                 intersection.point = ray.origin.add(D.scale(t));
                 intersection.distance = t;
                 intersection.color = super.getColor();
+                intersection.setNormal(this.calculateNormalPoint((float) this.u, (float) this.v, (float) this.w));
                 return new Intersection[] {intersection};
             }
         }
@@ -330,6 +331,8 @@ public class Triangle extends Object3D {
         Vector3D w = Vector3D.subtract(this.getA(), this.getC()).normalize().scale(-1);
         return Vector3D.crossProduct(v, w).normalize();
     }
+
+    public Vector3D calculateNormalPoint(float u, float v, float w){ return this.getnA().scale(this.w).add(this.getnB().scale(this.v)).add(this.getnC().scale(this.u)).normalize(); }
 
 
     @Override
