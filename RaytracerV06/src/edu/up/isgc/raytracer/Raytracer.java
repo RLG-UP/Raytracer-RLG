@@ -41,9 +41,9 @@ public class Raytracer {
         // Set up camera at the origin
         Camera camera = new Camera(new Vector3D(0, 0, -6), nearPlane, farPlane);
         //Light light01 = new Directional(1, Color.white, new Vector3D(-2,5,-1), new Vector3D(0, 0, 0));
-        //Light light02 = new Directional(1, Color.white, new Vector3D(0,10,1), new Vector3D(0,0,0));
-        Light light03 = new Point(1f, Color.white, new Vector3D(0, -1, -11));
-        //Light light04 = new Spot(1f, Color.white, new Vector3D(0,0,1), new Vector3D(0,0,0), 1f, 1f);
+        Light light02 = new Directional(1, Color.white, new Vector3D(0,10,0), new Vector3D(0,0,0));
+        //Light light03 = new Point(1f, Color.white, new Vector3D(0, 1, -11));
+        //Light light04 = new Spot(1f, Color.white, new Vector3D(0,0,-10), new Vector3D(0,0,0), 1f, 1f);
 
         /*
         // Instead of top of sphere, pick the front of the sphere

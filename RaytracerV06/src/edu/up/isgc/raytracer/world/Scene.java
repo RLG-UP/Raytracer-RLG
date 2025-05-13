@@ -192,7 +192,7 @@ public class Scene {
      */
 
     public static boolean isInShadow(Vector3D surfacePoint, Vector3D normal, Light light, Object3D ignoreShape) {
-        Vector3D lightDir = Vector3D.subtract(light.getPosition(), surfacePoint).normalize().scale(-1);
+        Vector3D lightDir = Vector3D.subtract(light.getPosition(), surfacePoint).normalize();
         Vector3D shadowOrigin = surfacePoint.add(normal.scale(Camera.getEpsilon()));
         Ray shadowRay = new Ray(shadowOrigin, lightDir);
 

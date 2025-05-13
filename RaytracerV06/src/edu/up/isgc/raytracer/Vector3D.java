@@ -37,7 +37,7 @@ public class Vector3D {
      * @return New vector result of subtraction
      */
     //public Vector3D subtract(Vector3D v) {return new Vector3D(x - v.x, y - v.y, z - v.z);}
-    public static Vector3D subtract(Vector3D v, Vector3D w) {
+    public static Vector3D subtract(Vector3D w, Vector3D v) {
         return new Vector3D(w.x - v.x, w.y - v.y, w.z - v.z);
     }
 

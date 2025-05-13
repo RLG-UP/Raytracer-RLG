@@ -104,10 +104,12 @@ public class Sphere extends Object3D {
 
      */
 
+    //This is the intersection BEFORE TRYING TO REFACTOR IT
+    /*
 
     public Intersection[] intersect(Ray ray) {
         Vector3D O = ray.origin;
-        Vector3D D = ray.direction;
+        Vector3D D = ray.direction.normalize();
         Vector3D L = Vector3D.subtract(center, O);
         double tCA = L.dot(D);
 
@@ -137,6 +139,41 @@ public class Sphere extends Object3D {
                 t1 > 0 ? p1 : null
         };
     }
+
+     */
+
+
+    public Intersection[] intersect(Ray ray) {
+        Vector3D O = ray.origin;
+        Vector3D D = ray.direction.normalize(); // ← very important
+        Vector3D L = Vector3D.subtract(O, center);
+        double tCA = L.dot(D);
+
+        double d2 = L.dot(L) - tCA * tCA;
+        double r2 = radius * radius;
+
+        if (d2 > r2) return null;
+
+        double tHC = Math.sqrt(r2 - d2);
+        double t0 = tCA - tHC;
+        double t1 = tCA + tHC;
+
+        Intersection p0 = null, p1 = null;
+
+        if (t0 > Camera.getEpsilon()) {
+            Vector3D A = O.add(D.scale(t0));
+            p0 = new Intersection(A, t0, this.getColor());
+        }
+        if (t1 > Camera.getEpsilon()) {
+            Vector3D B = O.add(D.scale(t1));
+            p1 = new Intersection(B, t1, this.getColor());
+        }
+
+        if (p0 == null && p1 == null) return null;
+
+        return new Intersection[] { p0, p1 };
+    }
+
 
     /*
     public Intersection[] intersect(Ray ray) {

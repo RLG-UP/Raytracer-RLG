@@ -22,7 +22,7 @@ public class Spot extends Light{
 
     @Override
     public Vector3D getDirection(Vector3D point) {
-        Vector3D L = Vector3D.subtract(this.getPosition(), point);
+        Vector3D L = Vector3D.subtract(point, super.getPosition());
         Vector3D Lnormalized = L.normalize();
 
         // Calculate spot factor

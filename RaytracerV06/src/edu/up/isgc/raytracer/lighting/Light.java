@@ -120,9 +120,9 @@ public abstract class Light {
 
     public static Vector3D ericson(Vector3D point, Vector3D v1, Vector3D v2, Vector3D v3, Vector3D n1, Vector3D n2, Vector3D n3) {
 
-        Vector3D e1 = Vector3D.subtract(v2,v1);
-        Vector3D e2 = Vector3D.subtract(v3,v1);
-        Vector3D eP = Vector3D.subtract(point,v1);
+        Vector3D e1 = Vector3D.subtract(v1,v2);
+        Vector3D e2 = Vector3D.subtract(v1,v3);
+        Vector3D eP = Vector3D.subtract(v1,point);
 
         /*
         Vector3D triNormal = Vector3D.crossProduct(e1,e2).normalize();

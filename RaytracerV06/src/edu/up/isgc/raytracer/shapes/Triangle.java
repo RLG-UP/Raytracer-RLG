@@ -35,12 +35,12 @@ public class Triangle extends Object3D {
 
     @Override
     public Intersection[] intersect(Ray ray) {
-        Vector3D v2v0 = Vector3D.subtract(this.getC(), this.getA());
-        Vector3D v1v0 = Vector3D.subtract(this.getB(), this.getA());
+        Vector3D v2v0 = Vector3D.subtract(this.getC(), this.getA()).scale(-1);
+        Vector3D v1v0 = Vector3D.subtract(this.getB(), this.getA()).scale(-1);
         Vector3D P = Vector3D.crossProduct(ray.direction, v1v0);
         double det = v2v0.dot(P);
         double invDet = 1.0 / det;
-        Vector3D T = Vector3D.subtract(ray.origin, this.getA());
+        Vector3D T = Vector3D.subtract(ray.origin, this.getA()).scale(-1);
         u = invDet * T.dot(P);
 
         if(u < 0 || u > 1) return Intersection.nullIntersection();
@@ -81,8 +81,8 @@ public class Triangle extends Object3D {
 
 
     public Vector3D normal(){
-        Vector3D v = Vector3D.subtract(this.getB(), this.getA()).normalize();
-        Vector3D w = Vector3D.subtract(this.getA(), this.getC()).normalize();
+        Vector3D v = Vector3D.subtract(this.getB(), this.getA()).normalize().scale(-1);
+        Vector3D w = Vector3D.subtract(this.getA(), this.getC()).normalize().scale(-1);
         return Vector3D.crossProduct(v, w).normalize();
     }
 
@@ -120,7 +120,7 @@ public class Triangle extends Object3D {
 
             if (!inShadow) {
                 lambertian = (float) Math.max(N.dot(l) * light.getAttenuation(), 0.0);
-                Vector3D h = Vector3D.subtract(Camera.getCameraPosition(), point).normalize().add(l).normalize();
+                Vector3D h = Vector3D.subtract(Camera.getCameraPosition(), point).scale(-1).normalize().add(l).normalize();
                 blinn = (float) (ks * Math.pow(Math.max(N.dot(h), 0), p));
             }
 
