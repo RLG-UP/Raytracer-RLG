@@ -119,7 +119,7 @@ public class Triangle extends Object3D {
     @Override
     public Intersection[] intersect(Ray ray) {
         Intersection intersection = new Intersection(null, -1, null);
-        Vector3D D = ray.direction.normalize();
+        Vector3D D = ray.direction.normalize().scale(-1);
         Vector3D[] vert = new Vector3D[]{this.getA(), this.getB(), this.getC()};
         Vector3D v2v0 = Vector3D.subtract(vert[2], vert[0]);
         Vector3D v1v0 = Vector3D.subtract(vert[1], vert[0]);
@@ -344,6 +344,7 @@ public class Triangle extends Object3D {
         float ks = 1f;
         float p = 100f;
         float ka = 0.1f;  // Ambient constant
+        float reflectivity = 0.5f;
         float ambientIntensity = ka * Light.getAmbientLight();
 
         for (Light light : Light.getLights()) {
@@ -388,6 +389,12 @@ public class Triangle extends Object3D {
             );
         }
 
+        Color reflectContribution = Scene.castReflection(point, N, this, 5);
+        finalColor = new Color(
+                clamp(Math.round( finalColor.getRed() * (1 - reflectivity) + (reflectivity * reflectContribution.getRed()) ), 0, 255),
+                clamp(Math.round( finalColor.getGreen() * (1 - reflectivity) + (reflectivity * reflectContribution.getGreen()) ), 0, 255),
+                clamp(Math.round( finalColor.getBlue() * (1 - reflectivity) + (reflectivity * reflectContribution.getBlue()) ), 0, 255)
+        );
         return finalColor;
     }
 
