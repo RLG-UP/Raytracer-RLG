@@ -106,6 +106,7 @@ public class Polygon {
         this.color = color;
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
 
     public void translate(float tX, float tY, float tZ){
         for(Triangle t : shape){
@@ -190,6 +191,8 @@ public class Polygon {
     public void setPosition(Vector3D position) {
         this.position = position;
     }
+=======
+>>>>>>> parent of b5cf2c9 (Just added more things to translate polygons, I think it is ready to test (added more logic to correctly translate complete objects))
 =======
 >>>>>>> parent of b5cf2c9 (Just added more things to translate polygons, I think it is ready to test (added more logic to correctly translate complete objects))
 }
