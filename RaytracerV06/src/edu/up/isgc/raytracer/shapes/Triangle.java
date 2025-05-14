@@ -342,7 +342,7 @@ public class Triangle extends Object3D {
         //Vector3D N = this.getnA().scale((double) 1 /3).add(this.getnB().scale((double) 1 /3)).add(this.getnC().scale((double) 1 /3)).normalize();
 
         float ks = 1f;
-        float p = 100f;
+        float p = 10f;
         float ka = 0.1f;  // Ambient constant
         float reflectivity = 0.5f;
         float ambientIntensity = ka * Light.getAmbientLight();
@@ -352,9 +352,9 @@ public class Triangle extends Object3D {
             double lightDistance = Double.MAX_VALUE;
 
             if (light.type().equals("directional")) {
-                l = light.getDirection().normalize();
+                l = light.getDirection().normalize().scale(-1);
             } else if (light.type().equals("point") || light.type().equals("spot")) {
-                l = light.getDirection(point).normalize();
+                l = light.getDirection(point).normalize().scale(-1);
                 lightDistance = Vector3D.subtract(light.getPosition(), point).value;
             }
 
@@ -363,7 +363,7 @@ public class Triangle extends Object3D {
             float lambertian = 0;
             float blinn = 0;
 
-            if (!inShadow) {
+            if (inShadow) {
                 lambertian = (float) Math.max(N.dot(l) * light.getAttenuation(), 0.0);
                 Vector3D h = Vector3D.subtract(Camera.getCameraPosition(), point).normalize().add(l).normalize();
                 blinn = (float) (ks * Math.pow(Math.max(N.dot(h), 0.0), p));

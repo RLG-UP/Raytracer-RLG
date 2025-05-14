@@ -122,7 +122,7 @@ public class Sphere extends Object3D {
         double t0 = tCA - tHC;
         double t1 = tCA + tHC;
 
-        if(Math.min(t0,t1) == t1){
+        if(t0 > t1){
             double copy = t0;
             t0 = t1;
             t1 = copy;
@@ -316,9 +316,9 @@ public class Sphere extends Object3D {
             double lightDistance = Double.MAX_VALUE;
 
             if (light.type().equals("directional")) {
-                l = light.getDirection().normalize();
+                l = light.getDirection().normalize().scale(-1);
             } else if (light.type().equals("point") || light.type().equals("spot")) {
-                l = light.getDirection(point).normalize();
+                l = light.getDirection(point).normalize().scale(-1);
                 lightDistance = Vector3D.subtract(light.getPosition(), point).value;
             }
 
@@ -327,7 +327,7 @@ public class Sphere extends Object3D {
             float lambertian = 0;
             float blinn = 0;
 
-            if (!inShadow) {
+            if (inShadow) {
                 lambertian = (float) Math.max(N.dot(l) * light.getAttenuation(), 0.0);
                 Vector3D h = Vector3D.subtract(Camera.getCameraPosition(), point).normalize().add(l).normalize();
                 blinn = (float) (ks * Math.pow(Math.max(N.dot(h), 0.0), p));

@@ -171,6 +171,28 @@ public class Scene {
         }
         return closestHit;
     }
+    public static Intersection findShadowIntersection(Ray ray, Object3D ignoreShape) {
+        Intersection closestHit = null;
+
+        for (Object3D shape : Scene.objects) {
+            if (shape == null || shape == ignoreShape) continue;
+
+            Intersection[] hits = shape.intersect(ray);
+            if (hits == null) continue;
+
+            for (Intersection hit : hits) {
+                if (hit == null) continue;
+
+                if (hit.distance > Camera.getEpsilon() &&
+                        (closestHit == null || hit.distance < closestHit.distance)) {
+                    closestHit = hit;
+                    closestHit.object = shape;
+                }
+
+            }
+        }
+        return closestHit;
+    }
 
 
 
@@ -193,8 +215,10 @@ public class Scene {
 
      */
 
+
     public static boolean isInShadow(Vector3D surfacePoint, Vector3D normal, Light light, Object3D ignoreShape) {
         Vector3D lightDir = Vector3D.subtract(light.getPosition(), surfacePoint).normalize();
+
         Vector3D shadowOrigin = surfacePoint.add(normal.scale(Camera.getEpsilon()));
         Ray shadowRay = new Ray(shadowOrigin, lightDir);
 
@@ -208,6 +232,24 @@ public class Scene {
 
         return false;
     }
+
+
+
+    /*
+    public static boolean isInShadow(Vector3D surfacePoint, Vector3D normal, Light light, Object3D ignoreShape) {
+        Vector3D incoming = Vector3D.subtract(surfacePoint, light.getPosition()).normalize();
+        Vector3D reflected = Vector3D.subtract(incoming, normal.scale(2 * incoming.dot(normal))).normalize().scale(-1);
+
+        // Step 2: Offset origin to avoid self-hit
+        Vector3D rayOrigin = surfacePoint.add(normal.scale(Camera.getEpsilon()));
+        Ray reflectionRay = new Ray(rayOrigin, reflected);
+
+        // Step 3: Check intersection
+        Intersection hit = Scene.findRayIntersection(reflectionRay, ignoreShape);
+        return hit != null && hit.distance > Camera.getEpsilon();
+    }
+
+     */
 
     /*
     public static Color castReflection(Vector3D surfacePoint, Vector3D normal, Object3D ignoreShape, int recursionLimit) {

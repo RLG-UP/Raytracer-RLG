@@ -164,6 +164,8 @@ public class Polygon {
         }
     }
 
+    public void rotateInPlace(float rX, float rY, float rZ){ this.rotateInPlace(rX, rY, rZ, false); }
+
     public void rotate(float rX, float rY, float rZ, boolean inRadians){
         for(Triangle t : shape){
             t.getA().rotate(rX, rY, rZ, inRadians);

@@ -44,7 +44,7 @@ public class Spot extends Light{
         float attenuation = spotFactor / (1.0f + 0.1f * distance + 0.01f * distance * distance);
 
         this.setAttenuation(attenuation);
-        return this.direction.normalize();
+        return this.direction.normalize().scale(1);
     }
 
     @Override

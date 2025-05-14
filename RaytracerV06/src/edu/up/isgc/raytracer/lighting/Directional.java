@@ -16,7 +16,7 @@ public class Directional extends Light{
     @Override
     public Vector3D getDirection(Vector3D point) {
         this.setAttenuation(1);
-        return direction.normalize();
+        return this.direction.normalize().scale(1);
     }
 
     @Override
