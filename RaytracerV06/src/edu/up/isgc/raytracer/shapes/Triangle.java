@@ -335,6 +335,7 @@ public class Triangle extends Object3D {
     public Vector3D calculateNormalPoint(float u, float v, float w){ return this.getnA().scale(this.w).add(this.getnB().scale(this.v)).add(this.getnC().scale(this.u)).normalize(); }
 
 
+    /*
     @Override
     public Color addLight(Vector3D point) {
         Color finalColor = new Color(0, 0, 0);
@@ -398,9 +399,15 @@ public class Triangle extends Object3D {
         return finalColor;
     }
 
+     */
 
 
 
+    @Override
+    public Color addLight(Vector3D point) {
+        Vector3D N = this.getnA().scale(this.w).add(this.getnB().scale(this.v)).add(this.getnC().scale(this.u)).normalize();
+        return Light.calculateColor(N, point, this);
+    }
 
     /*
     public Color addLight(Vector3D point){

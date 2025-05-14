@@ -1,7 +1,9 @@
 package edu.up.isgc.raytracer.lighting;
 
 import edu.up.isgc.raytracer.Vector3D;
+import edu.up.isgc.raytracer.shapes.Object3D;
 import edu.up.isgc.raytracer.world.Camera;
+import edu.up.isgc.raytracer.world.Scene;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -63,6 +65,64 @@ public abstract class Light {
     public float getAttenuation(){ return this.attenuation; }
     public abstract void setAttenuation(float d);
 
+    public static Color calculateColor(Vector3D N, Vector3D point, Object3D object) {
+        Color finalColor = new Color(0, 0, 0);
+        float ks = 1f;
+        float p = 10f;
+        float ka = 0.1f;  // Ambient constant
+        float reflectivity = 0.5f;
+        float ambientIntensity = ka * Light.getAmbientLight();
+
+        for (Light light : Light.getLights()) {
+            Vector3D l = Vector3D.getZero();
+            double lightDistance = Double.MAX_VALUE;
+
+            if (light.type().equals("directional")) {
+                l = light.getDirection().normalize().scale(-1);
+            } else if (light.type().equals("point") || light.type().equals("spot")) {
+                l = light.getDirection(point).normalize().scale(-1);
+                lightDistance = Vector3D.subtract(light.getPosition(), point).value;
+            }
+
+            boolean inShadow = Scene.isInShadow(point, N, light, object);
+
+            float lambertian = 0;
+            float blinn = 0;
+
+            if (inShadow) {
+                lambertian = (float) Math.max(N.dot(l) * light.getAttenuation(), 0.0);
+                Vector3D h = Vector3D.subtract(Camera.getCameraPosition(), point).normalize().add(l).normalize();
+                blinn = (float) (ks * Math.pow(Math.max(N.dot(h), 0.0), p));
+            }
+
+            // Individual components
+            Color ambient  = Light.shine(light.getColor(), object.getColor(), ambientIntensity, true);
+            Color diffuse  = Light.shine(light.getColor(), object.getColor(), lambertian, true);
+            Color specular = Light.shine(light.getColor(), object.getColor(), blinn, false); // specular is independent of object color
+
+            // Combine them
+            Color lightContribution = new Color(
+                    clamp(ambient.getRed() + diffuse.getRed() + specular.getRed(), 0, 255),
+                    clamp(ambient.getGreen() + diffuse.getGreen() + specular.getGreen(), 0, 255),
+                    clamp(ambient.getBlue() + diffuse.getBlue() + specular.getBlue(), 0, 255)
+            );
+
+            // Accumulate contribution
+            finalColor = new Color(
+                    clamp(finalColor.getRed() + lightContribution.getRed(), 0, 255),
+                    clamp(finalColor.getGreen() + lightContribution.getGreen(), 0, 255),
+                    clamp(finalColor.getBlue() + lightContribution.getBlue(), 0, 255)
+            );
+        }
+
+        Color reflectContribution = Scene.castReflection(point, N, object, 5);
+        finalColor = new Color(
+                clamp(Math.round( finalColor.getRed() * (1 - reflectivity) + (reflectivity * reflectContribution.getRed()) ), 0, 255),
+                clamp(Math.round( finalColor.getGreen() * (1 - reflectivity) + (reflectivity * reflectContribution.getGreen()) ), 0, 255),
+                clamp(Math.round( finalColor.getBlue() * (1 - reflectivity) + (reflectivity * reflectContribution.getBlue()) ), 0, 255)
+        );
+        return finalColor;
+    }
     public abstract Vector3D getDirection(Vector3D point);
     public Vector3D getDirection() { return this.getDirection(Vector3D.getZero()); }
 

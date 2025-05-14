@@ -106,7 +106,7 @@ public class Polygon {
     public void setColor(Color color) {
         this.color = color;
     }
-    
+
 
     public void translate(float tX, float tY, float tZ){
         for(Triangle t : shape){

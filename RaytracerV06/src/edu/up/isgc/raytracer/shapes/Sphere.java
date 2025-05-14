@@ -300,6 +300,7 @@ public class Sphere extends Object3D {
 
      */
 
+    /*
     @Override
     public Color addLight(Vector3D point) {
         Color finalColor = new Color(0, 0, 0);
@@ -361,6 +362,14 @@ public class Sphere extends Object3D {
                 clamp(Math.round( finalColor.getBlue() * (1 - reflectivity) + (reflectivity * reflectContribution.getBlue()) ), 0, 255)
         );
         return finalColor;
+    }
+
+     */
+
+    @Override
+    public Color addLight(Vector3D point) {
+        Vector3D N = this.normal(point);
+        return Light.calculateColor(N, point, this);
     }
 
 
