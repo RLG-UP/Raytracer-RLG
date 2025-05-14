@@ -14,7 +14,6 @@ import java.util.Arrays;
 public class Polygon {
     private ArrayList<Triangle> shape;
     private Color color;
-    private Vector3D position;
 
     public Polygon(ArrayList<Triangle> shape){
         this.setShape(shape);
@@ -88,7 +87,6 @@ public class Polygon {
                 }
             }
         }
-        this.setPosition(Vector3D.getZero());
         this.setShape(shape);
     }
 
@@ -107,6 +105,7 @@ public class Polygon {
     public void setColor(Color color) {
         this.color = color;
     }
+<<<<<<< HEAD
 
     public void translate(float tX, float tY, float tZ){
         for(Triangle t : shape){
@@ -191,5 +190,7 @@ public class Polygon {
     public void setPosition(Vector3D position) {
         this.position = position;
     }
+=======
+>>>>>>> parent of b5cf2c9 (Just added more things to translate polygons, I think it is ready to test (added more logic to correctly translate complete objects))
 }
 
