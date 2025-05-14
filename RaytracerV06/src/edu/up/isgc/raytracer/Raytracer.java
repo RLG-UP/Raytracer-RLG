@@ -25,52 +25,35 @@ public class Raytracer {
         int width = 400;
         int height = 400;
         double nearPlane = -1000, farPlane = 1000;
-        String path = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\Raytracer\\LocalFiles\\ObjFiles\\Ring.obj").getAbsolutePath();
-        //String path = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\Raytracer\\LocalFiles\\ObjFiles\\SmallTeapot.obj").getAbsolutePath();
+        String path2 = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\Raytracer\\LocalFiles\\ObjFiles\\Ring.obj").getAbsolutePath();
+        //String path = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\Raytracer\\LocalFiles\\ObjFiles\\Ring.obj").getAbsolutePath();
+        String path = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\Raytracer\\LocalFiles\\ObjFiles\\SmallTeapot.obj").getAbsolutePath();
         //String path = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\Raytracer\\LocalFiles\\ObjFiles\\shark1.obj").getAbsolutePath();
 
         // Create scene with objects
         Scene scene = new Scene();
-        scene.addObject(new Sphere(new Vector3D(0, 4, 0), 3, Color.blue));
-        scene.addObject(new Sphere(new Vector3D(0, -2, 0), 1.5, Color.yellow));
+        scene.addObject(new Sphere(new Vector3D(0, -3, 0), 2, Color.blue));
+        //scene.addObject(new Sphere(new Vector3D(0, -1, 0), 1.5, Color.yellow));
         //scene.addObject(new Triangle(new Vector3D(0.4, 0, -3), new Vector3D(0.4, 0.5, -3), new Vector3D(1.1, 0, -3), Color.GREEN));
+
         Polygon polygon = new Polygon(path, new Color(220, 20, 60));
+        Polygon polygon2 = new Polygon(path2, Color.lightGray);
 
         scene.addPolygon( polygon );
+        scene.addPolygon( polygon2 );
 
-        polygon.rotate(-90, 0, 0);
-        //polygon.translate(0, 0.8f, 0f);
+        //polygon.rotate(-90, 90, 0);
+        //polygon.translate(0, -0.7f, 0f);
         //polygon.scale(0.5f, 0.5f, 0.5f);
         //polygon.rotateInPlace(90, 0, 0);
 
         // Set up camera at the origin
         Camera camera = new Camera(new Vector3D(0, 0, -6), nearPlane, farPlane);
-        //Light light01 = new Directional(2, Color.white, new Vector3D(0,-10,0), new Vector3D(0, 0, 0));
-        //Light light02 = new Directional(1, Color.white, new Vector3D(0,0,10), new Vector3D(0,0,0));
-        //Light light03 = new Point(1f, Color.white, new Vector3D(0, 1, 0));
-        Light light04 = new Spot(1f, Color.white, new Vector3D(5,0,0), new Vector3D(0,0,0), 1f, 1f);
+        Light light01 = new Directional(2, Color.white, new Vector3D(0,-10,0), new Vector3D(0, 0, 0));
+        //Light light02 = new Directional(1, Color.white, new Vector3D(0,0,-10), new Vector3D(0,0,0));
+        Light light03 = new Point(1f, Color.white, new Vector3D(0, 0, 0));
+        //Light light04 = new Spot(1f, Color.white, new Vector3D(0,-4,0), new Vector3D(0,0,0), 1f, 1f);
 
-        /*
-        // Instead of top of sphere, pick the front of the sphere
-        Vector3D surfacePoint = new Vector3D(0, 0, -4);  // slightly in front of the sphere
-        Vector3D normal = new Vector3D(0, 0, 1);         // facing the camera
-
-        // Cast shadow ray to the light behind the sphere
-        Vector3D shadowRayDir = Vector3D.subtract(light03.getPosition(), surfacePoint).normalize();
-        Vector3D shadowOrigin = surfacePoint.add(normal.scale(Camera.getEpsilon())); // epsilon in view direction
-        Ray shadowRay = new Ray(shadowOrigin, shadowRayDir);
-
-
-        // Check for shadow intersection
-        Intersection shadowHit = Scene.findRayIntersection(shadowRay);
-
-        if (shadowHit != null) {
-            System.out.println("Shadow ray hit: " + shadowHit.point + " at distance " + shadowHit.distance);
-        } else {
-            System.out.println("No object hit by shadow ray — no shadow cast.");
-        }
-
-         */
 
         // Initialize image buffer (width x height x RGB)
         int[][][] image = new int[width][height][3];

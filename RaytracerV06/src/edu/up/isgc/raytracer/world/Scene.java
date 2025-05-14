@@ -194,6 +194,44 @@ public class Scene {
         return closestHit;
     }
 
+    /*
+    public static boolean isInShadow(Vector3D point, Vector3D normal, Light light, Object3D sourceObject) {
+        // 1. Calculate direction to light and distance
+        Vector3D toLight = Vector3D.subtract(light.getPosition(), point);
+        double lightDistance = toLight.value;
+        Vector3D lightDir = toLight.normalize();
+
+        // 2. Offset the ray origin to avoid self-intersection
+        Vector3D shadowRayOrigin = point.add(normal.scale(Camera.getEpsilon()));
+
+        // 3. Create shadow ray
+        Ray shadowRay = new Ray(shadowRayOrigin, lightDir);
+
+        // 4. Check for intersections with scene objects
+        for (Object3D obj : objects) {
+            if (obj == sourceObject || obj == null) continue;
+
+            Intersection[] intersections = obj.intersect(shadowRay);
+            if (intersections == null) continue;
+
+            for (Intersection intersection : intersections) {
+                if (intersection == null) continue;
+
+                // 5. Valid shadow hit if:
+                //    - Intersection is in front of the point (distance > epsilon)
+                //    - Intersection is closer than the light
+                if (intersection.distance > Camera.getEpsilon() &&
+                        intersection.distance < lightDistance) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+     */
+
 
 
 
@@ -215,9 +253,10 @@ public class Scene {
 
      */
 
+    /*
 
     public static boolean isInShadow(Vector3D surfacePoint, Vector3D normal, Light light, Object3D ignoreShape) {
-        Vector3D lightDir = Vector3D.subtract(light.getPosition(), surfacePoint).normalize();
+        Vector3D lightDir = Vector3D.subtract(light.getPosition(), surfacePoint).normalize().scale(1);
 
         Vector3D shadowOrigin = surfacePoint.add(normal.scale(Camera.getEpsilon()));
         Ray shadowRay = new Ray(shadowOrigin, lightDir);
@@ -232,6 +271,65 @@ public class Scene {
 
         return false;
     }
+
+     */
+
+    /*
+    public static boolean isInShadow(Vector3D point, Vector3D normal, Light light, Object3D sourceObject) {
+        Vector3D lightDir = Vector3D.subtract(light.getPosition(), point).normalize();
+        Vector3D origin = point.add(normal.scale(Camera.getEpsilon())); // Offset to avoid self-hit
+
+        Ray shadowRay = new Ray(origin, lightDir);
+        double lightDistance = Vector3D.subtract(light.getPosition(), origin).value;
+
+        for (Object3D obj : Scene.objects) {
+            if (obj == sourceObject) continue; // Avoid hitting itself
+            Intersection[] intersection = obj.intersect(shadowRay);
+            if (intersection == null) continue;
+            double t = intersection.length;
+            if (t > 0 && t < lightDistance) {
+                return true; // In shadow
+            }
+        }
+        return false;
+    }
+
+     */
+
+
+    public static boolean isInShadow(Vector3D surfacePoint, Vector3D normal, Light light, Object3D sourceObject) {
+        // Step 1: Calculate direction from surface point to the light
+        Vector3D lightDir = Vector3D.subtract(light.getPosition(), surfacePoint).normalize().scale(-1);
+
+        // Step 2: Offset the ray origin slightly along the normal to prevent self-intersection
+        Vector3D shadowOrigin = surfacePoint.add(normal.scale(Camera.getEpsilon()));
+
+        // Step 3: Cast shadow ray toward the light
+        Ray shadowRay = new Ray(shadowOrigin, lightDir);
+
+        // Step 4: Distance from the point to the light source
+        double lightDistance = Vector3D.subtract(light.getPosition(), shadowOrigin).value;
+
+        // Step 5: Check for intersections along this ray
+        for (Object3D obj : objects) {
+            if (obj == sourceObject) continue; // Skip the object casting the shadow ray
+
+            Intersection[] intersections = obj.intersect(shadowRay);
+            if (intersections == null) continue;
+
+            for (Intersection hit : intersections) {
+                if (hit == null) continue;
+
+                if (hit.distance > Camera.getEpsilon() && hit.distance < lightDistance) {
+                    return true; // Object blocks the light — surface is in shadow
+                }
+            }
+        }
+
+        return false; // No object blocked the light — surface is illuminated
+    }
+
+
 
 
 
@@ -250,6 +348,8 @@ public class Scene {
     }
 
      */
+
+
 
     /*
     public static Color castReflection(Vector3D surfacePoint, Vector3D normal, Object3D ignoreShape, int recursionLimit) {

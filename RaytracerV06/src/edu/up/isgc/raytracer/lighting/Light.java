@@ -89,11 +89,11 @@ public abstract class Light {
             float lambertian = 0;
             float blinn = 0;
 
-            if (inShadow) {
-                lambertian = (float) Math.max(N.dot(l) * light.getAttenuation(), 0.0);
-                Vector3D h = Vector3D.subtract(Camera.getCameraPosition(), point).normalize().add(l).normalize();
-                blinn = (float) (ks * Math.pow(Math.max(N.dot(h), 0.0), p));
+            if (!inShadow) {
             }
+            lambertian = (float) Math.max(N.dot(l) * light.getAttenuation(), 0.0);
+            Vector3D h = Vector3D.subtract(Camera.getCameraPosition(), point).normalize().add(l).normalize();
+            blinn = (float) (ks * Math.pow(Math.max(N.dot(h), 0.0), p));
 
             // Individual components
             Color ambient  = Light.shine(light.getColor(), object.getColor(), ambientIntensity, true);

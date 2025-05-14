@@ -8,6 +8,10 @@ public class Vertex {
         Vertex.addVertex(new Double[]{a,b,c});
     }
 
+    public static void clear() {
+        vertexes.clear();
+    }
+
     public static void addVertex(Double[] vertex){ vertexes.add(vertex); }
     public static ArrayList<Double[]> getVertexes(){ return Vertex.vertexes; }
 }

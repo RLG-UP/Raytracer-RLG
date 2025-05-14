@@ -13,6 +13,10 @@ import java.util.Arrays;
 
 public class Polygon {
     private ArrayList<Triangle> shape;
+    private ArrayList<Double[]> vertexes = new ArrayList<>();
+    private ArrayList<Double[]> normalVertexes = new ArrayList<>();
+    private ArrayList<Double[]> textures = new ArrayList<>();
+
     private Color color;
     private Vector3D position = Vector3D.getZero();
 
@@ -191,5 +195,14 @@ public class Polygon {
     public void setPosition(Vector3D position) {
         this.position = position;
     }
+
+    public void addNormalVertex(Double[] vertex){ this.normalVertexes.add(vertex); }
+    public ArrayList<Double[]> getNormalVertexes(){ return this.normalVertexes; }
+
+    public void addTexture(Double[] vertex){ this.textures.add(vertex); }
+    public ArrayList<Double[]> getTexture(){ return this.textures; }
+
+    public void addVertex(Double[] vertex){ this.vertexes.add(vertex); }
+    public ArrayList<Double[]> getVertexes(){ return this.vertexes; }
 }
 

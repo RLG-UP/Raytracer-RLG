@@ -8,6 +8,9 @@ public class Texture {
         Texture.addTexture(new Double[]{a,b,c});
     }
 
+    public static void clear() {
+        textures.clear();
+    }
     public static void addTexture(Double[] vertex){ textures.add(vertex); }
     public static ArrayList<Double[]> getTexture(){ return Texture.textures; }
 }

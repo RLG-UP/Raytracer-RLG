@@ -8,6 +8,10 @@ public class NormalVertex {
         NormalVertex.addNormalVertex(new Double[]{a,b,c});
     }
 
+    public static void clear() {
+        normalVertexes.clear();
+    }
+
     public static void addNormalVertex(Double[] vertex){ normalVertexes.add(vertex); }
     public static ArrayList<Double[]> getNormalVertexes(){ return NormalVertex.normalVertexes; }
 }

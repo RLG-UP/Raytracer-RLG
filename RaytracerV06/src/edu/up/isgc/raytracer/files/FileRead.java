@@ -179,10 +179,11 @@ public class FileRead {
 
     public static void extractComponents(ArrayList<ArrayList<String>> list){
         // Clear previous data
-        Vertex.getVertexes().clear();
-        NormalVertex.getNormalVertexes().clear();
-        Face.getFaces().clear();
-        Texture.getTexture().clear();
+
+        Vertex.clear();
+        NormalVertex.clear();
+        Face.clear();
+        Texture.clear();
 
         // Store vertices in order (index matches OBJ index - 1)
         for(Double[] vertex : createVertexMap(list.getFirst()).values()){

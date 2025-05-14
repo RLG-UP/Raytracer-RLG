@@ -18,6 +18,13 @@ public class Face {
         wholeFaces.add(new Integer[][] {face[0], face[1], face[2]});
     }
 
+    public static void clear() {
+        faces.clear();
+        faceTextures.clear();
+        faceNormals.clear();
+        wholeFaces.clear();
+    }
+
     public static ArrayList<Integer[][]> getWholeFaces() { return Face.wholeFaces; }
     public static ArrayList<Integer[]> getFaces(){ return Face.faces; }
     public static ArrayList<Integer[]> getFaceTextures(){ return Face.faceTextures; }
