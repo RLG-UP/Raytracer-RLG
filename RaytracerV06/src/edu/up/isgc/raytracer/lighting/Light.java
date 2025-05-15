@@ -70,7 +70,7 @@ public abstract class Light {
         float ks = 1f;
         float p = 10f;
         float ka = 0.1f;  // Ambient constant
-        float reflectivity = 0.5f;
+        float reflectivity = 0.1f;
         float ambientIntensity = ka * Light.getAmbientLight();
 
         for (Light light : Light.getLights()) {
@@ -90,10 +90,10 @@ public abstract class Light {
             float blinn = 0;
 
             if (!inShadow) {
+                lambertian = (float) Math.max(N.dot(l) * light.getAttenuation(), 0.0);
+                Vector3D h = Vector3D.subtract(Camera.getCameraPosition(), point).normalize().add(l).normalize();
+                blinn = (float) (ks * Math.pow(Math.max(N.dot(h), 0.0), p));
             }
-            lambertian = (float) Math.max(N.dot(l) * light.getAttenuation(), 0.0);
-            Vector3D h = Vector3D.subtract(Camera.getCameraPosition(), point).normalize().add(l).normalize();
-            blinn = (float) (ks * Math.pow(Math.max(N.dot(h), 0.0), p));
 
             // Individual components
             Color ambient  = Light.shine(light.getColor(), object.getColor(), ambientIntensity, true);

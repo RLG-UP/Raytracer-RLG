@@ -34,7 +34,7 @@ public class Sphere extends Object3D {
 
     public Intersection[] intersect(Ray ray) {
         Vector3D O = ray.origin;
-        Vector3D D = ray.direction.normalize().scale(1);
+        Vector3D D = ray.direction.normalize().scale(-1);
         Vector3D L = Vector3D.subtract(center, O);
         double tCA = L.dot(D);
 

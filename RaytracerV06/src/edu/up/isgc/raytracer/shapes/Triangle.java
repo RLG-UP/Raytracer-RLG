@@ -119,7 +119,7 @@ public class Triangle extends Object3D {
     @Override
     public Intersection[] intersect(Ray ray) {
         Intersection intersection = new Intersection(null, -1, null);
-        Vector3D D = ray.direction.normalize().scale(1);
+        Vector3D D = ray.direction.normalize().scale(-1);
         Vector3D[] vert = new Vector3D[]{this.getA(), this.getB(), this.getC()};
         Vector3D v2v0 = Vector3D.subtract(vert[2], vert[0]);
         Vector3D v1v0 = Vector3D.subtract(vert[1], vert[0]);

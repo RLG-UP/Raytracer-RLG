@@ -26,13 +26,13 @@ public class Raytracer {
         int height = 400;
         double nearPlane = -1000, farPlane = 1000;
         String path2 = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\Raytracer\\LocalFiles\\ObjFiles\\Ring.obj").getAbsolutePath();
-        //String path = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\Raytracer\\LocalFiles\\ObjFiles\\Ring.obj").getAbsolutePath();
-        String path = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\Raytracer\\LocalFiles\\ObjFiles\\SmallTeapot.obj").getAbsolutePath();
+        String path = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\Raytracer\\LocalFiles\\ObjFiles\\Ring.obj").getAbsolutePath();
+        //String path = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\Raytracer\\LocalFiles\\ObjFiles\\SmallTeapot.obj").getAbsolutePath();
         //String path = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\Raytracer\\LocalFiles\\ObjFiles\\shark1.obj").getAbsolutePath();
 
         // Create scene with objects
         Scene scene = new Scene();
-        scene.addObject(new Sphere(new Vector3D(0, -3, 0), 2, Color.blue));
+        scene.addObject(new Sphere(new Vector3D(1.5, 0, 0), 1, Color.blue));
         //scene.addObject(new Sphere(new Vector3D(0, -1, 0), 1.5, Color.yellow));
         //scene.addObject(new Triangle(new Vector3D(0.4, 0, -3), new Vector3D(0.4, 0.5, -3), new Vector3D(1.1, 0, -3), Color.GREEN));
 
@@ -42,16 +42,16 @@ public class Raytracer {
         scene.addPolygon( polygon );
         scene.addPolygon( polygon2 );
 
-        //polygon.rotate(-90, 90, 0);
-        //polygon.translate(0, -0.7f, 0f);
-        //polygon.scale(0.5f, 0.5f, 0.5f);
+        polygon.rotate(-90, 90, 0);
+        //polygon.translate(0, 0.7f, 0f);
+        polygon.scale(0.8f, 0.8f, 0.8f);
         //polygon.rotateInPlace(90, 0, 0);
 
         // Set up camera at the origin
         Camera camera = new Camera(new Vector3D(0, 0, -6), nearPlane, farPlane);
-        Light light01 = new Directional(2, Color.white, new Vector3D(0,-10,0), new Vector3D(0, 0, 0));
+        //Light light01 = new Directional(2, Color.white, new Vector3D(0,-10,0), new Vector3D(0, 0, 0));
         //Light light02 = new Directional(1, Color.white, new Vector3D(0,0,-10), new Vector3D(0,0,0));
-        Light light03 = new Point(1f, Color.white, new Vector3D(0, 0, 0));
+        Light light03 = new Point(1f, Color.white, new Vector3D(0, 1, -3));
         //Light light04 = new Spot(1f, Color.white, new Vector3D(0,-4,0), new Vector3D(0,0,0), 1f, 1f);
 
 
