@@ -162,7 +162,7 @@ public abstract class Light {
 
         Vector3D viewDir = Vector3D.subtract(Camera.getCameraPosition(), point).normalize();
         float cosTheta = Math.max(0f, (float)viewDir.dot(N.normalize()));
-        float fresnel = Light.schlick(cosTheta, (float)object.refraction);
+        float fresnel = reflectivity * Light.schlick(cosTheta, (float)object.refraction);
         float transparency = (float)object.transparency;
 
         int rI = clamp(Math.round(
