@@ -479,28 +479,43 @@ public class Scene {
 
         if (hit != null && hit.object != null) {
             // Optionally compute lighting here instead of raw color
+            /*
             Color localColor = hit.object.getColor();
 
             Color refractedColor = castRefraction(hit.point, hit.getNormal(), hit.object, recursionLimit - 1);
 
             double transparency = hit.object.transparency;
 
+
+             */
             Vector3D viewDir = Vector3D.subtract(Camera.getCameraPosition(), surfacePoint).normalize();
             float cosTheta = Math.max(0f, (float)viewDir.dot(normal.normalize()));
             float fresnel = Light.schlick(cosTheta, (float)ignoreShape.refraction);
 
+            Color localColor = hit.object.getColor();
+            //Color localColor = ignoreShape.getColor();
+            Color refractedColor = castRefraction(hit.point, hit.getNormal(), hit.object, recursionLimit - 1);
 
+            //double transparency = ignoreShape.transparency;
+            double transparency = hit.object.transparency;
+
+            int r = clamp((int)(localColor.getRed() * (1 - transparency) + refractedColor.getRed() * transparency), 0, 255);
+            int g = clamp((int)(localColor.getGreen() * (1 - transparency) + refractedColor.getGreen() * transparency), 0, 255);
+            int b = clamp((int)(localColor.getBlue() * (1 - transparency) + refractedColor.getBlue() * transparency), 0, 255);
+
+            /*
             int r = clamp((int) (localColor.getRed() * (1 - transparency) +
                     transparency * (localColor.getRed() * (1 - fresnel) + refractedColor.getRed() * fresnel)), 0, 255);
             int g = clamp((int) (localColor.getGreen() * (1 - transparency) +
                     transparency * (localColor.getGreen() * (1 - fresnel) + refractedColor.getGreen() * fresnel)), 0, 255);
             int b = clamp((int) (localColor.getBlue() * (1 - transparency) +
                     transparency * (localColor.getBlue() * (1 - fresnel) + refractedColor.getBlue() * fresnel)), 0, 255);
+            */
 
             return new Color(r, g, b);
         }
 
-        return Color.BLACK;
+        return Color.cyan;
     }
 
 

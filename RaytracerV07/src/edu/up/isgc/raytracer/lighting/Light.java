@@ -123,7 +123,7 @@ public abstract class Light {
         }
 
         //Color reflectContribution = Scene.castReflection(point, N, object, 5);
-        Color reflectContribution = Scene.castRefraction(point, N, object, 5);
+        //Color reflectContribution = Scene.castRefraction(point, N, object, 5);
         /*
         finalColor = new Color(
                 clamp(Math.round( finalColor.getRed() + (reflectContribution.getRed()) ), 0, 255),
@@ -138,6 +138,7 @@ public abstract class Light {
         );
          */
 
+        /*
         Vector3D viewDir = Vector3D.subtract(Camera.getCameraPosition(), point).normalize();
         float cosTheta = Math.max(0f, (float)viewDir.dot(N.normalize()));
         float fresnel = schlick(cosTheta, (float)object.refraction);
@@ -153,6 +154,34 @@ public abstract class Light {
                 clamp(Math.round(finalColor.getBlue() * (1 - transparency) +
                         transparency * (finalColor.getBlue() * (1 - fresnel) + reflectContribution.getBlue() * fresnel)), 0, 255)
         );
+
+         */
+
+        Color reflectionColor = Scene.castReflection(point, N, object, 5);
+        Color refractionColor = Scene.castRefraction(point, N, object, 10);
+
+        Vector3D viewDir = Vector3D.subtract(Camera.getCameraPosition(), point).normalize();
+        float cosTheta = Math.max(0f, (float)viewDir.dot(N.normalize()));
+        float fresnel = Light.schlick(cosTheta, (float)object.refraction);
+        float transparency = (float)object.transparency;
+
+        int rI = clamp(Math.round(
+                finalColor.getRed() * (1 - transparency) +
+                        transparency * ((1 - fresnel) * refractionColor.getRed() + fresnel * reflectionColor.getRed())
+        ), 0, 255);
+
+        int gI = clamp(Math.round(
+                finalColor.getGreen() * (1 - transparency) +
+                        transparency * ((1 - fresnel) * refractionColor.getGreen() + fresnel * reflectionColor.getGreen())
+        ), 0, 255);
+
+        int bI = clamp(Math.round(
+                finalColor.getBlue() * (1 - transparency) +
+                        transparency * ((1 - fresnel) * refractionColor.getBlue() + fresnel * reflectionColor.getBlue())
+        ), 0, 255);
+
+        finalColor = new Color(rI, gI, bI);
+
 
         float gamma = 2.2f;
 

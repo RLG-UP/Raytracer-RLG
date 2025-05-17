@@ -26,26 +26,27 @@ public class Raytracer {
         int height = 400;
         double nearPlane = -1000, farPlane = 1000;
         String path2 = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\Raytracer\\LocalFiles\\ObjFiles\\Ring.obj").getAbsolutePath();
-        String path = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\Raytracer\\LocalFiles\\ObjFiles\\Ring.obj").getAbsolutePath();
-        //String path = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\Raytracer\\LocalFiles\\ObjFiles\\SmallTeapot.obj").getAbsolutePath();
+        //String path = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\Raytracer\\LocalFiles\\ObjFiles\\Ring.obj").getAbsolutePath();
+        String path = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\Raytracer\\LocalFiles\\ObjFiles\\SmallTeapot.obj").getAbsolutePath();
         //String path = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\Raytracer\\LocalFiles\\ObjFiles\\shark1.obj").getAbsolutePath();
 
         // Create scene with objects
         Scene scene = new Scene();
-        scene.addObject(new Sphere(new Vector3D(1.5, -1, 0), 1, Color.blue,  2.77, 1));
-        scene.addObject(new Sphere(new Vector3D(0, 0, 30), 20, Color.yellow,  0, 0));
+        scene.addObject(new Sphere(new Vector3D(0, -0.3, -3), 0.5, Color.lightGray,  0.4, 1));
+        //scene.addObject(new Sphere(new Vector3D(0, 0, 30), 20, Color.yellow,  0, 0));
+        scene.addObject(new Sphere(new Vector3D(0, 0, 0), 50, Color.CYAN,  2.77, 0));
         //scene.addObject(new Sphere(new Vector3D(0, -1, 0), 1.5, Color.yellow));
         //scene.addObject(new Triangle(new Vector3D(0.4, 0, -3), new Vector3D(0.4, 0.5, -3), new Vector3D(1.1, 0, -3), Color.GREEN));
 
-        Polygon polygon = new Polygon(path, new Color(220, 20, 60), 1.5, 1);
-        Polygon polygon2 = new Polygon(path2, Color.lightGray, 2.77, 1);
+        Polygon polygon = new Polygon(path, new Color(220, 20, 60), 0.4, 1);
+        Polygon polygon2 = new Polygon(path2, Color.lightGray, 0.4, 1);
 
         scene.addPolygon( polygon );
         scene.addPolygon( polygon2 );
 
-        polygon.rotate(-75, 90, 0);
+        polygon2.rotate(-75, 90, 0);
         //polygon.translate(0, 0.7f, 0f);
-        polygon.scale(0.8f, 0.8f, 0.8f);
+        polygon2.scale(0.8f, 0.8f, 0.8f);
         //polygon.rotateInPlace(90, 0, 0);
 
         // Set up camera at the origin
