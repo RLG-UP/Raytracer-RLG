@@ -1,5 +1,6 @@
 package edu.up.isgc.raytracer;
 
+import edu.up.isgc.raytracer.files.Renderer;
 import edu.up.isgc.raytracer.lighting.Directional;
 import edu.up.isgc.raytracer.lighting.Light;
 import edu.up.isgc.raytracer.lighting.Point;
@@ -22,8 +23,8 @@ import java.io.IOException;
 public class Raytracer {
     public static void main(String[] args) {
         // Image settings
-        int width = 400;
-        int height = 400;
+        int width = 1200;
+        int height = 1200;
         double nearPlane = -1000, farPlane = 1000;
         String path2 = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\Raytracer\\LocalFiles\\ObjFiles\\Ring.obj").getAbsolutePath();
         //String path = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\Raytracer\\LocalFiles\\ObjFiles\\Ring.obj").getAbsolutePath();
@@ -32,7 +33,8 @@ public class Raytracer {
 
         // Create scene with objects
         Scene scene = new Scene();
-        scene.addObject(new Sphere(new Vector3D(0, -0.3, -3), 0.5, Color.lightGray,  0.4, 1));
+        scene.addObject(new Sphere(new Vector3D(0.7, 0, 0), 0.7, Color.lightGray,  0.4, 1));
+        scene.addObject(new Sphere(new Vector3D(0, 0, -3), 0.3, Color.lightGray,  0.4, 1));
         //scene.addObject(new Sphere(new Vector3D(0, 0, 30), 20, Color.yellow,  0, 0));
         scene.addObject(new Sphere(new Vector3D(0, 0, 0), 50, Color.CYAN,  2.77, 0));
         //scene.addObject(new Sphere(new Vector3D(0, -1, 0), 1.5, Color.yellow));
@@ -57,6 +59,8 @@ public class Raytracer {
         //Light light04 = new Spot(1f, Color.white, new Vector3D(0,-4,0), new Vector3D(0,0,0), 1f, 1f);
 
 
+        Renderer.renderScene(width, height, camera, scene);
+        /*
         // Initialize image buffer (width x height x RGB)
         int[][][] image = new int[width][height][3];
 
@@ -90,6 +94,8 @@ public class Raytracer {
         savePPM("output.ppm", image, width, height);
     }
 
+         */
+
     /**
      * Saves the rendered image as a PPM (Portable PixMap) file.
      * @param filename Output file name
@@ -97,6 +103,7 @@ public class Raytracer {
      * @param width Image width in pixels
      * @param height Image height in pixels
      */
+    /*
     private static void savePPM(String filename, int[][][] image, int width, int height) {
         try (FileWriter writer = new FileWriter(filename)) {
             // Write PPM header
@@ -113,5 +120,8 @@ public class Raytracer {
         } catch (IOException e) {
             System.out.println("Error saving image: " + e.getMessage());
         }
+
+     */
     }
+
 }
