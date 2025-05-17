@@ -238,4 +238,27 @@ public class Vector3D {
 
     public String toString() { return "(" + x + "," + y + "," + z + ")"; }
 
+    public static Vector3D rotateAroundAxis(Vector3D v, Vector3D axis, double angle) {
+        Vector3D k = axis.normalize();
+        double cosTheta = Math.cos(angle);
+        double sinTheta = Math.sin(angle);
+
+        Vector3D term1 = v.scale(cosTheta);
+        Vector3D term2 = Vector3D.crossProduct(k,v).scale(sinTheta);
+        Vector3D term3 = k.scale(k.dot(v) * (1 - cosTheta));
+
+        return term1.add(term2).add(term3);
+    }
+
+    public static Vector3D rotateAroundAxis(Vector3D v, Vector3D axis, double cosTheta, double sinTheta) {
+        Vector3D k = axis.normalize();
+
+        Vector3D term1 = v.scale(cosTheta);
+        Vector3D term2 = Vector3D.crossProduct(k,v).scale(sinTheta);
+        Vector3D term3 = k.scale(k.dot(v) * (1 - cosTheta));
+
+        return term1.add(term2).add(term3);
+    }
+
+
 }

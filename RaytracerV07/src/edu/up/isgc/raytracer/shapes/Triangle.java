@@ -16,15 +16,15 @@ public class Triangle extends Object3D {
     private Vector3D nA, nB, nC;
     private double u, v, w;
 
-    public Triangle(Vector3D A, Vector3D B, Vector3D C, Color color, double refraction) {
-        super(color, refraction);
+    public Triangle(Vector3D A, Vector3D B, Vector3D C, Color color, double refraction, double transparency) {
+        super(color, refraction, transparency);
         this.setA(A);
         this.setB(B);
         this.setC(C);
     }
 
-    public Triangle(Vector3D A, Vector3D B, Vector3D C, Vector3D nA, Vector3D nB, Vector3D nC, Color color, double refraction){
-        super(color, refraction);
+    public Triangle(Vector3D A, Vector3D B, Vector3D C, Vector3D nA, Vector3D nB, Vector3D nC, Color color, double refraction, double transparency) {
+        super(color, refraction, transparency);
         this.setA(A);
         this.setB(B);
         this.setC(C);
@@ -169,7 +169,7 @@ public class Triangle extends Object3D {
 
     @Override
     public Object3D returnZero(){
-        return new Triangle(Vector3D.getZero(), Vector3D.getZero(), Vector3D.getZero(), null, 1);
+        return new Triangle(Vector3D.getZero(), Vector3D.getZero(), Vector3D.getZero(), null, 0, 0);
     }
     public Vector3D getA() { return this.A; }
 

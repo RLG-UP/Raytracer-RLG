@@ -15,15 +15,16 @@ import java.awt.Color;
  */
 public abstract class Object3D {
     public Color color;  // The base color of the 3D object
-    public double refraction;
+    public double refraction, transparency;
 
     /**
      * Constructs a 3D object with the specified color.
      * @param color The color of the object
      */
-    public Object3D(Color color, double refraction) {
+    public Object3D(Color color, double refraction, double transparency) {
         this.color = color;
         this.refraction = refraction;
+        this.transparency = transparency;
     }
 
     /**

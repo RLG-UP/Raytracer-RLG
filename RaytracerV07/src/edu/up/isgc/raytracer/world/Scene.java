@@ -29,6 +29,7 @@ public class Scene {
 
     /**
      * Adds a 3D object to the scene.
+     *
      * @param obj The object to add
      */
     public void addObject(Object3D obj) {
@@ -36,13 +37,14 @@ public class Scene {
     }
 
     public void addPolygon(Polygon p) {
-        for(Triangle triangle : p.getShape()){
+        for (Triangle triangle : p.getShape()) {
             this.addObject(triangle);
         }
     }
 
     /**
      * Finds the closest intersection between a ray and any object in the scene.
+     *
      * @param ray The ray to test for intersections
      * @return The closest intersection, or null if no intersection found
      */
@@ -54,18 +56,18 @@ public class Scene {
         for (Object3D obj : objects) {
             // Get potential intersections with current object
             intersections = obj.intersect(ray);
-                if(intersections != null) {
-                    Intersection intersection = intersections[0] != null ? intersections[0] :
-                            intersections[1] != null ? intersections[1] : null;
+            if (intersections != null) {
+                Intersection intersection = intersections[0] != null ? intersections[0] :
+                        intersections[1] != null ? intersections[1] : null;
 
-                    //&& (intersection.distance >= camera.clipPlanes[0] && intersection.distance <= camera.clipPlanes[0])
-                    // Update closest intersection if this one is closer
-                    if (intersection != null && intersection.distance < minDist && (intersection.distance >= camera.clipPlanes[0] && intersection.distance <= camera.clipPlanes[1])) {
-                        minDist = intersection.distance;
-                        closestIntersection = intersection;
-                        closestIntersection.object = obj;
-                    }
+                //&& (intersection.distance >= camera.clipPlanes[0] && intersection.distance <= camera.clipPlanes[0])
+                // Update closest intersection if this one is closer
+                if (intersection != null && intersection.distance < minDist && (intersection.distance >= camera.clipPlanes[0] && intersection.distance <= camera.clipPlanes[1])) {
+                    minDist = intersection.distance;
+                    closestIntersection = intersection;
+                    closestIntersection.object = obj;
                 }
+            }
         }
 
         return closestIntersection;
@@ -427,9 +429,9 @@ public class Scene {
             Color reflectedColor = castReflection(hit.point, hit.getNormal(), hit.object, recursionLimit - 1);
 
             // Combine local and reflected colors
-            int r = clamp((int)(localColor.getRed() * 0.5 + reflectedColor.getRed() * 0.5), 0, 255);
-            int g = clamp((int)(localColor.getGreen() * 0.5 + reflectedColor.getGreen() * 0.5), 0, 255);
-            int b = clamp((int)(localColor.getBlue() * 0.5 + reflectedColor.getBlue() * 0.5), 0, 255);
+            int r = clamp((int) (localColor.getRed() * 0.5 + reflectedColor.getRed() * 0.5), 0, 255);
+            int g = clamp((int) (localColor.getGreen() * 0.5 + reflectedColor.getGreen() * 0.5), 0, 255);
+            int b = clamp((int) (localColor.getBlue() * 0.5 + reflectedColor.getBlue() * 0.5), 0, 255);
 
             return new Color(r, g, b);
         }
@@ -437,75 +439,70 @@ public class Scene {
         return Color.BLACK;
     }
 
+
     public static Color castRefraction(Vector3D surfacePoint, Vector3D normal, Object3D ignoreShape, int recursionLimit) {
-        if (recursionLimit <= 0) {
-            return Color.black;
+        if (recursionLimit <= 0 || ignoreShape.transparency <= 0) {
+            return Color.BLACK;
         }
-
-        //Intersection intersection = Scene.findRefractionIntersection(ray, ignoreShape);
-
-        // Step 1: Compute reflected direction
-        //Vector3D reflected = Vector3D.subtract(incoming, normal.scale(2 * incoming.dot(normal))).normalize();
-        //Vector3D reflected = Vector3D.subtract(incoming, normal.scale(2 * incoming.dot(normal))).normalize();
-
-        //double cos1 = incoming.dot(normal);
-        //double eta = ignoreShape.refraction / intersection.object.refraction;
-        //Vector3D refracted = Vector3D.subtract(incoming, normal.scale(2 * incoming.dot(normal))).scale(-ignoreShape.refraction).normalize();
 
         double n1 = 1.0;
         double n2 = ignoreShape.refraction;
 
-        Vector3D incoming = Vector3D.subtract(surfacePoint, Camera.getCameraPosition()).normalize();
+        Vector3D incoming = Vector3D.subtract(surfacePoint, Camera.getCameraPosition()).normalize().scale(-1);
+        double c1 = normal.dot(incoming);
 
-        if(incoming.dot(normal) > 0){
+        if (c1 < 0) {
+            c1 = -c1;
+        }else{
             normal = normal.scale(-1);
             n1 = n2;
             n2 = 1.0;
         }
 
-        double eta = n1/n2;
-        double cos01 = -normal.dot(incoming);
-        double k = 1 - eta * eta * (1 - cos01 * cos01);
+        double eta = n1 / n2;
+        double theta = Math.acos(c1);
+        double k = 1 - (eta * eta) * (1 - Math.pow(Math.sin(theta), 2));
+
         if (k < 0) {
-            // Total Internal Reflection
-            return castReflection(surfacePoint, normal, ignoreShape, recursionLimit - 1);
+            // Total internal reflection
+            return Scene.castReflection(surfacePoint, normal, ignoreShape, recursionLimit - 1);
         }
 
-        Vector3D refracted = incoming.scale(eta).add(normal.scale(eta * cos01 - Math.sqrt(k))).normalize();
-        // Step 2: Offset origin to avoid self-hit
+        double c2 = Math.sqrt(k);
+        double c3 = (eta * c1) - c2;
+        Vector3D refracted = incoming.scale(eta).add(normal.scale(c3)).normalize();
+
         Vector3D rayOrigin = surfacePoint.add(normal.scale(Camera.getEpsilon()));
         Ray refractionRay = new Ray(rayOrigin, refracted);
 
-        // Step 3: Check intersection
         Intersection hit = Scene.findRayIntersection(refractionRay, ignoreShape);
 
         if (hit != null && hit.object != null) {
-            // Get base color of object hit
-            Color localColor = hit.object.getColor(); // Or calculate with lighting, if available
+            // Optionally compute lighting here instead of raw color
+            Color localColor = hit.object.getColor();
 
-            // Recurse
             Color refractedColor = castRefraction(hit.point, hit.getNormal(), hit.object, recursionLimit - 1);
 
-            /*
-            // Combine local and reflected colors
-            int r = clamp((int)(localColor.getRed() * 0.5 + refractedColor.getRed() * 0.5), 0, 255);
-            int g = clamp((int)(localColor.getGreen() * 0.5 + refractedColor.getGreen() * 0.5), 0, 255);
-            int b = clamp((int)(localColor.getBlue() * 0.5 + refractedColor.getBlue() * 0.5), 0, 255);
+            double transparency = hit.object.transparency;
+
+            Vector3D viewDir = Vector3D.subtract(Camera.getCameraPosition(), surfacePoint).normalize();
+            float cosTheta = Math.max(0f, (float)viewDir.dot(normal.normalize()));
+            float fresnel = Light.schlick(cosTheta, (float)ignoreShape.refraction);
 
 
-             */
-
-            double objectRefraction =  hit.object.refraction;
-            // Combine local and reflected colors
-            int r = clamp((int)(localColor.getRed() * (objectRefraction - 1) + refractedColor.getRed() * objectRefraction), 0, 255);
-            int g = clamp((int)(localColor.getGreen() * (objectRefraction - 1) + refractedColor.getGreen() * objectRefraction), 0, 255);
-            int b = clamp((int)(localColor.getBlue() * (objectRefraction - 1) + refractedColor.getBlue() * objectRefraction), 0, 255);
+            int r = clamp((int) (localColor.getRed() * (1 - transparency) +
+                    transparency * (localColor.getRed() * (1 - fresnel) + refractedColor.getRed() * fresnel)), 0, 255);
+            int g = clamp((int) (localColor.getGreen() * (1 - transparency) +
+                    transparency * (localColor.getGreen() * (1 - fresnel) + refractedColor.getGreen() * fresnel)), 0, 255);
+            int b = clamp((int) (localColor.getBlue() * (1 - transparency) +
+                    transparency * (localColor.getBlue() * (1 - fresnel) + refractedColor.getBlue() * fresnel)), 0, 255);
 
             return new Color(r, g, b);
         }
 
         return Color.BLACK;
     }
+
 
 
 }

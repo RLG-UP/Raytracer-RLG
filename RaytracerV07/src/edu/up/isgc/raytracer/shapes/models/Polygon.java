@@ -25,7 +25,7 @@ public class Polygon {
         this.setShape(shape);
     }
 
-    public Polygon(String filePath, Color color, double refraction){
+    public Polygon(String filePath, Color color, double refraction, double transparency){
         FileRead.compileObj(filePath);
         ArrayList<Triangle> shape = new ArrayList<>();
 
@@ -72,7 +72,8 @@ public class Polygon {
                                 new Vector3D(nV2[0], nV2[1], nV2[2]),
                                 new Vector3D(nV3[0], nV3[1], nV3[2]),
                                 color,
-                                refraction
+                                refraction,
+                                transparency
                         ));
                     }
                     else{
@@ -81,7 +82,8 @@ public class Polygon {
                                 new Vector3D(v2[0], v2[1], v2[2]),
                                 new Vector3D(v3[0], v3[1], v3[2]),
                                 color,
-                                refraction
+                                refraction,
+                                transparency
                         ));
                     }
 

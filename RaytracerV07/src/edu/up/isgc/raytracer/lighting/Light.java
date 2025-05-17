@@ -65,12 +65,19 @@ public abstract class Light {
     public float getAttenuation(){ return this.attenuation; }
     public abstract void setAttenuation(float d);
 
+    public static float schlick(float cosTheta, float refractiveIndex) {
+        float r0 = (1 - refractiveIndex) / (1 + refractiveIndex);
+        r0 = r0 * r0;
+        return r0 + (1 - r0) * (float)Math.pow(1 - cosTheta, 5);
+    }
+
+
     public static Color calculateColor(Vector3D N, Vector3D point, Object3D object) {
         Color finalColor = new Color(0, 0, 0);
         float ks = 1f;
         float p = 100f;
         float ka = 0.1f;  // Ambient constant
-        float reflectivity = 0.5f;
+        float reflectivity = 0.8f;
         float ambientIntensity = ka * Light.getAmbientLight();
 
         for (Light light : Light.getLights()) {
@@ -124,12 +131,43 @@ public abstract class Light {
                 clamp(Math.round( finalColor.getBlue() + (reflectContribution.getBlue()) ), 0, 255)
         );
 
-         */
-
-        finalColor = new Color(
+                finalColor = new Color(
                 clamp(Math.round( finalColor.getRed() * (1 - reflectivity) + (reflectivity * reflectContribution.getRed()) ), 0, 255),
                 clamp(Math.round( finalColor.getGreen() * (1 - reflectivity) + (reflectivity * reflectContribution.getGreen()) ), 0, 255),
                 clamp(Math.round( finalColor.getBlue() * (1 - reflectivity) + (reflectivity * reflectContribution.getBlue()) ), 0, 255)
+        );
+         */
+
+        Vector3D viewDir = Vector3D.subtract(Camera.getCameraPosition(), point).normalize();
+        float cosTheta = Math.max(0f, (float)viewDir.dot(N.normalize()));
+        float fresnel = schlick(cosTheta, (float)object.refraction);
+
+
+        float transparency = (float)object.transparency;
+
+        finalColor = new Color(
+                clamp(Math.round(finalColor.getRed() * (1 - transparency) +
+                        transparency * (finalColor.getRed() * (1 - fresnel) + reflectContribution.getRed() * fresnel)), 0, 255),
+                clamp(Math.round(finalColor.getGreen() * (1 - transparency) +
+                        transparency * (finalColor.getGreen() * (1 - fresnel) + reflectContribution.getGreen() * fresnel)), 0, 255),
+                clamp(Math.round(finalColor.getBlue() * (1 - transparency) +
+                        transparency * (finalColor.getBlue() * (1 - fresnel) + reflectContribution.getBlue() * fresnel)), 0, 255)
+        );
+
+        float gamma = 2.2f;
+
+        float r = finalColor.getRed() / 255.0f;
+        float g = finalColor.getGreen() / 255.0f;
+        float b = finalColor.getBlue() / 255.0f;
+
+        r = (float) Math.pow(r, 1.0 / gamma);
+        g = (float) Math.pow(g, 1.0 / gamma);
+        b = (float) Math.pow(b, 1.0 / gamma);
+
+        finalColor = new Color(
+                clamp((int)(r * 255), 0, 255),
+                clamp((int)(g * 255), 0, 255),
+                clamp((int)(b * 255), 0, 255)
         );
 
         return finalColor;

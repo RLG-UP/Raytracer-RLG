@@ -26,8 +26,8 @@ public class Sphere extends Object3D {
      * @param radius Radius of the sphere
      * @param color Color of the sphere
      */
-    public Sphere(Vector3D center, double radius, Color color, double refraction) {
-        super(color, refraction);
+    public Sphere(Vector3D center, double radius, Color color, double refraction, double transparency) {
+        super(color, refraction, transparency);
         this.center = center;
         this.radius = radius;
     }
@@ -116,7 +116,7 @@ public class Sphere extends Object3D {
 
 
     public Object3D returnZero(){
-        return new Sphere(Vector3D.getZero(), 0.0, null, 1);
+        return new Sphere(Vector3D.getZero(), 0.0, null, 0, 0);
     }
 
     @Override
