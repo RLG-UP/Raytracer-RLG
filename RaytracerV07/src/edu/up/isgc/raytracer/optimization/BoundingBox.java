@@ -12,6 +12,7 @@ public class BoundingBox {
         this.setMax(max);
     }
 
+
     public boolean bbIntersects(Ray ray){
         float tmin = (float)((this.getMin().x - ray.origin.x) / (ray.direction.x));
         float tmax = (float)((this.getMax().x - ray.origin.x) / (ray.direction.x));

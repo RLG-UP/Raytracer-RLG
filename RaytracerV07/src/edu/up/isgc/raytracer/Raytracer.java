@@ -23,8 +23,8 @@ import java.io.IOException;
 public class Raytracer {
     public static void main(String[] args) {
         // Image settings
-        int width = 1600;
-        int height = 900;
+        int width = 400;
+        int height = 200;
         double nearPlane = -1000, farPlane = 1000;
         String path2 = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\Raytracer\\LocalFiles\\ObjFiles\\Ring.obj").getAbsolutePath();
         //String path = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\Raytracer\\LocalFiles\\ObjFiles\\Ring.obj").getAbsolutePath();
@@ -59,6 +59,8 @@ public class Raytracer {
         //Light light04 = new Spot(1f, Color.white, new Vector3D(0,-4,0), new Vector3D(0,0,0), 1f, 1f);
 
 
+        System.out.println("=== TREE STRUCTURE ===");
+        Scene.BBTree.printTree(Scene.BBTree.root, 0);
         Renderer.renderScene(width, height, camera, scene);
         /*
         // Initialize image buffer (width x height x RGB)
