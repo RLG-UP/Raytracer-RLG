@@ -59,8 +59,6 @@ public class Raytracer {
         //Light light04 = new Spot(1f, Color.white, new Vector3D(0,-4,0), new Vector3D(0,0,0), 1f, 1f);
 
 
-        System.out.println("=== TREE STRUCTURE ===");
-        Scene.BBTree.printTree(Scene.BBTree.root, 0);
         Renderer.renderScene(width, height, camera, scene);
         /*
         // Initialize image buffer (width x height x RGB)

@@ -1,5 +1,6 @@
 package edu.up.isgc.raytracer.world;
 
+import edu.up.isgc.raytracer.optimization.BBTree;
 import edu.up.isgc.raytracer.optimization.BoundingBox;
 import edu.up.isgc.raytracer.Intersection;
 import edu.up.isgc.raytracer.Vector3D;
@@ -22,14 +23,14 @@ import static java.lang.Math.clamp;
  */
 public class Scene {
     private static ArrayList<Object3D> objects;  // Collection of 3D objects in the scene
-    public static RBTree BBTree;
+    public static BBTree BBTree;
 
     /**
      * Constructs an empty scene.
      */
     public Scene() {
         objects = new ArrayList<>();
-        BBTree = new RBTree();
+        BBTree = new BBTree();
     }
 
     /**
@@ -39,7 +40,7 @@ public class Scene {
      */
     public void addObject(Object3D obj) {
         objects.add(obj);
-        BBTree.insert(obj, 0);
+        BBTree.insert(obj);
     }
 
     public void addPolygon(Polygon p) {
@@ -121,59 +122,52 @@ public class Scene {
 
 
     public Intersection findClosestIntersection(Ray ray, Camera camera) {
-        List<Intersection> intersections = new ArrayList<>();
-        Scene.BBTree.traverse(Scene.BBTree.root, ray, intersections);
+        Intersection closestHit = Scene.BBTree.traverse(ray);
 
-        if (intersections.isEmpty()) {
+        if (closestHit == null) {
             return null;
         }
 
-        Intersection closestIntersection = null;
         double clipNear = camera.clipPlanes[0];
         double clipFar = camera.clipPlanes[1];
+        double distance = closestHit.distance;
 
-        for (Intersection hit : intersections) {
-            if (hit == null) continue;
-
-            double d = hit.distance;
-
-            // Skip if intersection is outside the clip range
-            if (d < clipNear || d > clipFar) continue;
-
-            // Update closest intersection
-            if (closestIntersection == null || d < closestIntersection.distance) {
-                closestIntersection = hit;
-                // Early exit if we find a very close intersection
-                if (d <= Camera.getEpsilon()) {
-                    break;
-                }
-            }
+        // Check if within clip range
+        if (distance >= clipNear && distance <= clipFar) {
+            return closestHit;
         }
 
-        return closestIntersection;
+        return null;
     }
 
+    /*
     public static Intersection findRayIntersection(Ray ray, Object3D ignoreShape) {
-        List<Intersection> intersections = new ArrayList<>();
-        Scene.BBTree.traverse(Scene.BBTree.root, ray, intersections);
+        Intersection closestHit = Scene.BBTree.traverse(ray);
 
-        Intersection closestHit = null;
-
-        for (Intersection hit : intersections) {
-            if (hit == null) continue;
-            if (hit.object == ignoreShape) continue;
-
-            if (hit.distance > Camera.getEpsilon() &&
-                    (closestHit == null || hit.distance < closestHit.distance)) {
-                closestHit = hit;
-                // Early exit if we find a very close intersection
-                if (hit.distance <= Camera.getEpsilon() * 2) {
-                    break;
-                }
-            }
+        if (closestHit == null || closestHit.object == ignoreShape) {
+            return null;
         }
 
-        return closestHit;
+        // Check if valid distance
+        if (closestHit.distance > Camera.getEpsilon()) {
+            System.out.println(closestHit.color);
+            return closestHit;
+        }
+
+        return null;
+    }
+
+     */
+
+    public static Intersection findRayIntersection(Ray ray, Object3D ignoreShape) {
+        Intersection closestHit = Scene.BBTree.traverse(ray);
+        if (closestHit == null) return null;
+        return closestHit.object != ignoreShape ? closestHit : null;
+
+
+
+        //closestHit = Scene.BBTree.traverse(Scene.BBTree.root, ray)[0];
+        //return closestHit;
     }
 
 

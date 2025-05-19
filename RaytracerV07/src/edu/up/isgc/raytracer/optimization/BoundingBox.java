@@ -13,24 +13,39 @@ public class BoundingBox {
     }
 
 
-    public boolean bbIntersects(Ray ray){
-        float tmin = (float)((this.getMin().x - ray.origin.x) / (ray.direction.x));
-        float tmax = (float)((this.getMax().x - ray.origin.x) / (ray.direction.x));
-        if(tmin > tmax){ float temp = tmin; tmin = tmax; tmax = temp; }
+    public boolean bbIntersects(Ray ray) {
+        double tmin = Double.NEGATIVE_INFINITY;
+        double tmax = Double.POSITIVE_INFINITY;
 
-        float tymin = (float)((this.getMin().y - ray.origin.y) / (ray.direction.y));
-        float tymax = (float)((this.getMax().y - ray.origin.y) / (ray.direction.y));
-        if(tymin > tymax){ float temp = tymin; tymin = tymax; tymax = temp; }
+        for (int i = 0; i < 3; i++) {
+            double origin = ray.origin.get(i);
+            double direction = ray.direction.get(i);
+            double min = this.getMin().get(i);
+            double max = this.getMax().get(i);
 
-        if((tmin > tymax) || (tymin > tmax)) return false;
-        tmin = Math.min(tmin, tymin);
-        tmax = Math.max(tmax, tymax);
+            if (Math.abs(direction) < 1e-6) {
+                // Ray is parallel to this axis
+                if (origin < min || origin > max) {
+                    return false;
+                }
+            } else {
+                double t1 = (min - origin) / direction;
+                double t2 = (max - origin) / direction;
 
-        float tzmin = (float)((this.getMin().z - ray.origin.z) / (ray.direction.z));
-        float tzmax = (float)((this.getMax().z - ray.origin.z) / (ray.direction.z));
-        if(tzmin > tzmax){float temp = tzmin; tzmin = tzmax; tzmax = temp; }
+                if (t1 > t2) {
+                    double temp = t1;
+                    t1 = t2;
+                    t2 = temp;
+                }
 
-        if((tmin > tzmax) || (tzmin > tmax)) return false;
+                tmin = Math.max(tmin, t1);
+                tmax = Math.min(tmax, t2);
+
+                if (tmin > tmax) {
+                    return false;
+                }
+            }
+        }
 
         return true;
     }
@@ -63,5 +78,12 @@ public class BoundingBox {
 
     public void setMax(Vector3D max) {
         this.max = max;
+    }
+
+    public double getSurfaceArea() {
+        double dx = max.x - min.x;
+        double dy = max.y - min.y;
+        double dz = max.z - min.z;
+        return 2 * (dx * dy + dx * dz + dy * dz);
     }
 }

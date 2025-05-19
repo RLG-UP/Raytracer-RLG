@@ -261,4 +261,10 @@ public class Vector3D {
     }
 
 
+    public double get(int i) {
+        if (i == 0) return x;
+        else if (i == 1) return y;
+        else if (i == 2) return z;
+        return 0;
+    }
 }

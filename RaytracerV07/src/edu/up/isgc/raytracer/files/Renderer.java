@@ -26,7 +26,7 @@ public class Renderer {
                 Ray ray = camera.generateRay(px, py);
                 Intersection intersection = scene.findClosestIntersection(ray, camera);
 
-                //if(intersection != null)System.out.println("Found intersection with " + intersection.object);
+                //if(intersection != null && intersection.object != null)System.out.println("Found intersection with " + intersection.object);
                 Color pixelColor;
                 if (intersection != null && intersection.color != null && intersection.object != null) {
                     intersection.color = intersection.object.addLight(intersection.point);

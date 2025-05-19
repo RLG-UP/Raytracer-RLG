@@ -34,6 +34,14 @@ public class Intersection {
         this.setNormal(normal);
     }
 
+    public Intersection(Vector3D point, double distance, Color color, Vector3D normal, Object3D object) {
+        this.point = point;
+        this.distance = distance;
+        this.color = color;
+        this.setNormal(normal);
+        this.object = object;
+    }
+
     public static Intersection[] nullIntersection() { return new Intersection[]{null, null}; }
 
     public void setNormal(Vector3D normal) { this.normal = normal.normalize(); }
