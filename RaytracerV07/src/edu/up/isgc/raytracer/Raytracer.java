@@ -23,8 +23,8 @@ import java.io.IOException;
 public class Raytracer {
     public static void main(String[] args) {
         // Image settings
-        int width = 1200;
-        int height = 1200;
+        int width = 1600;
+        int height = 900;
         double nearPlane = -1000, farPlane = 1000;
         String path2 = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\Raytracer\\LocalFiles\\ObjFiles\\Ring.obj").getAbsolutePath();
         //String path = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\Raytracer\\LocalFiles\\ObjFiles\\Ring.obj").getAbsolutePath();

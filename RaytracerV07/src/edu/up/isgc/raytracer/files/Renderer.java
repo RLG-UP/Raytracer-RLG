@@ -17,10 +17,13 @@ public class Renderer {
 
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                double u = (x - width / 2.0) / width;
-                double v = (y - height / 2.0) / height;
+                double aspectRatio = (double) width / height;
+                double scale = 1.0; // or use Math.tan(fov / 2)
 
-                Ray ray = camera.generateRay(u, v);
+                double px = (2 * ((x + 0.5) / width) - 1) * aspectRatio * scale;
+                double py = (1 - 2 * ((y + 0.5) / height)) * scale;
+
+                Ray ray = camera.generateRay(px, py);
                 Intersection intersection = scene.findClosestIntersection(ray, camera);
 
                 Color pixelColor;
@@ -28,10 +31,10 @@ public class Renderer {
                     intersection.color = intersection.object.addLight(intersection.point);
                     pixelColor = intersection.color;
                 } else {
-                    pixelColor = new Color(0, 0, 0); // background
+                    pixelColor = new Color(0, 0, 0);
                 }
 
-                image.setRGB(x, y, pixelColor.getRGB());
+                image.setRGB(x, height - y - 1, pixelColor.getRGB());
             }
         }
 
