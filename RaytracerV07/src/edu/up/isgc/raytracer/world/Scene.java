@@ -1,5 +1,6 @@
 package edu.up.isgc.raytracer.world;
 
+import edu.up.isgc.raytracer.BoundingBox;
 import edu.up.isgc.raytracer.Intersection;
 import edu.up.isgc.raytracer.Vector3D;
 import edu.up.isgc.raytracer.lighting.Light;
@@ -55,6 +56,9 @@ public class Scene {
 
         for (Object3D obj : objects) {
             // Get potential intersections with current object
+            BoundingBox box = obj.getBB();
+            if (!box.bbIntersects(ray)) continue;
+
             intersections = obj.intersect(ray);
             if (intersections != null) {
                 Intersection intersection = intersections[0] != null ? intersections[0] :
@@ -155,6 +159,9 @@ public class Scene {
         Intersection closestHit = null;
 
         for (Object3D shape : Scene.objects) {
+            BoundingBox box = shape.getBB();
+            if (!box.bbIntersects(ray)) continue;
+
             if (shape == null || shape == ignoreShape) continue;
 
             Intersection[] hits = shape.intersect(ray);
@@ -178,6 +185,9 @@ public class Scene {
         Intersection closestHit = null;
 
         for (Object3D shape : Scene.objects) {
+            BoundingBox box = shape.getBB();
+            if (!box.bbIntersects(ray)) continue;
+
             if (shape == null || shape == ignoreShape) continue;
 
             Intersection[] hits = shape.intersect(ray);
@@ -201,6 +211,9 @@ public class Scene {
         Intersection closestHit = null;
 
         for (Object3D shape : Scene.objects) {
+            BoundingBox box = shape.getBB();
+            if (!box.bbIntersects(ray)) continue;
+
             if (shape == null || shape == ignoreShape) continue;
 
             Intersection[] hits = shape.intersect(ray);
@@ -338,6 +351,9 @@ public class Scene {
 
         // Step 5: Check for intersections along this ray
         for (Object3D obj : objects) {
+            BoundingBox box = obj.getBB();
+            if (!box.bbIntersects(shadowRay)) continue;
+
             if (obj == sourceObject) continue; // Skip the object casting the shadow ray
 
             Intersection[] intersections = obj.intersect(shadowRay);

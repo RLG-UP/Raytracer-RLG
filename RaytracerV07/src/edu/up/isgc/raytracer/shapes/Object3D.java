@@ -1,5 +1,6 @@
 package edu.up.isgc.raytracer.shapes;
 
+import edu.up.isgc.raytracer.BoundingBox;
 import edu.up.isgc.raytracer.Intersection;
 import edu.up.isgc.raytracer.Vector3D;
 import edu.up.isgc.raytracer.lighting.Light;
@@ -44,4 +45,6 @@ public abstract class Object3D {
         Ray shadowRay = new Ray(offsetPoint, lightDirection.normalize());
         return Scene.findRayIntersection(shadowRay, this);
     }
+
+    public abstract BoundingBox getBB();
 }

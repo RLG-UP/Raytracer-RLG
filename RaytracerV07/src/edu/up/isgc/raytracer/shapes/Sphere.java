@@ -1,5 +1,6 @@
 package edu.up.isgc.raytracer.shapes;
 
+import edu.up.isgc.raytracer.BoundingBox;
 import edu.up.isgc.raytracer.Intersection;
 import edu.up.isgc.raytracer.lighting.Directional;
 import edu.up.isgc.raytracer.lighting.Light;
@@ -33,6 +34,7 @@ public class Sphere extends Object3D {
     }
 
     public Intersection[] intersect(Ray ray) {
+
         Vector3D O = ray.origin;
         Vector3D D = ray.direction.normalize().scale(-1);
         Vector3D L = Vector3D.subtract(center, O);
@@ -117,6 +119,15 @@ public class Sphere extends Object3D {
 
     public Object3D returnZero(){
         return new Sphere(Vector3D.getZero(), 0.0, null, 0, 0);
+    }
+
+    @Override
+    public BoundingBox getBB(){
+        float r = (float)this.radius;
+        Vector3D origin = this.center;
+        Vector3D min = new Vector3D(origin.x - r, origin.y - r, origin.z - r);
+        Vector3D max = new Vector3D(origin.x + r, origin.y + r, origin.z + r);
+        return new BoundingBox(min, max);
     }
 
     @Override

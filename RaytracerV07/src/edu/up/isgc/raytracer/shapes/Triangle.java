@@ -1,5 +1,6 @@
 package edu.up.isgc.raytracer.shapes;
 
+import edu.up.isgc.raytracer.BoundingBox;
 import edu.up.isgc.raytracer.lighting.Light;
 import edu.up.isgc.raytracer.world.Camera;
 import edu.up.isgc.raytracer.Intersection;
@@ -171,6 +172,23 @@ public class Triangle extends Object3D {
     public Object3D returnZero(){
         return new Triangle(Vector3D.getZero(), Vector3D.getZero(), Vector3D.getZero(), null, 0, 0);
     }
+
+    @Override
+    public BoundingBox getBB() {
+        double minX = Math.min(this.getA().x, Math.min(this.getB().x, this.getC().x));
+        double minY = Math.min(this.getA().y, Math.min(this.getB().y, this.getC().y));
+        double minZ = Math.min(this.getA().z, Math.min(this.getB().z, this.getC().z));
+
+        double maxX = Math.max(this.getA().x, Math.max(this.getB().x, this.getC().x));
+        double maxY = Math.max(this.getA().y, Math.max(this.getB().y, this.getC().y));
+        double maxZ = Math.max(this.getA().z, Math.max(this.getB().z, this.getC().z));
+
+        return new BoundingBox(
+                new Vector3D(minX, minY, minZ),
+                new Vector3D(maxX, maxY, maxZ)
+        );
+    }
+
     public Vector3D getA() { return this.A; }
 
     public void setA(Vector3D a) { this.A = a; }
