@@ -3,16 +3,16 @@ package edu.up.isgc.raytracer.optimization;
 import edu.up.isgc.raytracer.shapes.Object3D;
 
 public class Node {
-    public double distance;    // distance from camera to object's bounding box center
+    public double centroidValue;    // distance from camera to object's bounding box center
     public Node left;
     public Node right;
     public Node parent;
     public boolean isRed;
     public boolean isBlack;
-    public Object objectRef; // You can store your 3D object reference here if needed
+    public Object3D objectRef; // You can store your 3D object reference here if needed
 
-    public Node(double distance, Object3D objectRef) {
-        this.distance = distance;
+    public Node(double centroidValue, Object3D objectRef) {
+        this.centroidValue = centroidValue;
         this.left = null;
         this.right = null;
         this.parent = null;
@@ -20,6 +20,8 @@ public class Node {
         this.isBlack = !this.isRed;
         this.objectRef = objectRef;
     }
+
+    public boolean isLeaf(){ return left == null && right == null; }
 
     public void paintRed() {
         this.isRed = true;
@@ -33,6 +35,6 @@ public class Node {
 
     @Override
     public String toString() {
-        return String.format("Node(distance=%.3f)", distance);
+        return String.format("Node(distance=%.3f)", centroidValue);
     }
 }

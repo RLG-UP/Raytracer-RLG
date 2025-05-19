@@ -21,7 +21,6 @@ public class Triangle extends Object3D {
         this.setA(A);
         this.setB(B);
         this.setC(C);
-        super.position = new Vector3D((A.x + B.x + C.x)/3, (A.y + B.y + C.y)/3, (A.z + B.z + C.z)/3);
     }
 
     public Triangle(Vector3D A, Vector3D B, Vector3D C, Vector3D nA, Vector3D nB, Vector3D nC, Color color, double refraction, double transparency) {

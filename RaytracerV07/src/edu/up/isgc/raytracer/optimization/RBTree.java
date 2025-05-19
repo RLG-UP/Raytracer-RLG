@@ -1,6 +1,11 @@
 package edu.up.isgc.raytracer.optimization;
 
+import edu.up.isgc.raytracer.Intersection;
+import edu.up.isgc.raytracer.Ray;
+import edu.up.isgc.raytracer.Vector3D;
 import edu.up.isgc.raytracer.shapes.Object3D;
+
+import java.util.function.Function;
 
 public class RBTree {
     public Node root;
@@ -96,20 +101,24 @@ public class RBTree {
     }
 
     // Insert a new node by distance value
-    public Node insert(double distance, Object3D object) {
+    public Node insert(Object3D object) {
         if (root == null) {
-            root = new Node(distance, object);
+            BoundingBox bbox = object.getBB();
+            Vector3D centroid = bbox.getMin().add(bbox.getMax()).scale((double) 1 /2);
+
+            root = new Node(centroid.x, object);
             root.paintBlack();
             return root;
         } else {
-            return insertRecursive(root, distance, object);
+            return insertRecursive(root, object, 0);
         }
     }
 
+    /*
     private Node insertRecursive(Node current, double distance, Object3D object) {
-        if (distance == current.distance) {
+        if (distance == current.centroidValue) {
             return current; // already exists, no duplicates
-        } else if (distance < current.distance) {
+        } else if (distance < current.centroidValue) {
             if (current.left == null) {
                 Node newNode = new Node(distance, object);
                 newNode.parent = current;
@@ -131,4 +140,62 @@ public class RBTree {
             }
         }
     }
+
+     */
+    private Node insertRecursive(Node current, Object3D object, int depth) {
+        // Compute centroid of the object's bounding box
+        BoundingBox bbox = object.getBB();
+        Vector3D centroid = bbox.getMin().add(bbox.getMax()).scale((double) 1 /2);
+
+        // Pick axis based on depth (0 = x, 1 = y, 2 = z)
+        double valueToCompare = switch (depth % 3) {
+            case 0 -> centroid.x;
+            case 1 -> centroid.y;
+            case 2 -> centroid.z;
+            default -> centroid.x;
+        };
+
+        if (current == null) {
+            Node newNode = new Node(valueToCompare, object); // centroidValue will be stored in constructor
+            fixInsertion(newNode);
+            return newNode;
+        }
+
+        if (valueToCompare < current.centroidValue) {
+            if (current.left == null) {
+                Node newNode = new Node(valueToCompare, object);
+                newNode.parent = current;
+                current.left = newNode;
+                fixInsertion(newNode);
+                return newNode;
+            } else {
+                return insertRecursive(current.left, object, depth + 1);
+            }
+        } else {
+            if (current.right == null) {
+                Node newNode = new Node(valueToCompare, object);
+                newNode.parent = current;
+                current.right = newNode;
+                fixInsertion(newNode);
+                return newNode;
+            } else {
+                return insertRecursive(current.right, object, depth + 1);
+            }
+        }
+    }
+
+    private Object3D traverse(Node node, Ray ray) {
+        if (node == null) return null;
+
+        if (node.objectRef.getBB().bbIntersects(ray)) {
+            if (node.left == null && node.right == null) {
+                return node.objectRef;
+            } else {
+                traverse(node.left, ray);
+                traverse(node.right, ray);
+            }
+        }
+        return null;
+    }
+
 }

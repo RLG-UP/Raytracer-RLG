@@ -28,7 +28,6 @@ public class Sphere extends Object3D {
         super(color, refraction, transparency);
         this.center = center;
         this.radius = radius;
-        super.position = this.center;
     }
 
     public Intersection[] intersect(Ray ray) {

@@ -38,8 +38,7 @@ public class Scene {
      */
     public void addObject(Object3D obj) {
         objects.add(obj);
-        float distance = (float)Vector3D.subtract(Camera.getCameraPosition(), obj.position).value;
-        BBTree.insert(distance, obj);
+        BBTree.insert(obj);
     }
 
     public void addPolygon(Polygon p) {

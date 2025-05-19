@@ -16,7 +16,6 @@ import java.awt.Color;
 public abstract class Object3D {
     public Color color;  // The base color of the 3D object
     public double refraction, transparency;
-    public Vector3D position;
 
     /**
      * Constructs a 3D object with the specified color.

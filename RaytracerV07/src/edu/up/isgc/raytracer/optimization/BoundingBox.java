@@ -34,6 +34,20 @@ public class BoundingBox {
         return true;
     }
 
+    public static BoundingBox surroundingBox(BoundingBox box1, BoundingBox box2) {
+        Vector3D small = new Vector3D(
+                Math.min(box1.min.x, box2.min.x),
+                Math.min(box1.min.y, box2.min.y),
+                Math.min(box1.min.z, box2.min.z)
+        );
+        Vector3D big = new Vector3D(
+                Math.max(box1.max.x, box2.max.x),
+                Math.max(box1.max.y, box2.max.y),
+                Math.max(box1.max.z, box2.max.z)
+        );
+        return new BoundingBox(small, big);
+    }
+
     public Vector3D getMin() {
         return min;
     }
