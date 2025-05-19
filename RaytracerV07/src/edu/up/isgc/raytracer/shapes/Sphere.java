@@ -1,13 +1,10 @@
 package edu.up.isgc.raytracer.shapes;
 
-import edu.up.isgc.raytracer.BoundingBox;
+import edu.up.isgc.raytracer.optimization.BoundingBox;
 import edu.up.isgc.raytracer.Intersection;
-import edu.up.isgc.raytracer.lighting.Directional;
 import edu.up.isgc.raytracer.lighting.Light;
 import edu.up.isgc.raytracer.Ray;
 import edu.up.isgc.raytracer.Vector3D;
-import edu.up.isgc.raytracer.world.Camera;
-import edu.up.isgc.raytracer.world.Scene;
 
 import java.awt.Color;
 
@@ -31,6 +28,7 @@ public class Sphere extends Object3D {
         super(color, refraction, transparency);
         this.center = center;
         this.radius = radius;
+        super.position = this.center;
     }
 
     public Intersection[] intersect(Ray ray) {

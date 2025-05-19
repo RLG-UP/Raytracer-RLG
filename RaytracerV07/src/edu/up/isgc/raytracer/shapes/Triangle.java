@@ -1,12 +1,11 @@
 package edu.up.isgc.raytracer.shapes;
 
-import edu.up.isgc.raytracer.BoundingBox;
+import edu.up.isgc.raytracer.optimization.BoundingBox;
 import edu.up.isgc.raytracer.lighting.Light;
 import edu.up.isgc.raytracer.world.Camera;
 import edu.up.isgc.raytracer.Intersection;
 import edu.up.isgc.raytracer.Ray;
 import edu.up.isgc.raytracer.Vector3D;
-import edu.up.isgc.raytracer.world.Scene;
 
 import java.awt.*;
 
@@ -22,6 +21,7 @@ public class Triangle extends Object3D {
         this.setA(A);
         this.setB(B);
         this.setC(C);
+        super.position = new Vector3D((A.x + B.x + C.x)/3, (A.y + B.y + C.y)/3, (A.z + B.z + C.z)/3);
     }
 
     public Triangle(Vector3D A, Vector3D B, Vector3D C, Vector3D nA, Vector3D nB, Vector3D nC, Color color, double refraction, double transparency) {

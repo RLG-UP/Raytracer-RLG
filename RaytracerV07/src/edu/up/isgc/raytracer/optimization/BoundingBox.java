@@ -1,4 +1,7 @@
-package edu.up.isgc.raytracer;
+package edu.up.isgc.raytracer.optimization;
+
+import edu.up.isgc.raytracer.Ray;
+import edu.up.isgc.raytracer.Vector3D;
 
 public class BoundingBox {
     private Vector3D min;

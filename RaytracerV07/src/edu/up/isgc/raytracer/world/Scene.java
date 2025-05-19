@@ -1,10 +1,11 @@
 package edu.up.isgc.raytracer.world;
 
-import edu.up.isgc.raytracer.BoundingBox;
+import edu.up.isgc.raytracer.optimization.BoundingBox;
 import edu.up.isgc.raytracer.Intersection;
 import edu.up.isgc.raytracer.Vector3D;
 import edu.up.isgc.raytracer.lighting.Light;
 import edu.up.isgc.raytracer.Ray;
+import edu.up.isgc.raytracer.optimization.RBTree;
 import edu.up.isgc.raytracer.shapes.Object3D;
 import edu.up.isgc.raytracer.shapes.Triangle;
 import edu.up.isgc.raytracer.shapes.models.Polygon;
@@ -20,12 +21,14 @@ import static java.lang.Math.clamp;
  */
 public class Scene {
     private static ArrayList<Object3D> objects;  // Collection of 3D objects in the scene
+    private static RBTree BBTree;
 
     /**
      * Constructs an empty scene.
      */
     public Scene() {
         objects = new ArrayList<>();
+        BBTree = new RBTree();
     }
 
     /**
@@ -35,6 +38,8 @@ public class Scene {
      */
     public void addObject(Object3D obj) {
         objects.add(obj);
+        float distance = (float)Vector3D.subtract(Camera.getCameraPosition(), obj.position).value;
+        BBTree.insert(distance, obj);
     }
 
     public void addPolygon(Polygon p) {

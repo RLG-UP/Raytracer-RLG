@@ -1,9 +1,8 @@
 package edu.up.isgc.raytracer.shapes;
 
-import edu.up.isgc.raytracer.BoundingBox;
+import edu.up.isgc.raytracer.optimization.BoundingBox;
 import edu.up.isgc.raytracer.Intersection;
 import edu.up.isgc.raytracer.Vector3D;
-import edu.up.isgc.raytracer.lighting.Light;
 import edu.up.isgc.raytracer.Ray;
 import edu.up.isgc.raytracer.world.Camera;
 import edu.up.isgc.raytracer.world.Scene;
@@ -17,6 +16,7 @@ import java.awt.Color;
 public abstract class Object3D {
     public Color color;  // The base color of the 3D object
     public double refraction, transparency;
+    public Vector3D position;
 
     /**
      * Constructs a 3D object with the specified color.
