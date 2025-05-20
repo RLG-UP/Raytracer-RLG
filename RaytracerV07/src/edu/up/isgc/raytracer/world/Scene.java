@@ -158,6 +158,7 @@ public class Scene {
 
  */
 
+
     public Intersection findClosestIntersection(Ray ray, Camera camera) {
         Intersection[] allHits = Scene.BBTree.traverse(ray);
         if (allHits == null || allHits.length == 0) return null;
@@ -166,6 +167,7 @@ public class Scene {
         double clipFar = camera.clipPlanes[1];
         Intersection closestHit = null;
         double minDist = Double.MAX_VALUE;
+
 
         for (Intersection hit : allHits) {
             if (hit != null &&
@@ -179,6 +181,8 @@ public class Scene {
 
         return closestHit;
     }
+
+
 
     /*
     public static Intersection findRayIntersection(Ray ray, Object3D ignoreShape) {
@@ -196,6 +200,7 @@ public class Scene {
 
         return null;
     }
+
 
 
     /*
@@ -325,9 +330,9 @@ public class Scene {
         double lightDistance = Vector3D.subtract(light.getPosition(), shadowOrigin).value;
 
         // Step 5: Check for intersections along this ray
-        Intersection[] intersections = BBTree.traverse(shadowRay);
-        if(intersections == null || intersections.length == 0) return false;
-        Intersection intersection = intersections[0];
+        //Intersection[] intersections = BBTree.traverse(shadowRay);
+        //if(intersections == null || intersections.length == 0) return false;
+        Intersection intersection = Scene.findRayIntersection(shadowRay, sourceObject);
         if(intersection == null) return false;
         Object3D obj = intersection.object;
 

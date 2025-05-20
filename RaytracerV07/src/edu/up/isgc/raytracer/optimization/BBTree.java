@@ -192,6 +192,7 @@ public class BBTree {
 
      */
 
+
     private Intersection[] traverse(BBNode node, Ray ray) {
         if (node == null || !node.bbox.bbIntersects(ray)) {
             return null;
@@ -202,6 +203,7 @@ public class BBTree {
             if (intersections == null) return null;
 
             // Set object reference for all intersections
+
             for (Intersection intersection : intersections) {
                 if (intersection != null) {
                     intersection.object = node.object;
