@@ -24,11 +24,18 @@ import static java.lang.Math.clamp;
 public class Scene {
     private static ArrayList<Object3D> objects;  // Collection of 3D objects in the scene
     public static BBTree BBTree;
+    public static Color background;
 
     /**
      * Constructs an empty scene.
      */
     public Scene() {
+        objects = new ArrayList<>();
+        BBTree = new BBTree();
+    }
+
+    public Scene(Color background) {
+        Scene.background = background;
         objects = new ArrayList<>();
         BBTree = new BBTree();
     }
@@ -350,7 +357,7 @@ public class Scene {
 
     public static Color castReflection(Vector3D surfacePoint, Vector3D normal, Object3D ignoreShape, int recursionLimit) {
         if (recursionLimit <= 0) {
-            return Color.BLACK;
+            return Scene.background;
         }
 
         // Step 1: Compute reflected direction
@@ -379,13 +386,13 @@ public class Scene {
             return new Color(r, g, b);
         }
 
-        return Color.BLACK;
+        return Scene.background;
     }
 
 
     public static Color castRefraction(Vector3D surfacePoint, Vector3D normal, Object3D ignoreShape, int recursionLimit) {
         if (recursionLimit <= 0 || ignoreShape.transparency <= 0) {
-            return Color.BLACK;
+            return Scene.background;
         }
 
         double n1 = 1.0;
@@ -440,7 +447,7 @@ public class Scene {
             return new Color(r, g, b);
         }
 
-        return Color.cyan;
+        return Scene.background;
     }
 
 

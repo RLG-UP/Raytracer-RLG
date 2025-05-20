@@ -32,7 +32,7 @@ public class Renderer {
                     intersection.color = intersection.object.addLight(intersection.point);
                     pixelColor = intersection.color;
                 } else {
-                    pixelColor = new Color(0, 0, 0);
+                    pixelColor = Scene.background;
                 }
 
                 image.setRGB(x, height - y - 1, pixelColor.getRGB());

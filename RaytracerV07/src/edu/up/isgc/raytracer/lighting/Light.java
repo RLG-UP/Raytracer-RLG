@@ -83,15 +83,16 @@ public abstract class Light {
         for (Light light : Light.getLights()) {
             Vector3D l = Vector3D.getZero();
             double lightDistance = Double.MAX_VALUE;
+            boolean inShadow = false;
 
             if (light.type().equals("directional")) {
-                l = light.getDirection().normalize().scale(-1);
+                l = light.getDirection().normalize().scale(1);
             } else if (light.type().equals("point") || light.type().equals("spot")) {
                 l = light.getDirection(point).normalize().scale(-1);
                 lightDistance = Vector3D.subtract(light.getPosition(), point).value;
+                inShadow = Scene.isInShadow(point, N, light, object);
             }
 
-            boolean inShadow = Scene.isInShadow(point, N, light, object);
 
             float lambertian = 0;
             float blinn = 0;
