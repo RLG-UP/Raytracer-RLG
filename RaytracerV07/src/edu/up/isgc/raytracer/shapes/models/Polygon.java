@@ -38,6 +38,7 @@ public class Polygon {
 
         //System.out.println("Total vertices: " + Vertex.getVertexes().size());
         //System.out.println("Total faces: " + Face.getFaces().size());
+        int faceCount = 0;
 
         for(Integer[][] face : Face.getWholeFaces()){
             if(face != null) {
@@ -65,7 +66,7 @@ public class Polygon {
                         Double[] t1 = Texture.getTexture().get(texture1);
                         Double[] t2 = Texture.getTexture().get(texture2);
                         Double[] t3 = Texture.getTexture().get(texture3);
-
+                        /*
                         if(!NormalVertex.getNormalVertexes().isEmpty()) {
                             Double[] nV1 = NormalVertex.getNormalVertexes().get(normal1);
                             Double[] nV2 = NormalVertex.getNormalVertexes().get(normal2);
@@ -84,6 +85,28 @@ public class Polygon {
                                     refraction,
                                     transparency,
                                     this
+                            ));
+                        }
+
+                         */
+                        if(!NormalVertex.getNormalVertexes().isEmpty()) {
+                            Double[] nV1 = NormalVertex.getNormalVertexes().get(normal1);
+                            Double[] nV2 = NormalVertex.getNormalVertexes().get(normal2);
+                            Double[] nV3 = NormalVertex.getNormalVertexes().get(normal3);
+
+
+                            shape.add(new Triangle(
+                                    new Vector3D(v1[0], v1[1], v1[2]),
+                                    new Vector3D(v2[0], v2[1], v2[2]),
+                                    new Vector3D(v3[0], v3[1], v3[2]),
+                                    new Vector3D(nV1[0], nV1[1], nV1[2]),
+                                    new Vector3D(nV2[0], nV2[1], nV2[2]),
+                                    new Vector3D(nV3[0], nV3[1], nV3[2]),
+                                    new Vector3D(t1[0], t1[1], t1[2]),
+                                    new Vector3D(t2[0], t2[1], t2[2]),
+                                    new Vector3D(t3[0], t3[1], t3[2]),
+                                    this,
+                                    Face.findMaterialByIndex(faceCount)
                             ));
                         }
                     }else{
@@ -122,6 +145,7 @@ public class Polygon {
                     throw e;
                 }
             }
+            faceCount++;
         }
         this.setShape(shape);
     }

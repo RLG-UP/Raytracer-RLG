@@ -1,5 +1,6 @@
 package edu.up.isgc.raytracer.shapes;
 
+import edu.up.isgc.raytracer.lighting.Material;
 import edu.up.isgc.raytracer.optimization.BoundingBox;
 import edu.up.isgc.raytracer.Intersection;
 import edu.up.isgc.raytracer.Vector3D;
@@ -16,6 +17,8 @@ import java.awt.Color;
 public abstract class Object3D {
     public Color color;  // The base color of the 3D object
     public double refraction, transparency;
+    private Material material;
+    private boolean hasMaterial = false;
 
     /**
      * Constructs a 3D object with the specified color.
@@ -25,6 +28,12 @@ public abstract class Object3D {
         this.color = color;
         this.refraction = refraction;
         this.transparency = transparency;
+    }
+
+    public Object3D(Material material) {
+        this.color = Color.magenta;
+        this.setMaterial(material);
+        this.setHasMaterial(true);
     }
 
     /**
@@ -47,4 +56,20 @@ public abstract class Object3D {
     }
 
     public abstract BoundingBox getBB();
+
+    public Material getMaterial() {
+        return material;
+    }
+
+    public void setMaterial(Material material) {
+        this.material = material;
+    }
+
+    public boolean getHasMaterial() {
+        return hasMaterial;
+    }
+
+    public void setHasMaterial(boolean hasMaterial) {
+        this.hasMaterial = hasMaterial;
+    }
 }

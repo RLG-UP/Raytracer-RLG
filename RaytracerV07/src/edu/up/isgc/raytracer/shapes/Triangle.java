@@ -1,5 +1,6 @@
 package edu.up.isgc.raytracer.shapes;
 
+import edu.up.isgc.raytracer.lighting.Material;
 import edu.up.isgc.raytracer.optimization.BoundingBox;
 import edu.up.isgc.raytracer.lighting.Light;
 import edu.up.isgc.raytracer.shapes.models.Texture;
@@ -44,6 +45,25 @@ public class Triangle extends Object3D {
 
     public Triangle(Vector3D A, Vector3D B, Vector3D C, Vector3D nA, Vector3D nB, Vector3D nC , Vector3D tA, Vector3D tB, Vector3D tC, Color color, double refraction, double transparency, Polygon parent) {
         super(color, refraction, transparency);
+        this.setA(A);
+        this.setB(B);
+        this.setC(C);
+
+        this.setnA(nA);
+        this.setnB(nB);
+        this.setnC(nC);
+        this.setHasNormals(true);
+
+        this.setTA(tA);
+        this.setTB(tB);
+        this.setTC(tC);
+        this.setHasTextures(true);
+
+        this.setParent(parent);
+    }
+
+    public Triangle(Vector3D A, Vector3D B, Vector3D C, Vector3D nA, Vector3D nB, Vector3D nC , Vector3D tA, Vector3D tB, Vector3D tC, Polygon parent, Material material) {
+        super(material);
         this.setA(A);
         this.setB(B);
         this.setC(C);
@@ -298,4 +318,5 @@ public class Triangle extends Object3D {
     public void setParent(Polygon parent) {
         this.parent = parent;
     }
+
 }

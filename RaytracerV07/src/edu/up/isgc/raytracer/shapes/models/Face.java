@@ -4,6 +4,7 @@ import edu.up.isgc.raytracer.lighting.Material;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Face {
@@ -11,7 +12,7 @@ public class Face {
     private static ArrayList<Integer[]> faceTextures = new ArrayList<>();
     private static ArrayList<Integer[]> faceNormals = new ArrayList<>();
     private static ArrayList<Integer[][]> wholeFaces = new ArrayList<>();
-    Map<int[], Material> materialMap = new HashMap<>();
+    private static Map<Integer, Material> materialMap = new HashMap<>();
 
     public Face (Integer[][] face){
         Face.addFace(face);
@@ -29,10 +30,23 @@ public class Face {
         faceTextures.clear();
         faceNormals.clear();
         wholeFaces.clear();
+        materialMap.clear();
     }
 
     public static ArrayList<Integer[][]> getWholeFaces() { return Face.wholeFaces; }
     public static ArrayList<Integer[]> getFaces(){ return Face.faces; }
     public static ArrayList<Integer[]> getFaceTextures(){ return Face.faceTextures; }
     public static ArrayList<Integer[]> getFaceNormals(){ return Face.faceNormals; }
+
+    public static Map<Integer, Material> getMaterialMap() {
+        return materialMap;
+    }
+
+    public static void setMaterialMap(Map<Integer, Material> materialMap) {
+        Face.materialMap = materialMap;
+    }
+
+    public static Material findMaterialByIndex(int index){
+        return Face.getMaterialMap().get(index);
+    }
 }
