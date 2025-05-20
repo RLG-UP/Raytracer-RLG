@@ -308,9 +308,14 @@ public abstract class Light {
         Vector3D vN = n2.scale(v);
         Vector3D wN = n3.scale(w);
 
-        return uN.add(vN).add(wN).normalize();
+        //return uN.add(vN).add(wN).normalize();
         //return n1.scale(u).add(n2.scale(v)).add(n3.scale(w)).normalize();
         //return n1.add(n2).add(n3).scale(1.0/3.0).normalize();
+
+        double texU = u * n1.x + v * n2.x + w * n3.x;
+        double texV = u * n1.y + v * n2.y + w * n3.y;
+
+        return new Vector3D(texU, texV, 0);
     }
 
     public static ArrayList<Light> getLights(){return Light.lights;}

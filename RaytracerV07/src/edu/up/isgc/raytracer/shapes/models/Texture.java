@@ -1,5 +1,6 @@
 package edu.up.isgc.raytracer.shapes.models;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 public class Texture {
@@ -13,4 +14,5 @@ public class Texture {
     }
     public static void addTexture(Double[] vertex){ textures.add(vertex); }
     public static ArrayList<Double[]> getTexture(){ return Texture.textures; }
+
 }

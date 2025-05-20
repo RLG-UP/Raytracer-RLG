@@ -6,6 +6,7 @@ import edu.up.isgc.raytracer.world.Camera;
 import edu.up.isgc.raytracer.Intersection;
 import edu.up.isgc.raytracer.Ray;
 import edu.up.isgc.raytracer.Vector3D;
+import edu.up.isgc.raytracer.shapes.models.Polygon;
 
 import java.awt.*;
 
@@ -14,7 +15,10 @@ import static java.lang.Math.clamp;
 public class Triangle extends Object3D {
     private Vector3D A, B, C;
     private Vector3D nA, nB, nC;
+    private Vector3D tA, tB, tC;
     private double u, v, w;
+    private boolean hasNormals, hasTextures;
+    private Polygon parent;
 
     public Triangle(Vector3D A, Vector3D B, Vector3D C, Color color, double refraction, double transparency) {
         super(color, refraction, transparency);
@@ -23,14 +27,37 @@ public class Triangle extends Object3D {
         this.setC(C);
     }
 
-    public Triangle(Vector3D A, Vector3D B, Vector3D C, Vector3D nA, Vector3D nB, Vector3D nC, Color color, double refraction, double transparency) {
+    public Triangle(Vector3D A, Vector3D B, Vector3D C, Vector3D nA, Vector3D nB, Vector3D nC, Color color, double refraction, double transparency, Polygon parent) {
         super(color, refraction, transparency);
         this.setA(A);
         this.setB(B);
         this.setC(C);
+
         this.setnA(nA);
         this.setnB(nB);
         this.setnC(nC);
+        this.setHasNormals(true);
+
+        this.setParent(parent);
+    }
+
+    public Triangle(Vector3D A, Vector3D B, Vector3D C, Vector3D nA, Vector3D nB, Vector3D nC , Vector3D tA, Vector3D tB, Vector3D tC, Color color, double refraction, double transparency, Polygon parent) {
+        super(color, refraction, transparency);
+        this.setA(A);
+        this.setB(B);
+        this.setC(C);
+
+        this.setnA(nA);
+        this.setnB(nB);
+        this.setnC(nC);
+        this.setHasNormals(true);
+
+        this.setTA(tA);
+        this.setTB(tB);
+        this.setTC(tC);
+        this.setHasTextures(true);
+
+        this.setParent(parent);
     }
 
 
@@ -207,4 +234,51 @@ public class Triangle extends Object3D {
 
     public void setnC(Vector3D nC) { this.nC = nC; }
 
+    public Vector3D getTA() {
+        return tA;
+    }
+
+    public void setTA(Vector3D tA) {
+        this.tA = tA;
+    }
+
+    public Vector3D getTB() {
+        return tB;
+    }
+
+    public void setTB(Vector3D tB) {
+        this.tB = tB;
+    }
+
+    public Vector3D getTC() {
+        return tC;
+    }
+
+    public void setTC(Vector3D tC) {
+        this.tC = tC;
+    }
+
+    public boolean getHasNormals() {
+        return hasNormals;
+    }
+
+    public void setHasNormals(boolean hasNormals) {
+        this.hasNormals = hasNormals;
+    }
+
+    public boolean getHasTextures() {
+        return hasTextures;
+    }
+
+    public void setHasTextures(boolean hasTextures) {
+        this.hasTextures = hasTextures;
+    }
+
+    public Polygon getParent() {
+        return parent;
+    }
+
+    public void setParent(Polygon parent) {
+        this.parent = parent;
+    }
 }

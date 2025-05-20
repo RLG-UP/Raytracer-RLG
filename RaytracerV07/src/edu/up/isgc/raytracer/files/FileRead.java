@@ -123,9 +123,14 @@ public class FileRead {
             //System.out.println("Vertex Values: " + v1 + ", " + v2 + ", " + v3);
             return new Double[]{v1, v2, v3};
         } else if (matcherTexture.find()) {
-            Double v1 = (Double) Double.parseDouble(matcherTexture.group(1));
-            Double v2 = (Double) Double.parseDouble(matcherTexture.group(2));
-            Double v3 = (Double) Double.parseDouble(matcherTexture.group(3));
+            Double v1 = Double.parseDouble(matcherTexture.group(1));
+            Double v2 = Double.parseDouble(matcherTexture.group(2));
+            Double v3 = 0.0;
+
+            if (matcherTexture.group(3) != null && !matcherTexture.group(3).isEmpty()) {
+                v3 = Double.parseDouble(matcherTexture.group(3));
+            }
+
 
             //System.out.println("Vertex Values: " + v1 + ", " + v2 + ", " + v3);
             return new Double[]{v1, v2, v3};
