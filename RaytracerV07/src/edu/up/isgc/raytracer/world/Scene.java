@@ -85,7 +85,9 @@ public class Scene {
 
         return closestIntersection;
     }
-
+*/
+    //NORMAL IMPLEMENTATION
+    /*
     public static Intersection findRayIntersection(Ray ray, Object3D ignoreShape) {
         Intersection closestHit = null;
 
@@ -120,7 +122,21 @@ public class Scene {
 
      */
 
+    public static Intersection findRayIntersection(Ray ray, Object3D ignoreShape) {
+        Intersection[] allHits = Scene.BBTree.traverse(ray);
+        if (allHits == null || allHits.length == 0) return null;
 
+        // Return the closest valid intersection (first in sorted array)
+        for (Intersection hit : allHits) {
+            if (hit != null && hit.object != ignoreShape && hit.distance > Camera.getEpsilon()) {
+                return hit;
+            }
+        }
+        return null;
+    }
+
+
+/*
     public Intersection findClosestIntersection(Ray ray, Camera camera) {
         Intersection closestHit = Scene.BBTree.traverse(ray);
 
@@ -140,6 +156,30 @@ public class Scene {
         return null;
     }
 
+ */
+
+    public Intersection findClosestIntersection(Ray ray, Camera camera) {
+        Intersection[] allHits = Scene.BBTree.traverse(ray);
+        if (allHits == null || allHits.length == 0) return null;
+
+        double clipNear = camera.clipPlanes[0];
+        double clipFar = camera.clipPlanes[1];
+        Intersection closestHit = null;
+        double minDist = Double.MAX_VALUE;
+
+        for (Intersection hit : allHits) {
+            if (hit != null &&
+                    hit.distance >= clipNear &&
+                    hit.distance <= clipFar &&
+                    hit.distance < minDist) {
+                minDist = hit.distance;
+                closestHit = hit;
+            }
+        }
+
+        return closestHit;
+    }
+
     /*
     public static Intersection findRayIntersection(Ray ray, Object3D ignoreShape) {
         Intersection closestHit = Scene.BBTree.traverse(ray);
@@ -157,18 +197,25 @@ public class Scene {
         return null;
     }
 
-     */
 
+    /*
     public static Intersection findRayIntersection(Ray ray, Object3D ignoreShape) {
         Intersection closestHit = Scene.BBTree.traverse(ray);
         if (closestHit == null) return null;
-        return closestHit.object != ignoreShape ? closestHit : null;
+        //System.out.println(closestHit.color);
+        //return closestHit.object != ignoreShape ? closestHit : null;
 
+        if (closestHit.distance > Camera.getEpsilon()) {
+            return closestHit;
+        }
+        return null;
 
 
         //closestHit = Scene.BBTree.traverse(Scene.BBTree.root, ray)[0];
         //return closestHit;
     }
+
+     */
 
 
 
@@ -225,8 +272,6 @@ public class Scene {
         }
         return closestHit;
     }
-*/
-
 
     public static boolean isInShadow(Vector3D surfacePoint, Vector3D normal, Light light, Object3D sourceObject) {
         // Step 1: Calculate direction from surface point to the light
@@ -262,7 +307,40 @@ public class Scene {
 
         return false; // No object blocked the light — surface is illuminated
     }
+*/
 
+
+
+    public static boolean isInShadow(Vector3D surfacePoint, Vector3D normal, Light light, Object3D sourceObject) {
+        // Step 1: Calculate direction from surface point to the light
+        Vector3D lightDir = Vector3D.subtract(light.getPosition(), surfacePoint).normalize().scale(-1);
+
+        // Step 2: Offset the ray origin slightly along the normal to prevent self-intersection
+        Vector3D shadowOrigin = surfacePoint.add(normal.scale(Camera.getEpsilon()));
+
+        // Step 3: Cast shadow ray toward the light
+        Ray shadowRay = new Ray(shadowOrigin, lightDir);
+
+        // Step 4: Distance from the point to the light source
+        double lightDistance = Vector3D.subtract(light.getPosition(), shadowOrigin).value;
+
+        // Step 5: Check for intersections along this ray
+        Intersection[] intersections = BBTree.traverse(shadowRay);
+        if(intersections == null || intersections.length == 0) return false;
+        Intersection intersection = intersections[0];
+        if(intersection == null) return false;
+        Object3D obj = intersection.object;
+
+        if (obj == sourceObject) return false; // Skip the object casting the shadow ray
+
+        if (intersection.distance > Camera.getEpsilon() && intersection.distance < lightDistance) {
+            return true; // Object blocks the light — surface is in shadow
+        }
+
+
+
+        return false; // No object blocked the light — surface is illuminated
+    }
 
 
     public static Color castReflection(Vector3D surfacePoint, Vector3D normal, Object3D ignoreShape, int recursionLimit) {

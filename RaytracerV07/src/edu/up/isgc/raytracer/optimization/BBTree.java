@@ -5,6 +5,10 @@ import edu.up.isgc.raytracer.Ray;
 import edu.up.isgc.raytracer.Vector3D;
 import edu.up.isgc.raytracer.shapes.Object3D;
 
+import java.awt.*;
+import java.util.Arrays;
+import java.util.Comparator;
+
 public class BBTree {
     private BBNode root;
 
@@ -57,7 +61,7 @@ public class BBTree {
         node.updateBoundingBox();
     }
 
-    public Intersection traverse(Ray ray) {
+    public Intersection[] traverse(Ray ray) {
         return traverse(root, ray);
     }
 
@@ -102,6 +106,7 @@ public class BBTree {
 
      */
 
+    /*
     private Intersection traverse(BBNode node, Ray ray) {
         if (node == null || !node.bbox.bbIntersects(ray)) {
             return null;
@@ -118,6 +123,7 @@ public class BBTree {
                     // Use the original intersection but ensure correct object reference
                     intersection.object = node.object;  // Critical line
                     closest = intersection;
+                    closest.color = intersection.color;
                 }
             }
             return closest;
@@ -129,6 +135,101 @@ public class BBTree {
         if (leftHit == null) return rightHit;
         if (rightHit == null) return leftHit;
         return leftHit.distance < rightHit.distance ? leftHit : rightHit;
+    }
+
+     */
+
+    /*
+    private Intersection[] traverse(BBNode node, Ray ray) {
+        if (node == null || !node.bbox.bbIntersects(ray)) {
+            return null;
+        }
+
+        if (node.isLeaf()) {
+            Intersection[] intersections = node.object.intersect(ray);
+            if (intersections == null) return null;
+
+            // Set object reference for all valid intersections
+            for (Intersection intersection : intersections) {
+                if (intersection != null) {
+                    intersection.object = node.object;
+                    // intersection.color = Color.RED; // Uncomment if you want to force color
+                }
+            }
+            return intersections;
+        }
+
+        // Recursively get intersections from children
+        Intersection[] leftHits = traverse(node.left, ray);
+        Intersection[] rightHits = traverse(node.right, ray);
+
+        // Combine and sort all intersections
+        return combineAndSortIntersections(leftHits, rightHits);
+    }
+
+    private Intersection[] combineAndSortIntersections(Intersection[] hits1, Intersection[] hits2) {
+        if (hits1 == null) return hits2;
+        if (hits2 == null) return hits1;
+
+        // Count total non-null intersections
+        int count = 0;
+        for (Intersection hit : hits1) if (hit != null) count++;
+        for (Intersection hit : hits2) if (hit != null) count++;
+
+        // Create combined array
+        Intersection[] combined = new Intersection[count];
+        int index = 0;
+
+        // Add all non-null intersections
+        for (Intersection hit : hits1) if (hit != null) combined[index++] = hit;
+        for (Intersection hit : hits2) if (hit != null) combined[index++] = hit;
+
+        // Sort by distance (ascending)
+        Arrays.sort(combined, (a, b) -> Double.compare(a.distance, b.distance));
+
+        return combined;
+    }
+
+     */
+
+    private Intersection[] traverse(BBNode node, Ray ray) {
+        if (node == null || !node.bbox.bbIntersects(ray)) {
+            return null;
+        }
+
+        if (node.isLeaf()) {
+            Intersection[] intersections = node.object.intersect(ray);
+            if (intersections == null) return null;
+
+            // Set object reference for all intersections
+            for (Intersection intersection : intersections) {
+                if (intersection != null) {
+                    intersection.object = node.object;
+                }
+            }
+            return intersections;
+        }
+
+        Intersection[] leftHits = traverse(node.left, ray);
+        Intersection[] rightHits = traverse(node.right, ray);
+
+        return combineIntersections(leftHits, rightHits);
+    }
+
+    private Intersection[] combineIntersections(Intersection[] hits1, Intersection[] hits2) {
+        if (hits1 == null) return hits2;
+        if (hits2 == null) return hits1;
+
+        Intersection[] combined = new Intersection[hits1.length + hits2.length];
+        System.arraycopy(hits1, 0, combined, 0, hits1.length);
+        System.arraycopy(hits2, 0, combined, hits1.length, hits2.length);
+
+        // Sort by distance to maintain order
+        Arrays.sort(combined, Comparator.nullsLast(
+                Comparator.comparingDouble(hit -> hit != null ? hit.distance : Double.MAX_VALUE)
+        ));
+
+        return combined;
     }
 
     private static class BBNode {

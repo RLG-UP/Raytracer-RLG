@@ -23,8 +23,8 @@ import java.io.IOException;
 public class Raytracer {
     public static void main(String[] args) {
         // Image settings
-        int width = 400;
-        int height = 200;
+        int width = 1600;
+        int height = 1600;
         double nearPlane = -1000, farPlane = 1000;
         String path2 = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\Raytracer\\LocalFiles\\ObjFiles\\Ring.obj").getAbsolutePath();
         //String path = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\Raytracer\\LocalFiles\\ObjFiles\\Ring.obj").getAbsolutePath();
@@ -46,9 +46,9 @@ public class Raytracer {
         scene.addPolygon( polygon );
         scene.addPolygon( polygon2 );
 
-        polygon2.rotate(-75, 90, 0);
+        //polygon2.rotate(-75, 90, 0);
         //polygon.translate(0, 0.7f, 0f);
-        polygon2.scale(0.8f, 0.8f, 0.8f);
+        //polygon2.scale(3f, 3f, 3f);
         //polygon.rotateInPlace(90, 0, 0);
 
         // Set up camera at the origin
