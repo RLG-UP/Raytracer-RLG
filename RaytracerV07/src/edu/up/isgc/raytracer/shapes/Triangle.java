@@ -2,6 +2,7 @@ package edu.up.isgc.raytracer.shapes;
 
 import edu.up.isgc.raytracer.optimization.BoundingBox;
 import edu.up.isgc.raytracer.lighting.Light;
+import edu.up.isgc.raytracer.shapes.models.Texture;
 import edu.up.isgc.raytracer.world.Camera;
 import edu.up.isgc.raytracer.Intersection;
 import edu.up.isgc.raytracer.Ray;
@@ -166,7 +167,16 @@ public class Triangle extends Object3D {
                 double t = invDet * vectorQ.dot(v1v0);
                 intersection.point = ray.origin.add(D.scale(t));
                 intersection.distance = t;
-                intersection.color = super.getColor();
+                if(this.getHasTextures()) {
+                    Vector3D uvTexture= Texture.ericson(intersection.point, this.getA(), this.getB(), this.getC(), this.getTA(), this.getTB(), this.getTC());
+                    int texX = (int)(uvTexture.x * (this.getParent().getTextureMap().getWidth() - 1));
+                    int texY = (int)((1 - uvTexture.y) * (this.getParent().getTextureMap().getHeight() - 1)); // flip v if needed
+                    texX = Math.max(0, Math.min(texX, this.getParent().getTextureMap().getWidth() - 1));
+                    texY = Math.max(0, Math.min(texY, this.getParent().getTextureMap().getHeight() - 1));
+                    intersection.color = new Color(this.getParent().getTextureMap().getRGB(texX, texY));
+                }else{
+                    intersection.color = super.getColor();
+                }
                 intersection.setNormal(this.calculateNormalPoint((float) this.u, (float) this.v, (float) this.w));
                 return new Intersection[] {intersection};
             }
@@ -184,11 +194,18 @@ public class Triangle extends Object3D {
 
     public Vector3D calculateNormalPoint(float u, float v, float w){ return this.getnA().scale(this.w).add(this.getnB().scale(this.v)).add(this.getnC().scale(this.u)).normalize(); }
 
-
+/*
     @Override
     public Color addLight(Vector3D point) {
         Vector3D N = this.getnA().scale(this.w).add(this.getnB().scale(this.v)).add(this.getnC().scale(this.u)).normalize();
         return Light.calculateColor(N, point, this);
+    }
+
+ */
+    @Override
+    public Color addLight(Intersection intersection) {
+        Vector3D N = this.getnA().scale(this.w).add(this.getnB().scale(this.v)).add(this.getnC().scale(this.u)).normalize();
+        return Light.calculateColor(N, intersection.point, this, intersection);
     }
 
     @Override

@@ -107,10 +107,19 @@ public class Sphere extends Object3D {
     }
 
 
+    /*
     @Override
     public Color addLight(Vector3D point) {
         Vector3D N = this.normal(point);
         return Light.calculateColor(N, point, this);
+    }
+
+     */
+
+    @Override
+    public Color addLight(Intersection intersection) {
+        Vector3D N = this.normal(intersection.point);
+        return Light.calculateColor(N, intersection.point, this, intersection);
     }
 
 

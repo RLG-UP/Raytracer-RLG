@@ -43,7 +43,7 @@ public class Renderer {
 
                 Color pixelColor;
                 if (intersection != null && intersection.color != null && intersection.object != null) {
-                    intersection.color = intersection.object.addLight(intersection.point);
+                    intersection.color = intersection.object.addLight(intersection);
                     pixelColor = intersection.color;
                 } else {
                     pixelColor = Scene.background;

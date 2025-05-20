@@ -34,7 +34,8 @@ public abstract class Object3D {
      */
     public abstract Intersection[] intersect(Ray ray);
     public abstract String type();
-    public abstract Color addLight(Vector3D point);
+    //public abstract Color addLight(Vector3D point);
+    public abstract Color addLight(Intersection intersection);
     public abstract Object3D returnZero();
 
     public Color getColor() { return color; }

@@ -373,7 +373,8 @@ public class Scene {
 
         if (hit != null && hit.object != null) {
             // Get base color of object hit
-            Color localColor = hit.object.getColor(); // Or calculate with lighting, if available
+            //Color localColor = hit.object.getColor(); // Or calculate with lighting, if available
+            Color localColor = hit.color; // Or calculate with lighting, if available
 
             // Recurse
             Color reflectedColor = castReflection(hit.point, hit.getNormal(), hit.object, recursionLimit - 1);
@@ -433,7 +434,8 @@ public class Scene {
             float cosTheta = Math.max(0f, (float)viewDir.dot(normal.normalize()));
             float fresnel = Light.schlick(cosTheta, (float)ignoreShape.refraction);
 
-            Color localColor = hit.object.getColor();
+            //Color localColor = hit.object.getColor();
+            Color localColor = hit.color;
             //Color localColor = ignoreShape.getColor();
             Color refractedColor = castRefraction(hit.point, hit.getNormal(), hit.object, recursionLimit - 1);
 
