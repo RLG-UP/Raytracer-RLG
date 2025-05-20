@@ -30,8 +30,9 @@ public class Face {
         faceTextures.clear();
         faceNormals.clear();
         wholeFaces.clear();
-        materialMap.clear();
     }
+
+    public static void clearMaterialMap() { materialMap.clear(); }
 
     public static ArrayList<Integer[][]> getWholeFaces() { return Face.wholeFaces; }
     public static ArrayList<Integer[]> getFaces(){ return Face.faces; }
