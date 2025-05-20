@@ -98,7 +98,12 @@ public class FileRead {
     public static Double[] normalizeDouble(String line) {
         Pattern pattern = Pattern.compile("^v\\s+(-?\\d*\\.\\d+)\\s+(-?\\d*\\.\\d+)\\s+(-?\\d*\\.\\d+)");
         Pattern patternNormal = Pattern.compile("^vn\\s+(-?\\d*\\.\\d+)\\s+(-?\\d*\\.\\d+)\\s+(-?\\d*\\.\\d+)");
-        Pattern patternTexture = Pattern.compile("^vt\\s+(-?\\d*\\.\\d+)\\s+(-?\\d*\\.\\d+)\\s+(-?\\d*\\.\\d+)");
+        //Pattern patternTexture = Pattern.compile("^vt\\s+(-?\\d*\\.\\d+)\\s+(-?\\d*\\.\\d+)\\s+(-?\\d*\\.\\d+)");
+        Pattern patternTexture = Pattern.compile(
+                "^vt\\s+(-?\\d+(?:\\.\\d+)?)\\s+(-?\\d+(?:\\.\\d+)?)(?:\\s+(-?\\d+(?:\\.\\d+)?))?"
+        );
+
+
         Matcher matcher = pattern.matcher(line);
         Matcher matcherNormal = patternNormal.matcher(line);
         Matcher matcherTexture = patternTexture.matcher(line);
@@ -125,7 +130,7 @@ public class FileRead {
             //System.out.println("Vertex Values: " + v1 + ", " + v2 + ", " + v3);
             return new Double[]{v1, v2, v3};
         } else {
-            System.err.println("NO MATCH for line: " + line);
+            System.err.println("////NO MATCH for line: " + line);
             return null;
         }
     }

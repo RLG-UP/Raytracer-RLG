@@ -28,7 +28,8 @@ public class Raytracer {
         double nearPlane = -1000, farPlane = 1000;
         String path2 = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\Raytracer\\LocalFiles\\ObjFiles\\Ring.obj").getAbsolutePath();
         //String path = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\Raytracer\\LocalFiles\\ObjFiles\\Ring.obj").getAbsolutePath();
-        String path = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\Raytracer\\LocalFiles\\ObjFiles\\SmallTeapot.obj").getAbsolutePath();
+        //String path = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\Raytracer\\LocalFiles\\ObjFiles\\SmallTeapot.obj").getAbsolutePath();
+        String path = new File("\\W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Hat.obj").getAbsolutePath();
         //String path = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\Raytracer\\LocalFiles\\ObjFiles\\shark1.obj").getAbsolutePath();
 
         // Create scene with objects
@@ -43,9 +44,9 @@ public class Raytracer {
         Polygon polygon = new Polygon(path, new Color(220, 20, 60), 0.4, 0.3);
         Polygon polygon2 = new Polygon(path2, Color.lightGray, 0.4, 0.7);
 
-        polygon2.rotate(-75, 90, 0);
-        polygon.translate(0, 2f, 0f);
-        polygon2.scale(0.8f, 0.8f, 0.8f);
+        polygon.rotate(20, -180, 0);
+        polygon.translate(0, 0.5f, 0f);
+        polygon.scale(2f, 2f, 2f);
         polygon.rotate(10, 0, 0);
 
         scene.addPolygon( polygon );
