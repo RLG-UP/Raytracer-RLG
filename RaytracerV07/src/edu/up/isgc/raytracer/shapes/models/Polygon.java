@@ -258,6 +258,19 @@ public class Polygon {
             t.setnA(t.getnA().normalize());
             t.setnB(t.getnB().normalize());
             t.setnC(t.getnC().normalize());
+
+            /*
+            t.getTA().scale(sX, sY, sZ);
+            t.getTB().scale(sX, sY, sZ);
+            t.getTC().scale(sX, sY, sZ);
+
+             */
+
+            /*
+            t.getTA().scale(nSX, nSY, nSZ);
+            t.getTB().scale(nSX, nSY, nSZ);
+            t.getTC().scale(nSX, nSY, sZ);
+            */
         }
     }
 
@@ -305,6 +318,12 @@ public class Polygon {
             t.setnA(t.getnA().normalize());
             t.setnB(t.getnB().normalize());
             t.setnC(t.getnC().normalize());
+
+            /*
+            t.getTA().rotate(rX, rY, rZ, inRadians);
+            t.getTB().rotate(rX, rY, rZ, inRadians);
+            t.getTC().rotate(rX, rY, rZ, inRadians);
+             */
         }
     }
 

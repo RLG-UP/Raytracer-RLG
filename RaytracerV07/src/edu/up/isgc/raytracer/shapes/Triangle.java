@@ -16,7 +16,7 @@ import static java.lang.Math.clamp;
 public class Triangle extends Object3D {
     private Vector3D A, B, C;
     private Vector3D nA, nB, nC;
-    private Vector3D tA, tB, tC;
+    private Vector3D tA = Vector3D.getZero(), tB = Vector3D.getZero(), tC = Vector3D.getZero();
     private double u, v, w;
     private boolean hasNormals, hasTextures;
     private Polygon parent;

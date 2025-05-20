@@ -36,8 +36,8 @@ public class Raytracer {
 
         // Create scene with objects
         Scene scene = new Scene(Color.white);
-        scene.addObject(new Sphere(new Vector3D(0.7, 0, 0), 0.7, Color.lightGray,  0.4, 0.7));
-        scene.addObject(new Sphere(new Vector3D(0, 2, 0), 1, Color.lightGray,  0.4, 0.7));
+        //scene.addObject(new Sphere(new Vector3D(0.7, 0, 0), 0.7, Color.lightGray,  0.4, 0.7));
+        //scene.addObject(new Sphere(new Vector3D(0, 2, 0), 1, Color.lightGray,  0.4, 0.7));
         //scene.addObject(new Sphere(new Vector3D(0, 0, 30), 20, Color.yellow,  0, 0));
         //scene.addObject(new Sphere(new Vector3D(0, 0, 0), 50, Color.CYAN,  2.77, 0));
         //scene.addObject(new Sphere(new Vector3D(0, -1, 0), 1.5, Color.yellow));
@@ -49,19 +49,20 @@ public class Raytracer {
         Polygon polygon = new Polygon(path, Color.red, 0.0, 0, texture);
         Polygon polygon2 = new Polygon(path2, Color.lightGray, 0.4, 0.7);
 
-        polygon.rotate(20, -180, 0);
+
+        polygon.rotate(0, -180, 0);
         polygon.translate(0, 0.5f, 0f);
         polygon.scale(2f, 2f, 2f);
         polygon.rotate(10, 0, 0);
 
         scene.addPolygon( polygon );
-        scene.addPolygon( polygon2 );
+        //scene.addPolygon( polygon2 );
 
         // Set up camera at the origin
         Camera camera = new Camera(new Vector3D(0, 0, -6), nearPlane, farPlane);
-        //Light light01 = new Directional(5, Color.white, new Vector3D(0,10,0), new Vector3D(0, 0, 0));
+        Light light01 = new Directional(1, Color.white, new Vector3D(0,10,0), new Vector3D(0, 0, 0));
         //Light light02 = new Directional(100, Color.blue, new Vector3D(0,-10,0), new Vector3D(0,0,0));
-        Light light03 = new Point(10f, Color.white, new Vector3D(0, -1, -2.5));
+        //Light light03 = new Point(10f, Color.white, new Vector3D(0, -1, -2.5));
         //Light light04 = new Spot(1f, Color.white, new Vector3D(0,-4,0), new Vector3D(0,0,0), 1f, 1f);
 
 
