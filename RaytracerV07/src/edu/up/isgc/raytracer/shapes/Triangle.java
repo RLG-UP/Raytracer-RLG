@@ -189,11 +189,15 @@ public class Triangle extends Object3D {
                 intersection.distance = t;
                 if(this.getHasTextures()) {
                     Vector3D uvTexture= Texture.ericson(intersection.point, this.getA(), this.getB(), this.getC(), this.getTA(), this.getTB(), this.getTC());
-                    int texX = (int)(uvTexture.x * (this.getParent().getTextureMap().getWidth() - 1));
-                    int texY = (int)((1 - uvTexture.y) * (this.getParent().getTextureMap().getHeight() - 1)); // flip v if needed
-                    texX = Math.max(0, Math.min(texX, this.getParent().getTextureMap().getWidth() - 1));
-                    texY = Math.max(0, Math.min(texY, this.getParent().getTextureMap().getHeight() - 1));
-                    intersection.color = new Color(this.getParent().getTextureMap().getRGB(texX, texY));
+                    if(this.getHasNormals()) {
+                        int texX = (int)(uvTexture.x * (super.getMaterial().getTextureMap().getWidth() - 1));
+                        int texY = (int)((1 - uvTexture.y) * (super.getMaterial().getTextureMap().getHeight() - 1)); // flip v if needed
+
+                        texX = Math.max(0, Math.min(texX, super.getMaterial().getTextureMap().getWidth() - 1));
+                        texY = Math.max(0, Math.min(texY, super.getMaterial().getTextureMap().getHeight() - 1));
+
+                        intersection.color = new Color(super.getMaterial().getTextureMap().getRGB(texX, texY));
+                    }
                 }else{
                     intersection.color = super.getColor();
                 }

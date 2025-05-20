@@ -1,5 +1,6 @@
 package edu.up.isgc.raytracer;
 
+import edu.up.isgc.raytracer.files.Obj;
 import edu.up.isgc.raytracer.files.Renderer;
 import edu.up.isgc.raytracer.lighting.Directional;
 import edu.up.isgc.raytracer.lighting.Light;
@@ -28,36 +29,39 @@ public class Raytracer {
         int width = 1600;
         int height = 900;
         double nearPlane = -1000, farPlane = 1000;
-        String path2 = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\Raytracer\\LocalFiles\\ObjFiles\\Ring.obj").getAbsolutePath();
+        String objPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\carl-manfred-detroit-become-human\\CarlManfred.obj").getAbsolutePath();
+        String mtlPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\carl-manfred-detroit-become-human\\CarlManfred.mtl").getAbsolutePath();
+
+        //String path2 = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\Raytracer\\LocalFiles\\ObjFiles\\Ring.obj").getAbsolutePath();
         //String path = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\Raytracer\\LocalFiles\\ObjFiles\\Ring.obj").getAbsolutePath();
         //String path = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\Raytracer\\LocalFiles\\ObjFiles\\SmallTeapot.obj").getAbsolutePath();
-        String path = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\optimized-3d-capturedphotogrammetry-hat\\Hat.obj").getAbsolutePath();
-        //String path = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\carl-manfred-detroit-become-human\\CarlManfred.obj").getAbsolutePath();
+        //String path = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\optimized-3d-capturedphotogrammetry-hat\\Hat.obj").getAbsolutePath();
         //String path = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\Raytracer\\LocalFiles\\ObjFiles\\shark1.obj").getAbsolutePath();
 
         // Create scene with objects
         Scene scene = new Scene(Color.white);
+
         //scene.addObject(new Sphere(new Vector3D(0.7, 0, 0), 0.7, Color.lightGray,  0.4, 0.7));
         //scene.addObject(new Sphere(new Vector3D(0, 2, 0), 1, Color.lightGray,  0.4, 0.7));
-        //scene.addObject(new Sphere(new Vector3D(0, 0, 30), 20, Color.yellow,  0, 0));
         //scene.addObject(new Sphere(new Vector3D(0, 0, 0), 50, Color.CYAN,  2.77, 0));
-        //scene.addObject(new Sphere(new Vector3D(0, -1, 0), 1.5, Color.yellow));
-        //scene.addObject(new Triangle(new Vector3D(0.4, 0, -3), new Vector3D(0.4, 0.5, -3), new Vector3D(1.1, 0, -3), Color.GREEN));
 
-        //BufferedImage texture = ImageIO.read(new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\optimized-3d-capturedphotogrammetry-hat\\textures\\Hat_Albedo.png"));
         BufferedImage texture = ImageIO.read(new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\optimized-3d-capturedphotogrammetry-hat\\textures\\Hat_Albedo.png"));
 
         //Polygon polygon = new Polygon(path, new Color(220, 20, 60), 0.4, 0.3, texture);
-        Polygon polygon = new Polygon(path, Color.red, 0.0, 0, texture);
-        Polygon polygon2 = new Polygon(path2, Color.lightGray, 0.4, 0.7);
+        //Polygon polygon = new Polygon(path, Color.red, 0.0, 0, texture);
 
 
+        Obj.RenderObj(scene, objPath, mtlPath);
+
+        //Polygon polygon2 = new Polygon(path2, Color.lightGray, 0.4, 0.7);
+        /*
         polygon.rotate(0, -180, 0);
         polygon.translate(0, -0.5f, 0f);
         polygon.scale(2f, 2f, 2f);
         polygon.rotate(10, 0, 0);
+         */
 
-        scene.addPolygon( polygon );
+        //scene.addPolygon( polygon );
         //scene.addPolygon( polygon2 );
 
         // Set up camera at the origin
@@ -69,68 +73,7 @@ public class Raytracer {
 
 
         Renderer.renderScene(width, height, camera, scene);
-        /*
-        // Initialize image buffer (width x height x RGB)
-        int[][][] image = new int[width][height][3];
 
-        // Render each pixel
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                // Convert pixel coordinates to normalized camera space
-                double u = (x - width / 2.0) / width;
-                double v = (y - height / 2.0) / height;
-
-                // Cast ray and find closest intersection
-                Ray ray = camera.generateRay(u, v);
-                Intersection intersection = scene.findClosestIntersection(ray, camera);
-
-                if (intersection != null && intersection.color != null) {
-                    // Set pixel color to intersected object's color
-                    intersection.color = intersection.object.addLight(intersection.point);
-                    image[x][y][0] = intersection.color.getRed();
-                    image[x][y][1] = intersection.color.getGreen();
-                    image[x][y][2] = intersection.color.getBlue();
-                } else {
-                    // Default to white background if no intersection
-                    image[x][y][0] = 0;
-                    image[x][y][1] = 0;
-                    image[x][y][2] = 0;
-                }
-            }
-        }
-
-        // Save rendered image to PPM file
-        savePPM("output.ppm", image, width, height);
-    }
-
-         */
-
-    /**
-     * Saves the rendered image as a PPM (Portable PixMap) file.
-     * @param filename Output file name
-     * @param image 3D array containing RGB values
-     * @param width Image width in pixels
-     * @param height Image height in pixels
-     */
-    /*
-    private static void savePPM(String filename, int[][][] image, int width, int height) {
-        try (FileWriter writer = new FileWriter(filename)) {
-            // Write PPM header
-            writer.write("P3\n" + width + " " + height + "\n255\n");
-
-            // Write pixel data
-            for (int y = 0; y < height; y++) {
-                for (int x = 0; x < width; x++) {
-                    writer.write(image[x][y][0] + " " + image[x][y][1] + " " + image[x][y][2] + " ");
-                }
-                writer.write("\n");
-            }
-            System.out.println("Image saved as " + filename);
-        } catch (IOException e) {
-            System.out.println("Error saving image: " + e.getMessage());
-        }
-
-     */
     }
 
 }
