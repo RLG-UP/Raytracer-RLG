@@ -1,5 +1,6 @@
 package edu.up.isgc.raytracer.files;
 
+import edu.up.isgc.raytracer.lighting.Material;
 import edu.up.isgc.raytracer.shapes.models.Face;
 import edu.up.isgc.raytracer.shapes.models.NormalVertex;
 import edu.up.isgc.raytracer.shapes.models.Texture;
@@ -9,10 +10,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Objects;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -22,21 +20,40 @@ public class FileRead {
         ArrayList<String> faceList = new ArrayList<>();
         ArrayList<String> textureList = new ArrayList<>();
         ArrayList<String> vertexNormalList = new ArrayList<>();
+        Map<int[], Material> materialMap = new HashMap<>();
 
         File file = new File(filePath);
         Pattern vertex = Pattern.compile("^v[^a-zA-Z]*");
         Pattern texture = Pattern.compile("^vt[^a-zA-Z]*");
         Pattern normal = Pattern.compile("^vn[^a-zA-Z]*");
         Pattern face = Pattern.compile("^f[^a-zA-Z]*");
+        Pattern mtl = Pattern.compile("^usemtl[^a-zA-Z]*");
 
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
+            int mtlFaceCount = 0;
+            int startCount = 0;
+            boolean newFace = true;
+            String materialName = "";
             while ((line = br.readLine()) != null) {
                 //System.out.println(line);
                 if(line.matches(vertex.pattern())) { vertexList.add(line); }
                 else if(line.matches(face.pattern())){ faceList.add(line); }
                 else if(line.matches(texture.pattern())){ textureList.add(line); }
                 else if(line.matches(normal.pattern())){ vertexNormalList.add(line); }
+                else if(line.matches(mtl.pattern())){
+                    if(newFace) {
+                        newFace = false;
+                        startCount = mtlFaceCount;
+                        materialName = line;
+                    }
+                    else{
+                        materialMap.put(new int[]{startCount, mtlFaceCount}, Material.findByName(materialName));
+                        startCount = mtlFaceCount;
+                        materialName = line;
+                    }
+                }
+                mtlFaceCount++;
             }
         } catch (IOException e) {
             e.printStackTrace();

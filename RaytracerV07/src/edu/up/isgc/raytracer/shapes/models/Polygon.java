@@ -4,6 +4,7 @@ import edu.up.isgc.raytracer.Intersection;
 import edu.up.isgc.raytracer.Ray;
 import edu.up.isgc.raytracer.Vector3D;
 import edu.up.isgc.raytracer.files.FileRead;
+import edu.up.isgc.raytracer.lighting.Material;
 import edu.up.isgc.raytracer.shapes.Object3D;
 import edu.up.isgc.raytracer.shapes.Triangle;
 
@@ -11,12 +12,15 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Polygon {
     private ArrayList<Triangle> shape;
     private ArrayList<Double[]> vertexes = new ArrayList<>();
     private ArrayList<Double[]> normalVertexes = new ArrayList<>();
     private ArrayList<Double[]> textures = new ArrayList<>();
+
     private double refraction;
 
     private BufferedImage textureMap;

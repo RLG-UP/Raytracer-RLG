@@ -1,12 +1,18 @@
 package edu.up.isgc.raytracer.shapes.models;
 
+import edu.up.isgc.raytracer.lighting.Material;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Face {
     private static ArrayList<Integer[]> faces = new ArrayList<>();
     private static ArrayList<Integer[]> faceTextures = new ArrayList<>();
     private static ArrayList<Integer[]> faceNormals = new ArrayList<>();
     private static ArrayList<Integer[][]> wholeFaces = new ArrayList<>();
+    Map<int[], Material> materialMap = new HashMap<>();
+
     public Face (Integer[][] face){
         Face.addFace(face);
     }
