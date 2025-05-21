@@ -97,20 +97,29 @@ public class FileRead {
                     vertexNormalList.add(line);
                 } else if (line.matches(mtl.pattern())) {
                     currentMaterialName = line.split("\\s+")[1]; // store latest usemtl
-                    System.out.println("Material: " + line);
+                    System.out.println("Material: " + currentMaterialName);
                 } else if (line.matches(face.pattern())) {
                     faceList.add(line);
 
-                    // Count how many triangles this face will produce (1 for triangles, 2 for quads)
-                    String[] parts = line.split("\\s+");
-                    int numTriangles = (parts.length - 1 == 4) ? 2 : 1; // 4 vertices = quad
-
+                    // Get current material (or default if none specified)
                     Material material = Material.findByName(currentMaterialName);
-                    for (int i = 0; i < numTriangles; i++) {
-                        System.out.println("$$$$$ Adding material to face number: " + mtlFaceCount);
-                        materialMap.put(mtlFaceCount, material);
-                        mtlFaceCount++;
+                    if (material == null) {
+                        material = null; // Default material
+                        System.err.println("Warning: Using default material for face " + mtlFaceCount);
                     }
+
+                    // Count triangles this face produces
+                    String[] parts = line.split("\\s+");
+                    boolean isQuad = (parts.length - 1 == 4);
+
+                    // Assign material to each generated triangle
+                    materialMap.put(mtlFaceCount, material);
+                    if (isQuad) {
+                        materialMap.put(mtlFaceCount + 1, material);
+                    }
+
+                    // Increment counter (by 1 for triangle, 2 for quad)
+                    mtlFaceCount += isQuad ? 2 : 1;
                 }
             }
         } catch (IOException e) {

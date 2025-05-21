@@ -29,7 +29,11 @@ public class Polygon {
     private Vector3D position = Vector3D.getZero();
 
     public Polygon(ArrayList<Triangle> shape){
+        this.color = Color.magenta;
         this.setShape(shape);
+        for(Triangle t : shape){
+            t.setParent(this);
+        }
     }
 
     public Polygon(String filePath){
@@ -71,7 +75,7 @@ public class Polygon {
                             Double[] nV2 = NormalVertex.getNormalVertexes().get(normal2);
                             Double[] nV3 = NormalVertex.getNormalVertexes().get(normal3);
 
-                            System.out.println("CREATING NEW FACE WITH: " + faceCount);
+                            //System.out.println("Face: " + faceCount + " // Material: " + Face.findMaterialByIndex(faceCount).getName());
                             shape.add(new Triangle(
                                     new Vector3D(v1[0], v1[1], v1[2]),
                                     new Vector3D(v2[0], v2[1], v2[2]),
