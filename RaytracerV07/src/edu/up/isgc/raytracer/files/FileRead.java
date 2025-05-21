@@ -15,6 +15,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class FileRead {
+    /*
     public static ArrayList<ArrayList<String>> readFile(String filePath) {
         ArrayList<String> vertexList = new ArrayList<>();
         ArrayList<String> faceList = new ArrayList<>();
@@ -45,6 +46,7 @@ public class FileRead {
                 else if(line.matches(normal.pattern())){ vertexNormalList.add(line); }
                 else if(line.matches(mtl.pattern())){ materialName = line.split("\\s+")[1]; }
 
+                System.out.println("Saving FACE: " + mtlFaceCount + " // Saving MATERIAL: " + materialName);
                 materialMap.put(mtlFaceCount, Material.findByName(materialName));
                 mtlFaceCount++;
             }
@@ -60,6 +62,73 @@ public class FileRead {
 
         return objLines;
     }
+
+     */
+
+    public static ArrayList<ArrayList<String>> readFile(String filePath) {
+        ArrayList<String> vertexList = new ArrayList<>();
+        ArrayList<String> faceList = new ArrayList<>();
+        ArrayList<String> textureList = new ArrayList<>();
+        ArrayList<String> vertexNormalList = new ArrayList<>();
+        Map<Integer, Material> materialMap = new HashMap<>();
+
+        File file = new File(filePath);
+        Pattern vertex = Pattern.compile("^v[^a-zA-Z]*");
+        Pattern texture = Pattern.compile("^vt[^a-zA-Z]*");
+        Pattern normal = Pattern.compile("^vn[^a-zA-Z]*");
+        Pattern face = Pattern.compile("^f[^a-zA-Z]*");
+        //Pattern mtl = Pattern.compile("^usemtl[^a-zA-Z]*");
+        Pattern mtl = Pattern.compile("^usemtl\\s+.+");
+
+
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            int mtlFaceCount = 0;
+            String currentMaterialName = "";
+
+            while ((line = br.readLine()) != null) {
+                line = line.trim();
+
+                if (line.matches(vertex.pattern())) {
+                    vertexList.add(line);
+                } else if (line.matches(texture.pattern())) {
+                    textureList.add(line);
+                } else if (line.matches(normal.pattern())) {
+                    vertexNormalList.add(line);
+                } else if (line.matches(mtl.pattern())) {
+                    currentMaterialName = line.split("\\s+")[1]; // store latest usemtl
+                    System.out.println("Material: " + line);
+                } else if (line.matches(face.pattern())) {
+                    faceList.add(line);
+
+                    // Count how many triangles this face will produce (1 for triangles, 2 for quads)
+                    String[] parts = line.split("\\s+");
+                    int numTriangles = (parts.length - 1 == 4) ? 2 : 1; // 4 vertices = quad
+
+                    Material material = Material.findByName(currentMaterialName);
+                    for (int i = 0; i < numTriangles; i++) {
+                        System.out.println("$$$$$ Adding material to face number: " + mtlFaceCount);
+                        materialMap.put(mtlFaceCount, material);
+                        mtlFaceCount++;
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        ArrayList<ArrayList<String>> objLines = new ArrayList<>();
+        objLines.add(vertexList);
+        objLines.add(faceList);
+        objLines.add(textureList);
+        objLines.add(vertexNormalList);
+
+        Face.setMaterialMap(materialMap);
+
+        return objLines;
+    }
+
+
     public static HashMap<Integer, Double[]> createVertexMap(ArrayList<String> lines) {
         HashMap<Integer, Double[]> map = new HashMap<>();
         int index = 0;

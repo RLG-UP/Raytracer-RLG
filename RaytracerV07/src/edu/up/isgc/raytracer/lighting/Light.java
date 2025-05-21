@@ -80,6 +80,18 @@ public abstract class Light {
         float p = 100f;
         float ka = 0.1f;  // Ambient constant
         float reflectivity = 0.8f;
+        float refraction = 0;
+        float transparency = 0;
+
+        if(object.getHasMaterial()){
+            Material material = object.getMaterial();
+            ks = material.getSpecular();
+            p = material.getShininess();
+            ka = material.getAmbient();
+            reflectivity = material.getReflectivity();
+            refraction = material.getRefraction();
+            transparency = material.getTransparency();
+        }
         float ambientIntensity = ka * Light.getAmbientLight();
 
         for (Light light : Light.getLights()) {
@@ -165,8 +177,9 @@ public abstract class Light {
 
         Vector3D viewDir = Vector3D.subtract(Camera.getCameraPosition(), point).normalize();
         float cosTheta = Math.max(0f, (float)viewDir.dot(N.normalize()));
-        float fresnel = reflectivity * Light.schlick(cosTheta, (float)object.refraction);
-        float transparency = (float)object.transparency;
+        float fresnel = reflectivity * Light.schlick(cosTheta, refraction);
+        //float fresnel = reflectivity * Light.schlick(cosTheta, (float)object.refraction);
+        //float transparency = (float)object.transparency;
 
         int rI = clamp(Math.round(
                 finalColor.getRed() * (1 - transparency) +

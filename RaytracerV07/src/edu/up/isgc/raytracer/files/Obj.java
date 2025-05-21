@@ -9,6 +9,7 @@ public class Obj {
     public static void RenderObj(Scene scene, String objPath, String mtlPath){
         MTLReader.readMTL(mtlPath);
         scene.addPolygon(new Polygon(objPath));
+        Face.clearMaterialMap();
     }
 
     public static void RenderObj(Scene scene, String objPath, String mtlPath, Vector3D rotate, Vector3D scale, Vector3D translation){

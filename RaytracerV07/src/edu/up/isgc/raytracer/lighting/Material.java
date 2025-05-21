@@ -108,6 +108,10 @@ public class Material {
     }
 
     public static Material findByName(String name){
-        return Material.getMtlDictionary().get(name);
+        System.out.println("Searching for material with name " + name);
+        Material material = Material.getMtlDictionary().get(name);
+        if (material == null) System.out.println("MATERIAL NOT FOUND");
+        if (material != null) System.out.println("MATERIAL FOUND: " + material);
+        return material;
     }
 }

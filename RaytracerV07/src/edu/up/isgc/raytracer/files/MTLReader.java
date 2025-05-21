@@ -54,6 +54,7 @@ public class MTLReader {
                                 texture,
                                 currentName
                         );
+                        System.out.println("Saving material: " + currentName);
                         mtlDictionary.put(currentName, material);
                     }
 
@@ -81,6 +82,7 @@ public class MTLReader {
                     String texturePath = line.substring(line.indexOf(" ") + 1).trim();
                     try {
                         texture = ImageIO.read(new File(texturePath));
+                        //System.out.println("Loaded texture: \"" + texturePath + "\"");
                     } catch (IOException e) {
                         System.err.println("Failed to load texture: " + texturePath);
                     }
@@ -99,6 +101,7 @@ public class MTLReader {
                         texture,
                         currentName
                 );
+                System.out.println("Saving LAST material: " + currentName);
                 mtlDictionary.put(currentName, material);
             }
 

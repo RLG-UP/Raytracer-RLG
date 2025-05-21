@@ -70,7 +70,8 @@ public class Polygon {
                             Double[] nV1 = NormalVertex.getNormalVertexes().get(normal1);
                             Double[] nV2 = NormalVertex.getNormalVertexes().get(normal2);
                             Double[] nV3 = NormalVertex.getNormalVertexes().get(normal3);
-                            
+
+                            System.out.println("CREATING NEW FACE WITH: " + faceCount);
                             shape.add(new Triangle(
                                     new Vector3D(v1[0], v1[1], v1[2]),
                                     new Vector3D(v2[0], v2[1], v2[2]),
@@ -114,6 +115,7 @@ public class Polygon {
                             ));
                         }
                     }
+                    faceCount++;
 
                 } catch (IndexOutOfBoundsException e) {
                     System.err.println("Invalid vertex index in face: " +
@@ -121,7 +123,6 @@ public class Polygon {
                     throw e;
                 }
             }
-            faceCount++;
         }
         this.setShape(shape);
     }
