@@ -82,7 +82,7 @@ public abstract class Light {
         float reflectivity = 0.8f;
         float refraction = 0;
         float transparency = 0;
-
+/*
         if(object.getHasMaterial()){
             Material material = object.getMaterial();
             ks = material.getSpecular();
@@ -92,6 +92,8 @@ public abstract class Light {
             refraction = material.getRefraction();
             transparency = material.getTransparency();
         }
+
+ */
         float ambientIntensity = ka * Light.getAmbientLight();
 
         for (Light light : Light.getLights()) {

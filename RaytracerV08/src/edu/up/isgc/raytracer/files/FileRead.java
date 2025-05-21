@@ -186,7 +186,8 @@ public class FileRead {
 
     public static Double[] normalizeDouble(String line) {
         Pattern pattern = Pattern.compile("^v\\s+(-?\\d*\\.\\d+)\\s+(-?\\d*\\.\\d+)\\s+(-?\\d*\\.\\d+)");
-        Pattern patternNormal = Pattern.compile("^vn\\s+(-?\\d*\\.\\d+)\\s+(-?\\d*\\.\\d+)\\s+(-?\\d*\\.\\d+)");
+        //Pattern patternNormal = Pattern.compile("^vn\\s+(-?\\d*\\.\\d+)\\s+(-?\\d*\\.\\d+)\\s+(-?\\d*\\.\\d+)");
+        Pattern patternNormal = Pattern.compile("^vn\\s+(-?\\d+(?:\\.\\d+)?)\\s+(-?\\d+(?:\\.\\d+)?)\\s+(-?\\d+(?:\\.\\d+)?)");
         //Pattern patternTexture = Pattern.compile("^vt\\s+(-?\\d*\\.\\d+)\\s+(-?\\d*\\.\\d+)\\s+(-?\\d*\\.\\d+)");
         Pattern patternTexture = Pattern.compile(
                 "^vt\\s+(-?\\d+(?:\\.\\d+)?)\\s+(-?\\d+(?:\\.\\d+)?)(?:\\s+(-?\\d+(?:\\.\\d+)?))?"

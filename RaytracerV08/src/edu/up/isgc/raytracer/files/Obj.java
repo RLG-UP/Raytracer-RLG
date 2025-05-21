@@ -27,13 +27,9 @@ public class Obj {
 
      */
 
-    public static void RenderObj(Scene scene, String objPath, String mtlPath, Vector3D rotate, Vector3D scale, Vector3D translation){
-        MTLReader.readMTL(mtlPath);
+    public static void RenderObj(Scene scene, String objPath, Material material){
         Polygon polygon = new Polygon(objPath);
 
-        if(rotate != null){ polygon.rotate((float)rotate.x, (float)rotate.y, (float)rotate.z); }
-        if(scale != null){ polygon.scale((float)scale.x, (float)scale.y, (float)scale.z); }
-        if(translation != null){ polygon.translate((float)translation.x, (float)translation.y, (float)translation.z); }
 
         scene.addPolygon(polygon);
         Face.clearMaterialMap();
@@ -148,6 +144,7 @@ public class Obj {
     }
 
     // Helper method to create a single triangle
+
     private static Triangle createTriangle(
             ArrayList<Double[]> vertices,
             ArrayList<Double[]> texCoords,
@@ -163,20 +160,21 @@ public class Obj {
 
         for (int j = 0; j < 3; j++) {
             // Vertices (required)
-            triVertices[j] = new Vector3D(
-                    vertices.get(vertexIndices[j] - 1)[0],
-                    vertices.get(vertexIndices[j] - 1)[1],
-                    vertices.get(vertexIndices[j] - 1)[2]
-            );
+                triVertices[j] = new Vector3D(
+                        vertices.get(vertexIndices[j] - 1)[0],
+                        vertices.get(vertexIndices[j] - 1)[1],
+                        vertices.get(vertexIndices[j] - 1)[2]
+                );
+
 
             // Texture coordinates (optional)
-            if (!texCoords.isEmpty() && texIndices[j] > 0) {
+            if (!texCoords.isEmpty() && texIndices[j] > 0 ) {
                 Double[] tex = texCoords.get(texIndices[j] - 1);
                 triTexCoords[j] = new Vector3D(tex[0], tex[1], tex.length > 2 ? tex[2] : 0);
             }
 
             // Normals (optional)
-            if (!normals.isEmpty() && normalIndices[j] > 0) {
+            if (!normals.isEmpty() && normalIndices[j] > 0 ){
                 Double[] norm = normals.get(normalIndices[j] - 1);
                 triNormals[j] = new Vector3D(norm[0], norm[1], norm[2]);
             }
@@ -206,6 +204,7 @@ public class Obj {
             );
         }
     }
+
 
     // Data classes to hold intermediate OBJ data
     private static class ObjData {
@@ -244,6 +243,8 @@ public class Obj {
         // Create polygon from data
         Polygon polygon = createPolygonFromObjData(objData);
         if (polygon != null) {
+            polygon.rotate(0, 90, 0);
+            polygon.scale(10,10,10);
             scene.addPolygon(polygon);
         }
 

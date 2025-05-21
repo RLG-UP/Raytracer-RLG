@@ -24,6 +24,11 @@ public class Material {
         this.setTransparency(transparency);
         this.setTextureMap(textureMap);
         this.setName(name);
+        try{
+            System.out.println(this.getTextureMap().getWidth() + " " + this.getTextureMap().getHeight());
+        } catch (RuntimeException e) {
+            System.err.println("The material " + name + " could not be created.");
+        }
     }
 
     public Material(float specular, float shininess, float ambient, float reflectivity, float refraction, float transparency) {
