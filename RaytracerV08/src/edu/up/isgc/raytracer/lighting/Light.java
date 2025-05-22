@@ -76,12 +76,12 @@ public abstract class Light {
     public static Color calculateColor(Vector3D N, Vector3D point, Object3D object, Intersection intersection) {
         Color finalColor = new Color(0, 0, 0);
         Color pointColor = intersection.color;
-        float ks = 1f;
-        float p = 100f;
+        float ks = 0.9f;
+        float p = 1000f;
         float ka = 0.1f;  // Ambient constant
         float reflectivity = 0.8f;
-        float refraction = 0;
-        float transparency = 0;
+        float refraction = 0.4f;
+        float transparency = 0.7f;
 
         if(object.getHasMaterial()){
             Material material = object.getMaterial();

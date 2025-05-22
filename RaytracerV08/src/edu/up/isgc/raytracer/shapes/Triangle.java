@@ -207,7 +207,6 @@ public class Triangle extends Object3D {
                 if(this.getHasTextures()) {
                     Vector3D uvTexture= Texture.ericson(intersection.point, this.getA(), this.getB(), this.getC(), this.getTA(), this.getTB(), this.getTC());
                     if(this.getHasNormals()) {
-                        if (this.getHasTextures()) {
                             //System.out.println("%%%%%%%%%%%%%%%%");
                             int texX = (int) (uvTexture.x * (super.getMaterial().getTextureMap().getWidth() - 1));
                             int texY = (int) ((1 - uvTexture.y) * (super.getMaterial().getTextureMap().getHeight() - 1)); // flip v if needed
@@ -216,13 +215,13 @@ public class Triangle extends Object3D {
                             texY = Math.max(0, Math.min(texY, super.getMaterial().getTextureMap().getHeight() - 1));
 
                             intersection.color = new Color(super.getMaterial().getTextureMap().getRGB(texX, texY));
-                        }else if(this.getHasMaterial()){
-                            intersection.color = this.getMaterial().getColor();
-                    }else{
-                            intersection.color = super.getColor();
-                        }
-
                     }
+                    else{
+                        intersection.color = super.getColor();
+                    }
+                }else if(this.getHasMaterial()){
+                    intersection.color = super.getMaterial().getColor();
+                    //intersection.color = Color.white;
                 }else{
                     intersection.color = super.getColor();
                 }

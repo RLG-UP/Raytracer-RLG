@@ -142,7 +142,7 @@ public class Material {
     }
 
     public static Material GLASS(Color color){
-        return new Material(0.8f, 1000f, 0.1f,0.8f,0.4f,0.96f, color);
+        return new Material(0.8f, 1000f, 0.1f,0.8f,0.4f,0.7f, color);
     }
 
     public static Material METAL(Color color){

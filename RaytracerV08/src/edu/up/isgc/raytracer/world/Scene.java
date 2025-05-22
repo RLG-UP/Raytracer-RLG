@@ -94,6 +94,7 @@ public class Scene {
     }
 */
     //NORMAL IMPLEMENTATION
+
     /*
     public static Intersection findRayIntersection(Ray ray, Object3D ignoreShape) {
         Intersection closestHit = null;
@@ -129,9 +130,11 @@ public class Scene {
 
      */
 
+     //IMPLEMENTACION CON BVH
+
     public static Intersection findRayIntersection(Ray ray, Object3D ignoreShape) {
         Intersection[] allHits = Scene.BBTree.traverse(ray);
-        if (allHits == null || allHits.length == 0) return null;
+        if (allHits == null) return null;
 
         // Return the closest valid intersection (first in sorted array)
         for (Intersection hit : allHits) {
@@ -141,6 +144,7 @@ public class Scene {
         }
         return null;
     }
+
 
 
 /*
