@@ -1,10 +1,12 @@
 package edu.up.isgc.raytracer.lighting;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Material {
+    private Color color = Color.magenta;
     private float specular = 0;     //ks - Ns
     private float shininess = 0;    //p
     private float ambient = 0;      // ka - Ka
@@ -39,6 +41,17 @@ public class Material {
         this.setRefraction(refraction);
         this.setTransparency(transparency);
     }
+
+    public Material(float specular, float shininess, float ambient, float reflectivity, float refraction, float transparency, Color color) {
+        this.setSpecular(specular);
+        this.setShininess(shininess);
+        this.setAmbient(ambient);
+        this.setReflectivity(reflectivity);
+        this.setRefraction(refraction);
+        this.setTransparency(transparency);
+        this.setColor(color);
+    }
+
 
     public float getSpecular() {
         return specular;
@@ -118,5 +131,24 @@ public class Material {
         //if (material == null) System.out.println("MATERIAL NOT FOUND");
         //if (material != null) System.out.println("MATERIAL FOUND: " + material);
         return material;
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
+    }
+
+    public static Material GLASS(Color color){
+        return new Material(0.8f, 1000f, 0.1f,0.8f,0.4f,0.96f, color);
+    }
+
+    public static Material METAL(Color color){
+        return new Material(1f, 1000f, 0.1f,0.4f,0.7f,0.1f, color);
+    }
+    public static Material GLASS(){
+        return Material.GLASS(Color.white);
     }
 }

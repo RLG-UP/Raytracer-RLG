@@ -19,7 +19,7 @@ public class Triangle extends Object3D {
     private Vector3D nA, nB, nC;
     private Vector3D tA = Vector3D.getZero(), tB = Vector3D.getZero(), tC = Vector3D.getZero();
     private double u, v, w;
-    private boolean hasNormals, hasTextures;
+    private boolean hasNormals = false, hasTextures = false;
     private Polygon parent;
 
     public Triangle(Vector3D A, Vector3D B, Vector3D C, Color color, double refraction, double transparency) {
@@ -41,6 +41,22 @@ public class Triangle extends Object3D {
         this.setHasNormals(true);
 
         this.setParent(parent);
+    }
+
+    public Triangle(Vector3D A, Vector3D B, Vector3D C, Vector3D nA, Vector3D nB, Vector3D nC, Polygon parent, Material material) {
+        super(material);
+        this.setA(A);
+        this.setB(B);
+        this.setC(C);
+
+        this.setnA(nA);
+        this.setnB(nB);
+        this.setnC(nC);
+        this.setHasNormals(true);
+
+        this.setParent(parent);
+        this.setMaterial(material);
+        this.setHasMaterial(true);
     }
 
     public Triangle(Vector3D A, Vector3D B, Vector3D C, Vector3D nA, Vector3D nB, Vector3D nC , Vector3D tA, Vector3D tB, Vector3D tC, Color color, double refraction, double transparency, Polygon parent) {
@@ -77,6 +93,7 @@ public class Triangle extends Object3D {
         this.setTB(tB);
         this.setTC(tC);
         this.setHasTextures(true);
+        this.setHasMaterial(true);
 
         this.setParent(parent);
     }
@@ -190,15 +207,18 @@ public class Triangle extends Object3D {
                 if(this.getHasTextures()) {
                     Vector3D uvTexture= Texture.ericson(intersection.point, this.getA(), this.getB(), this.getC(), this.getTA(), this.getTB(), this.getTC());
                     if(this.getHasNormals()) {
-                        if(this.getHasMaterial()){
-                            int texX = (int)(uvTexture.x * (super.getMaterial().getTextureMap().getWidth() - 1));
-                            int texY = (int)((1 - uvTexture.y) * (super.getMaterial().getTextureMap().getHeight() - 1)); // flip v if needed
+                        if (this.getHasTextures()) {
+                            //System.out.println("%%%%%%%%%%%%%%%%");
+                            int texX = (int) (uvTexture.x * (super.getMaterial().getTextureMap().getWidth() - 1));
+                            int texY = (int) ((1 - uvTexture.y) * (super.getMaterial().getTextureMap().getHeight() - 1)); // flip v if needed
 
                             texX = Math.max(0, Math.min(texX, super.getMaterial().getTextureMap().getWidth() - 1));
                             texY = Math.max(0, Math.min(texY, super.getMaterial().getTextureMap().getHeight() - 1));
 
                             intersection.color = new Color(super.getMaterial().getTextureMap().getRGB(texX, texY));
-                        }else{
+                        }else if(this.getHasMaterial()){
+                            intersection.color = this.getMaterial().getColor();
+                    }else{
                             intersection.color = super.getColor();
                         }
 

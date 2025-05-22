@@ -1,5 +1,6 @@
 package edu.up.isgc.raytracer.shapes;
 
+import edu.up.isgc.raytracer.lighting.Material;
 import edu.up.isgc.raytracer.optimization.BoundingBox;
 import edu.up.isgc.raytracer.Intersection;
 import edu.up.isgc.raytracer.lighting.Light;
@@ -28,6 +29,13 @@ public class Sphere extends Object3D {
         super(color, refraction, transparency);
         this.center = center;
         this.radius = radius;
+    }
+
+    public Sphere(Vector3D center, double radius, Material material) {
+        super(material);
+        this.center = center;
+        this.radius = radius;
+        this.setHasMaterial(true);
     }
 
     public Intersection[] intersect(Ray ray) {
@@ -59,6 +67,10 @@ public class Sphere extends Object3D {
         double distA = Vector3D.subtract(A, center).value;
         double distB = Vector3D.subtract(B, center).value;
 
+        Color color = super.getColor();
+        if(this.getHasMaterial()){
+            color = this.getMaterial().getColor();
+        }
         // Create intersection points
         Intersection p0 = new Intersection(A, t0, super.getColor(), this.normal(A));
         Intersection p1 = new Intersection(B, t1, super.getColor(), this.normal(B));

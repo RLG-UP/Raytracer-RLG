@@ -2,10 +2,7 @@ package edu.up.isgc.raytracer;
 
 import edu.up.isgc.raytracer.files.Obj;
 import edu.up.isgc.raytracer.files.Renderer;
-import edu.up.isgc.raytracer.lighting.Directional;
-import edu.up.isgc.raytracer.lighting.Light;
-import edu.up.isgc.raytracer.lighting.Point;
-import edu.up.isgc.raytracer.lighting.Spot;
+import edu.up.isgc.raytracer.lighting.*;
 import edu.up.isgc.raytracer.shapes.Sphere;
 import edu.up.isgc.raytracer.shapes.Triangle;
 import edu.up.isgc.raytracer.shapes.models.Polygon;
@@ -39,7 +36,7 @@ public class Raytracer {
         String mtlPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Pilot_Scene\\Hazmat\\Obj\\tripo_pbr_model_a7cac90a-deb1-4ce8-9cef-093d5db3efea.mtl").getAbsolutePath();
 
         //String path2 = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\Raytracer\\LocalFiles\\ObjFiles\\Ring.obj").getAbsolutePath();
-        //String path = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\Raytracer\\LocalFiles\\ObjFiles\\Ring.obj").getAbsolutePath();
+        String path = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\Raytracer\\LocalFiles\\ObjFiles\\Ring.obj").getAbsolutePath();
         //String path = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\Raytracer\\LocalFiles\\ObjFiles\\SmallTeapot.obj").getAbsolutePath();
         //String path = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\optimized-3d-capturedphotogrammetry-hat\\Hat.obj").getAbsolutePath();
         //String path = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\Raytracer\\LocalFiles\\ObjFiles\\shark1.obj").getAbsolutePath();
@@ -48,8 +45,10 @@ public class Raytracer {
         Scene scene = new Scene(Color.black);
 
         //scene.addObject(new Sphere(new Vector3D(0, -5, 0), 2, Color.lightGray,  0.5, 0.9));
+        //scene.addObject(new Sphere(new Vector3D(0, -2, 0), 3, Material.GLASS(Color.WHITE)));
+        //scene.addObject(new Sphere(new Vector3D(1, 2, 0), 3, Material.GLASS(Color.RED)));
         //scene.addObject(new Sphere(new Vector3D(0, 2, 0), 1, Color.lightGray,  0.4, 0.7));
-        //scene.addObject(new Sphere(new Vector3D(0, 0, 0), 50, Color.CYAN,  2.77, 0));
+        scene.addObject(new Sphere(new Vector3D(0, 0, 0), 50, Color.CYAN,  2.77, 0));
 
         //BufferedImage texture = ImageIO.read(new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\optimized-3d-capturedphotogrammetry-hat\\textures\\Hat_Albedo.png"));
 
@@ -57,7 +56,11 @@ public class Raytracer {
         //Polygon polygon = new Polygon(path, Color.red, 0.0, 0, texture);
 
 
-        Obj.RenderObj(scene, objPath, mtlPath);
+        //Obj.RenderObj(scene, objPath, mtlPath);
+        //Obj.RenderObj(scene, objPath, Material.GLASS(Color.red), new Vector3D(0,90,0), new Vector3D(10,10,10), Vector3D.getZero());
+        //Obj.RenderObj(scene, objPath, Material.GLASS(Color.blue), new Vector3D(0,90,0), new Vector3D(10,10,10), new Vector3D(-1.5,0,0));
+        Obj.RenderObj(scene, path, Material.GLASS(Color.RED),new Vector3D(-90,0,0), new Vector3D(3,3,3), new Vector3D(0,0,0));
+        Obj.RenderObj(scene, path, Material.GLASS(Color.blue),new Vector3D(0,0,0), new Vector3D(3,3,3), new Vector3D(0,0,0));
 
         //Polygon polygon2 = new Polygon(path2, Color.lightGray, 0.4, 0.7);
         /*
@@ -72,12 +75,13 @@ public class Raytracer {
 
         // Set up camera at the origin
         Camera camera = new Camera(new Vector3D(0, 2, -6), nearPlane, farPlane);
-        Light light01 = new Point(1f, Color.red, new Vector3D(-1, 3.5, -1));
+        //Light light01 = new Point(1f, new Color(200,150,10), new Vector3D(-1, 3.5, -1));
+        Light light01 = new Point(1f, Color.white, new Vector3D(-1, 3.5, -1));
         //Light light01 = new Point(1f, Color.darkGray, new Vector3D(2.9896, 1.6178, 3.9184));
         //Light light02 = new Point(1f, Color.white, new Vector3D(-0.177, 0.9578, -4.708));
         //Light light03 = new Point(1f, Color.white, new Vector3D(0.1207, 0.7511, -4.153));
 
-        //Light light0D = new Directional(1, Color.green, new Vector3D(2,10,0), new Vector3D(0, 0, 0));
+        Light light0D = new Directional(1, Color.white, new Vector3D(2,10,0), new Vector3D(0, 0, 0));
         //Light light02 = new Directional(100, Color.blue, new Vector3D(0,-10,0), new Vector3D(0,0,0));
         //Light light03 = new Point(10f, Color.white, new Vector3D(0, -1, -2.5));
         //Light light04 = new Spot(1f, Color.white, new Vector3D(0,-4,0), new Vector3D(0,0,0), 1f, 1f);

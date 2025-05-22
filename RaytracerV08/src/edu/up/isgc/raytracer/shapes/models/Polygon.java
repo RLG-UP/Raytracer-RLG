@@ -36,7 +36,7 @@ public class Polygon {
         }
     }
 
-    public Polygon(String filePath){
+    public Polygon(String filePath, Material material){
         FileRead.compileObj(filePath);
         ArrayList<Triangle> shape = new ArrayList<>();
 
@@ -83,11 +83,8 @@ public class Polygon {
                                     new Vector3D(nV1[0], nV1[1], nV1[2]),
                                     new Vector3D(nV2[0], nV2[1], nV2[2]),
                                     new Vector3D(nV3[0], nV3[1], nV3[2]),
-                                    new Vector3D(t1[0], t1[1], t1[2]),
-                                    new Vector3D(t2[0], t2[1], t2[2]),
-                                    new Vector3D(t3[0], t3[1], t3[2]),
                                     this,
-                                    Face.findMaterialByIndex(faceCount)
+                                    material
                             ));
                         }
                     }else{
@@ -103,10 +100,8 @@ public class Polygon {
                                     new Vector3D(nV1[0], nV1[1], nV1[2]),
                                     new Vector3D(nV2[0], nV2[1], nV2[2]),
                                     new Vector3D(nV3[0], nV3[1], nV3[2]),
-                                    color,
-                                    0,
-                                    0,
-                                    this
+                                    this,
+                                    material
                             ));
                         } else {
                             shape.add(new Triangle(

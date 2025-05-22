@@ -28,10 +28,42 @@ public class Obj {
      */
 
     public static void RenderObj(Scene scene, String objPath, Material material){
-        Polygon polygon = new Polygon(objPath);
-
-
+        Polygon polygon = new Polygon(objPath, material);
+        polygon.rotate(0, 90, 0);
+        polygon.scale(10,10,10);
         scene.addPolygon(polygon);
+        Face.clearMaterialMap();
+    }
+
+    public static void RenderObj(Scene scene, String objPath, Material material, Vector3D rotate, Vector3D scale, Vector3D translate){
+        Polygon polygon = new Polygon(objPath, material);
+        polygon.rotate((float)rotate.x, (float)rotate.y, (float)rotate.x);
+        polygon.scale((float)scale.x,(float)scale.y,(float)scale.z);
+        polygon.translate((float)translate.x, (float)translate.y, (float)translate.z);
+        scene.addPolygon(polygon);
+        Face.clearMaterialMap();
+    }
+
+    // Updated RenderObj method
+    public static void RenderObj(Scene scene, String objPath, String mtlPath) {
+        // Load materials first
+        if (mtlPath != null) {
+            MTLReader.readMTL(mtlPath);
+        }
+
+        // Read OBJ data
+        ObjData objData = readObjData(objPath);
+        if (objData == null) return;
+
+        // Create polygon from data
+        Polygon polygon = createPolygonFromObjData(objData);
+        if (polygon != null) {
+            polygon.rotate(0, 90, 0);
+            polygon.scale(10,10,10);
+            scene.addPolygon(polygon);
+        }
+
+        // Clean up
         Face.clearMaterialMap();
     }
 
@@ -227,29 +259,6 @@ public class Obj {
             this.normalIndices = normalIndices;
             this.materialName = materialName;
         }
-    }
-
-    // Updated RenderObj method
-    public static void RenderObj(Scene scene, String objPath, String mtlPath) {
-        // Load materials first
-        if (mtlPath != null) {
-            MTLReader.readMTL(mtlPath);
-        }
-
-        // Read OBJ data
-        ObjData objData = readObjData(objPath);
-        if (objData == null) return;
-
-        // Create polygon from data
-        Polygon polygon = createPolygonFromObjData(objData);
-        if (polygon != null) {
-            polygon.rotate(0, 90, 0);
-            polygon.scale(10,10,10);
-            scene.addPolygon(polygon);
-        }
-
-        // Clean up
-        Face.clearMaterialMap();
     }
 
 }

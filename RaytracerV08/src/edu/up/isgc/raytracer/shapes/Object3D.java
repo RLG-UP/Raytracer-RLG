@@ -31,7 +31,7 @@ public abstract class Object3D {
     }
 
     public Object3D(Material material) {
-        this.color = Color.magenta;
+        this.color = material.getColor();
         this.setMaterial(material);
         this.setHasMaterial(true);
     }
