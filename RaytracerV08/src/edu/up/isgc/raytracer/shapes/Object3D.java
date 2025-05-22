@@ -36,6 +36,7 @@ public abstract class Object3D {
         this.setHasMaterial(true);
         this.refraction = material.getRefraction();
         this.transparency = material.getTransparency();
+        //this.transparency = 0;
     }
 
     /**

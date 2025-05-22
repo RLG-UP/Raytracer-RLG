@@ -146,7 +146,7 @@ public class Material {
     }
 
     public static Material METAL(Color color){
-        return new Material(1f, 1000f, 0.1f,0.4f,0.7f,0.1f, color);
+        return new Material(1f, 10f, 0.1f,0.4f,0.7f,0.1f, color);
     }
     public static Material GLASS(){
         return Material.GLASS(Color.white);

@@ -49,8 +49,8 @@ public class MTLReader {
                                 ns != null ? ns : 0f,
                                 ka != null ? ka : 0f,
                                 0f,
-                                ni != null ? 1f - ni : 0f,
-                                d != null ? 1f - d : 0f,
+                                ni != null ? ni : 0f,
+                                d != null ? d : 0f,
                                 texture,
                                 currentName
                         );
@@ -96,8 +96,8 @@ public class MTLReader {
                         ns != null ? ns : 0f,
                         ka != null ? ka : 0f,
                         0f,
-                        ni != null ? 1f - ni : 0f,
-                        d != null ? 1f - d : 0f,
+                        ni != null ? ni : 0f,
+                        d != null ? d : 0f,
                         texture,
                         currentName
                 );

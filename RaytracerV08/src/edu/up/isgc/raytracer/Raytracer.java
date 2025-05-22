@@ -42,7 +42,7 @@ public class Raytracer {
         //String path = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\Raytracer\\LocalFiles\\ObjFiles\\shark1.obj").getAbsolutePath();
 
         // Create scene with objects
-        Scene scene = new Scene(Color.cyan);
+        Scene scene = new Scene(Color.black);
 
         //scene.addObject(new Sphere(new Vector3D(0, 0, 0), 2, Color.green,  0.5, 0.9));
         //scene.addObject(new Sphere(new Vector3D(0, -2, 0), 3, Material.GLASS(Color.WHITE)));
@@ -75,13 +75,13 @@ public class Raytracer {
 
         // Set up camera at the origin
         Camera camera = new Camera(new Vector3D(0, 2, -6), nearPlane, farPlane);
-        //Light light01 = new Point(1f, Color.white, new Vector3D(0, 0, -5));
+        Light light01 = new Point(6f, Color.white, new Vector3D(3, 2, -0.2));
         //Light light01 = new Point(1f, Color.white, new Vector3D(-1, 3.5, -1));
         //Light light01 = new Point(1f, Color.darkGray, new Vector3D(2.9896, 1.6178, 3.9184));
         //Light light02 = new Point(1f, Color.white, new Vector3D(-0.177, 0.9578, -4.708));
         //Light light03 = new Point(1f, Color.white, new Vector3D(0.1207, 0.7511, -4.153));
 
-        Light light0D = new Directional(1, Color.white, new Vector3D(0,0,-10), new Vector3D(0, 0, 0));
+        //Light light0D = new Directional(1, Color.white, new Vector3D(0,0,-10), new Vector3D(0, 0, 0));
         //Light light02 = new Directional(100, Color.blue, new Vector3D(0,-10,0), new Vector3D(0,0,0));
         //Light light03 = new Point(10f, Color.white, new Vector3D(0, -1, -2.5));
         //Light light04 = new Spot(1f, Color.white, new Vector3D(0,-4,0), new Vector3D(0,0,0), 1f, 1f);

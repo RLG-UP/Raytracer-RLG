@@ -81,7 +81,7 @@ public abstract class Light {
         float ka = 0.1f;  // Ambient constant
         float reflectivity = 0.8f;
         float refraction = 0.4f;
-        float transparency = 0.7f;
+        float transparency = 0.0f;
 
         if(object.getHasMaterial()){
             Material material = object.getMaterial();
