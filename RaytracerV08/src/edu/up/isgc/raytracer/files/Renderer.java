@@ -16,8 +16,14 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Renderer {
+    //private static int totalY = 0, lastProgress=-1;
+    private static final AtomicInteger renderedPixels = new AtomicInteger(0);
+    private static int lastProgress = -1;
+    private static final Object progressLock = new Object();
+
     public static void renderScene(int width, int height, Camera camera, Scene scene) {
         // Start timing
         long startTime = System.currentTimeMillis();
@@ -29,7 +35,7 @@ public class Renderer {
         System.out.println("Rendering " + width + "x" + height + " image...");
         int lastProgress = -1;
 
-        int N_THREADS = Runtime.getRuntime().availableProcessors();
+        int N_THREADS = (int)(Runtime.getRuntime().availableProcessors()*0.8);
         ExecutorService executor = Executors.newFixedThreadPool(N_THREADS);
         int splitWidth = width / N_THREADS;
         int splitHeight = height / N_THREADS;
@@ -38,11 +44,14 @@ public class Renderer {
 
         for (int y = 0; y < height; y+=splitHeight) {
             // Calculate and print progress percentage
+            /*
             int progress = (int)((y / (double)height) * 100);
             if (progress != lastProgress && progress % 10 == 0) {
-                System.out.println("Progress: " + progress + "%");
+                //System.out.println("Progress: " + progress + "%");
                 lastProgress = progress;
             }
+
+             */
 
             for (int x = 0; x < width; x+=splitWidth) {
                 /*
@@ -117,6 +126,19 @@ public class Renderer {
     }
     public static void paintSplit(BufferedImage renderImage, Camera camera, Scene scene, int x, int y, int tileW, int tileH){
         for(int tY= 0; tY<tileH; tY++){
+            //System.out.println("Process: " + x + " // " + (int)((tY/tileH)*100) + "%");
+
+            /*
+            int progress = (int)((Renderer.totalY / (double)renderImage.getHeight()) * 100);
+            if (progress != Renderer.lastProgress && progress % 10 == 0) {
+                System.out.println("Progress: " + progress + "%");
+                Renderer.lastProgress = progress;
+            }
+
+            Renderer.totalY+=1;
+
+             */
+
             for(int tX=0; tX<tileW; tX++){
                 double aspectRatio = (double) renderImage.getWidth() / renderImage.getHeight();
                 double tanFov = Math.tan(Math.toRadians(camera.getFov()) / 2.0);
@@ -150,6 +172,18 @@ public class Renderer {
                 }
 
                 renderImage.setRGB(pX, renderImage.getHeight() - pY -1, pixelColor.getRGB());
+                int pixelsRendered = renderedPixels.incrementAndGet();
+                updateProgress(pixelsRendered, renderImage.getWidth()*renderImage.getHeight());
+            }
+        }
+    }
+    private static void updateProgress(int rendered, int total) {
+        int progress = (int) ((rendered / (double) total) * 100);
+
+        synchronized (progressLock) {
+            if (progress != lastProgress && progress % 5 == 0) {  // Update every 5%
+                System.out.println("Progress: " + progress + "%");
+                lastProgress = progress;
             }
         }
     }
