@@ -11,15 +11,18 @@ public class Camera {
     public static Vector3D position;  // The position of the camera in 3D space
     private static double epsilon = 0.00001;
     public double[] clipPlanes = new double[2];
+    private double fov;
+    private int width, height;
 
     /**
      * Constructs a camera with the specified position.
      * @param position The 3D coordinates of the camera's location
      */
-    public Camera(Vector3D position,  double nearPlane, double farPlane) {
+    public Camera(Vector3D position,  double nearPlane, double farPlane, double fov, int width, int height) {
         this.position = position;
         this.clipPlanes[0] = nearPlane;
         this.clipPlanes[1] = farPlane;
+        this.setFov(fov);
     }
 
     /**
@@ -38,4 +41,28 @@ public class Camera {
     public static Vector3D getCameraPosition() { return Camera.position; }
 
     public Vector3D getPosition() { return this.position; }
+
+    public double getFov() {
+        return fov;
+    }
+
+    public void setFov(double fov) {
+        this.fov = fov;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
 }

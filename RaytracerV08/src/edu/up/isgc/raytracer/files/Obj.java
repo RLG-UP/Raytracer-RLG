@@ -29,8 +29,8 @@ public class Obj {
 
     public static void RenderObj(Scene scene, String objPath, Material material){
         Polygon polygon = new Polygon(objPath, material);
-        polygon.rotate(0, 90, 0);
-        polygon.scale(10,10,10);
+        //polygon.rotate(0, 90, 0);
+        //polygon.scale(10,10,10);
         scene.addPolygon(polygon);
         Face.clearMaterialMap();
     }

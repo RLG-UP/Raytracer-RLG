@@ -10,6 +10,12 @@ import java.awt.image.BufferedImage;
 import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class Renderer {
     public static void renderScene(int width, int height, Camera camera, Scene scene) {
@@ -23,7 +29,14 @@ public class Renderer {
         System.out.println("Rendering " + width + "x" + height + " image...");
         int lastProgress = -1;
 
-        for (int y = 0; y < height; y++) {
+        int N_THREADS = Runtime.getRuntime().availableProcessors();
+        ExecutorService executor = Executors.newFixedThreadPool(N_THREADS);
+        int splitWidth = width / N_THREADS;
+        int splitHeight = height / N_THREADS;
+        List<Future<?>> futures = new ArrayList<>();
+
+
+        for (int y = 0; y < height; y+=splitHeight) {
             // Calculate and print progress percentage
             int progress = (int)((y / (double)height) * 100);
             if (progress != lastProgress && progress % 10 == 0) {
@@ -31,13 +44,23 @@ public class Renderer {
                 lastProgress = progress;
             }
 
-            for (int x = 0; x < width; x++) {
+            for (int x = 0; x < width; x+=splitWidth) {
+                /*
                 double aspectRatio = (double) width / height;
                 double scale = 1.0;
 
                 double px = (2 * ((x + 0.5) / width) - 1) * aspectRatio * scale;
                 double py = (1 - 2 * ((y + 0.5) / height)) * scale;
 
+                 */
+
+                final int tileX = x;
+                final int tileY = y;
+                final int tileW = Math.min(splitWidth, width-x);
+                final int tileH = Math.min(splitHeight, height-y);
+
+
+                /*
                 Ray ray = camera.generateRay(px, py);
                 Intersection intersection = scene.findClosestIntersection(ray, camera);
 
@@ -50,8 +73,21 @@ public class Renderer {
                 }
 
                 image.setRGB(x, height - y - 1, pixelColor.getRGB());
+
+                 */
+
+
+                futures.add(executor.submit(() -> {Renderer.paintSplit(image, camera, scene, tileX, tileY, tileW, tileH); }));
             }
         }
+        for(Future<?> future : futures) {
+            try{
+                future.get();
+            }catch(InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
+        }
+        executor.shutdown();
 
         try {
             File outputfile = new File("output.png");
@@ -76,6 +112,45 @@ public class Renderer {
             System.out.println("Image saved as output.png");
         } catch (IOException e) {
             System.out.println("Error saving image: " + e.getMessage());
+        }
+
+    }
+    public static void paintSplit(BufferedImage renderImage, Camera camera, Scene scene, int x, int y, int tileW, int tileH){
+        for(int tY= 0; tY<tileH; tY++){
+            for(int tX=0; tX<tileW; tX++){
+                double aspectRatio = (double) renderImage.getWidth() / renderImage.getHeight();
+                double tanFov = Math.tan(Math.toRadians(camera.getFov()) / 2.0);
+                double scale = 1.0;
+
+                int pX = tX + x;
+                int pY = tY + y;
+
+                double px = (2 * ((pX + 0.5) / renderImage.getWidth()) - 1) * aspectRatio * scale;
+                double py = (1 - 2 * ((pY + 0.5) / renderImage.getHeight())) * scale;
+
+
+                double ndcX = (2.0 * (pX + 0.5) / renderImage.getWidth() - 1.0);
+                double ndcY = (1.0 - 2.0 * (pY + 0.5) / renderImage.getHeight());
+
+                // Apply aspect ratio and FOV scaling
+                double u = ndcX * aspectRatio * tanFov;
+                double v = ndcY * tanFov;
+
+
+                //Ray ray = camera.generateRay(px, py);
+                Ray ray = camera.generateRay(u, v);
+                Intersection intersection = scene.findClosestIntersection(ray, camera);
+
+                Color pixelColor;
+                if (intersection != null && intersection.color != null && intersection.object != null) {
+                    intersection.color = intersection.object.addLight(intersection);
+                    pixelColor = intersection.color;
+                } else {
+                    pixelColor = Scene.background;
+                }
+
+                renderImage.setRGB(pX, renderImage.getHeight() - pY -1, pixelColor.getRGB());
+            }
         }
     }
 }
