@@ -23,8 +23,19 @@ import java.io.IOException;
 public class Raytracer {
     public static void main(String[] args) throws IOException {
         // Image settings
+
+        /*
         int width = 1600;
         int height = 900;
+
+         */
+
+
+
+        int width = 4096;
+        int height = 2160;
+
+
         double nearPlane = -1000, farPlane = 1000;
         //String objPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\optimized-3d-capturedphotogrammetry-hat\\Hat.obj").getAbsolutePath();
         //String mtlPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\optimized-3d-capturedphotogrammetry-hat\\Hat.mtl").getAbsolutePath();
@@ -53,7 +64,6 @@ public class Raytracer {
         //scene.addObject(new Sphere(new Vector3D(0, -2, 0), 3, Material.GLASS(Color.WHITE)));
         //scene.addObject(new Sphere(new Vector3D(1, 2, 0), 3, Material.GLASS(Color.RED)));
         //scene.addObject(new Sphere(new Vector3D(0, 2, 0), 1, Color.lightGray,  0.4, 0.7));
-        //scene.addObject(new Sphere(new Vector3D(0, 0, 0), 50, Color.CYAN,  2.77, 0));
 
         //BufferedImage texture = ImageIO.read(new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\optimized-3d-capturedphotogrammetry-hat\\textures\\Hat_Albedo.png"));
 
@@ -80,21 +90,28 @@ public class Raytracer {
         //scene.addPolygon( polygon2 );
 
         //SCREAM SCENE
-        Scene scene = new Scene(Color.white);
+        Scene scene = new Scene(new Color(220, 20, 60));
         String objPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Scream_Scene\\RenderOBJS\\Rage_Shards.obj").getAbsolutePath();
-        Obj.RenderObj(scene, objPath, Material.GLASS(Color.black));
+        String objPath02 = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Scream_Scene\\RenderOBJS\\Rage_Man.obj").getAbsolutePath();
+        String objPath03 = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Scream_Scene\\RenderOBJS\\Rage_Background.obj").getAbsolutePath();
+        Obj.RenderObj(scene, objPath, Material.GLASS(Color.BLACK));
+        Obj.RenderObj(scene, objPath02, Material.GLASS(Color.BLACK));
+        Obj.RenderObj(scene, objPath03, Material.GLASS(Color.WHITE));
+        //scene.addObject(new Sphere(new Vector3D(0, 0, 0), 2, Material.GLASS(Color.WHITE)));
 
         // Set up camera at the origin
         //Camera camera = new Camera(new Vector3D(-0.008, -0.005, -1.5), nearPlane, farPlane, 60, width, height);
-        Camera camera = new Camera(new Vector3D(-0.005, -0.005, -4.75), nearPlane, farPlane, 30, width, height);
+        //Camera camera = new Camera(new Vector3D(-0.005, -0.005, -4.75), nearPlane, farPlane, 30, width, height);
+        Camera camera = new Camera(new Vector3D(-0.005, -0.005, -5.5), nearPlane, farPlane, 30, width, height);
         //ScreamLights
-        Light light01 = new Point(6f, Color.white, new Vector3D(0, 1.072, -0.31));
-        Light light02 = new Point(6f, Color.white, new Vector3D(0, -1.6593, -1.14));
+        Light light01 = new Point(5f, Color.white, new Vector3D(0, 1.1, -7));
+        Light light02 = new Point(5f, Color.white, new Vector3D(0, -1.6593, -7));
 
-        //Light light0D = new Directional(1, Color.white, new Vector3D(0,0,-10), new Vector3D(0, 0, 0));
+        //Light light0D = new Directional(1, Color.white, new Vector3D(0,0,10), new Vector3D(2, 0, 0));
         //Light light02 = new Directional(100, Color.blue, new Vector3D(0,-10,0), new Vector3D(0,0,0));
         //Light light03 = new Point(10f, Color.white, new Vector3D(0, -1, -2.5));
-        //Light light04 = new Spot(1f, Color.white, new Vector3D(0,-4,0), new Vector3D(0,0,0), 1f, 1f);
+        Light light04 = new Spot(1f, Color.white, new Vector3D(0,0,-10), new Vector3D(4, 0, 0), 1f, 1f);
+        Light light05 = new Spot(1f, Color.white, new Vector3D(0,0,-10), new Vector3D(-4, 0, 0), 1f, 1f);
 
 
         Renderer.renderScene(width, height, camera, scene);

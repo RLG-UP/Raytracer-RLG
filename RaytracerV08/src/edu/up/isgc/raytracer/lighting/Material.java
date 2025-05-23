@@ -142,13 +142,16 @@ public class Material {
     }
 
     public static Material GLASS(Color color){
-        return new Material(0.8f, 1000f, 0.1f,0.8f,0.4f,0.7f, color);
+        return new Material(1.0f, 8000f, 0.1f,0.8f,0.4f,0.7f, color);
     }
 
+    public static Material GLASS(){
+        return Material.GLASS(Color.white);
+    }
     public static Material METAL(Color color){
         return new Material(1f, 10f, 0.1f,0.4f,0.7f,0.1f, color);
     }
-    public static Material GLASS(){
-        return Material.GLASS(Color.white);
+    public static Material MIRROR(Color color){
+        return new Material(1f, 10f, 0.1f,1.0f,0.3f,0.1f, color);
     }
 }
