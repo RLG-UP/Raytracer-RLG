@@ -92,9 +92,11 @@ public class Raytracer {
         //SCREAM SCENE
         Scene scene = new Scene(new Color(220, 20, 60));
         String objPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Scream_Scene\\RenderOBJS\\Rage_Shards.obj").getAbsolutePath();
+        String objPath01 = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Scream_Scene\\RenderOBJS\\Rage_Shards2.obj").getAbsolutePath();
         String objPath02 = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Scream_Scene\\RenderOBJS\\Rage_Man.obj").getAbsolutePath();
         String objPath03 = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Scream_Scene\\RenderOBJS\\Rage_Background.obj").getAbsolutePath();
         Obj.RenderObj(scene, objPath, Material.GLASS(Color.BLACK));
+        Obj.RenderObj(scene, objPath01, Material.GLASS(Color.BLACK));
         Obj.RenderObj(scene, objPath02, Material.GLASS(Color.BLACK));
         Obj.RenderObj(scene, objPath03, Material.GLASS(Color.WHITE));
         //scene.addObject(new Sphere(new Vector3D(0, 0, 0), 2, Material.GLASS(Color.WHITE)));

@@ -175,7 +175,7 @@ public abstract class Light {
          */
 
         Color reflectionColor = Scene.castReflection(point, N, object, 10);
-        Color refractionColor = Scene.castRefraction(point, N, object, 10);
+        Color refractionColor = Scene.castRefraction(point, N, object, 15);
 
         Vector3D viewDir = Vector3D.subtract(Camera.getCameraPosition(), point).normalize();
         float cosTheta = Math.max(0f, (float)viewDir.dot(N.normalize()));
