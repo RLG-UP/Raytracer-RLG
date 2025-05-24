@@ -166,6 +166,9 @@ public class Material {
         return new Material(1f, 10f, 0.1f,1.0f,0.3f,0.1f, color);
     }
     public static Material ALBEDO(Color color){
-        return new Material(0.5f, 1000f, 0.1f,0.01f,0.01f,0.01f, color);
+        return new Material(0.5f, 1000f, 0.1f,0.00f,0.00f,0.00f, color);
+    }
+    public static Material PLASTIC(Color color){
+        return new Material(1f, 100f, 0.1f,0.00f,0.00f,0.00f, color);
     }
 }

@@ -50,14 +50,17 @@ public class Polygon {
                     int coord1 = face[0][0] - 1;
                     int coord2 = face[0][1] - 1;
                     int coord3 = face[0][2] - 1;
+                    int coord4 = face[0].length==4? face[0][3]-1 : -1;
 
                     int texture1 = face[1][0] - 1;
                     int texture2 = face[1][1] - 1;
                     int texture3 = face[1][2] - 1;
+                    int texture4 = face[0].length==4? face[0][3]-1 : -1;
 
                     int normal1 = face[2][0] - 1;
                     int normal2 = face[2][1] - 1;
                     int normal3 = face[2][2] - 1;
+                    int normal4 = face[0].length==4? face[0][3]-1 : -1;
 
                     // Debug output
                     //System.out.println("Processing face with indices: " + index1 + ", " + index2 + ", " + index3);
@@ -83,6 +86,20 @@ public class Polygon {
                                     this,
                                     material
                             ));
+                            if(coord4 != -1){
+                                Double[] v4 = Vertex.getVertexes().get(coord4);
+                                Double[] nV4 = NormalVertex.getNormalVertexes().get(normal4);
+                                shape.add(new Triangle(
+                                        new Vector3D(v1[0], v1[1], v1[2]),
+                                        new Vector3D(v3[0], v3[1], v3[2]),
+                                        new Vector3D(v4[0], v4[1], v4[2]),
+                                        new Vector3D(nV1[0], nV1[1], nV1[2]),
+                                        new Vector3D(nV3[0], nV3[1], nV3[2]),
+                                        new Vector3D(nV4[0], nV4[1], nV4[2]),
+                                        this,
+                                        material
+                                ));
+                            }
                         }
                     }else{
 
@@ -100,6 +117,20 @@ public class Polygon {
                                     this,
                                     material
                             ));
+                            if(coord4 != -1){
+                                Double[] v4 = Vertex.getVertexes().get(coord4);
+                                Double[] nV4 = NormalVertex.getNormalVertexes().get(normal4);
+                                shape.add(new Triangle(
+                                        new Vector3D(v1[0], v1[1], v1[2]),
+                                        new Vector3D(v3[0], v3[1], v3[2]),
+                                        new Vector3D(v4[0], v4[1], v4[2]),
+                                        new Vector3D(nV1[0], nV1[1], nV1[2]),
+                                        new Vector3D(nV3[0], nV3[1], nV3[2]),
+                                        new Vector3D(nV4[0], nV4[1], nV4[2]),
+                                        this,
+                                        material
+                                ));
+                            }
                         } else {
                             shape.add(new Triangle(
                                     new Vector3D(v1[0], v1[1], v1[2]),

@@ -26,6 +26,7 @@ public class Obj {
     }
 
      */
+    /*
 
     public static void RenderObj(Scene scene, String objPath, Material material){
         Polygon polygon = new Polygon(objPath, material);
@@ -34,6 +35,8 @@ public class Obj {
         scene.addPolygon(polygon);
         Face.clearMaterialMap();
     }
+
+     */
 
     public static void RenderObj(Scene scene, String objPath, Material material, Vector3D rotate, Vector3D scale, Vector3D translate){
         Polygon polygon = new Polygon(objPath, material);
@@ -45,7 +48,7 @@ public class Obj {
     }
 
     // Updated RenderObj method
-    public static void RenderObj(Scene scene, String objPath, String mtlPath) {
+    public static void RenderObj(Scene scene, String objPath, String mtlPath, Material material) {
         // Load materials first
         if (mtlPath != null) {
             MTLReader.readMTL(mtlPath);
@@ -56,16 +59,18 @@ public class Obj {
         if (objData == null) return;
 
         // Create polygon from data
-        Polygon polygon = createPolygonFromObjData(objData);
+        Polygon polygon = material != null ? createPolygonFromObjData(objData, material) : createPolygonFromObjData(objData);
         if (polygon != null) {
-            polygon.rotate(0, 90, 0);
-            polygon.scale(10,10,10);
+            //polygon.rotate(0, 90, 0);
+            //polygon.scale(10,10,10);
             scene.addPolygon(polygon);
         }
 
         // Clean up
         Face.clearMaterialMap();
     }
+
+    public static void RenderObj(Scene scene, String objPath, Material material) { Obj.RenderObj(scene, objPath, null, material);}
 
     // First method: Reads OBJ file and collects data
     public static ObjData readObjData(String filePath) {
@@ -117,16 +122,16 @@ public class Obj {
     }
 
     // Second method: Creates triangles from collected data
-    public static Polygon createPolygonFromObjData(ObjData objData) {
+    public static Polygon createPolygonFromObjData(ObjData objData, Material mat) {
         if (objData == null) return null;
 
         ArrayList<Triangle> triangles = new ArrayList<>();
 
         for (FaceData face : objData.faces) {
-            Material material = Material.findByName(face.materialName);
+            Material material = mat == null ? Material.findByName(face.materialName) : mat;
             if (material == null) {
                 System.err.println("Warning: Material not found - " + face.materialName);
-                material = null; // Default material
+                material = Material.ALBEDO(Color.magenta); // Default material
             }
 
             // Handle both triangles and quads
@@ -156,24 +161,40 @@ public class Obj {
                 }
 
                 // Create the triangle
-                Triangle triangle = createTriangle(
-                        objData.vertices,
-                        objData.texCoords,
-                        objData.normals,
-                        triVertexIndices,
-                        triTexIndices,
-                        triNormalIndices,
-                        material
-                );
 
-                if (triangle != null) {
-                    triangles.add(triangle);
+                if(material == null) {
+                    Triangle triangle = createTriangle(
+                            objData.vertices,
+                            objData.texCoords,
+                            objData.normals,
+                            triVertexIndices,
+                            triTexIndices,
+                            triNormalIndices,
+                            material
+                    );
+                    if (triangle != null) {
+                        triangles.add(triangle);
+                    }
+                }else{
+                    Triangle triangle = createTriangle(
+                            objData.vertices,
+                            objData.normals,
+                            triVertexIndices,
+                            triNormalIndices,
+                            material
+                    );
+                    if (triangle != null) {
+                        triangles.add(triangle);
+                    }
                 }
+
             }
         }
 
         return new Polygon(triangles);
     }
+
+    public static Polygon createPolygonFromObjData(ObjData objData){ return Obj.createPolygonFromObjData(objData, null);}
 
     // Helper method to create a single triangle
 
@@ -225,8 +246,48 @@ public class Obj {
         else if (triNormals[0] != null) {
             return new Triangle(
                     triVertices[0], triVertices[1], triVertices[2],
+                    triNormals[0], triNormals[1], triNormals[2], null, material
+            );
+        }
+        else {
+            return new Triangle(
+                    triVertices[0], triVertices[1], triVertices[2],
+                    Color.WHITE, 0, 0
+            );
+        }
+    }
+
+    private static Triangle createTriangle(
+            ArrayList<Double[]> vertices,
+            ArrayList<Double[]> normals,
+            int[] vertexIndices,
+            int[] normalIndices,
+            Material material
+    ) {
+        Vector3D[] triVertices = new Vector3D[3];
+        Vector3D[] triNormals = new Vector3D[3];
+
+        for (int j = 0; j < 3; j++) {
+            // Vertices (required)
+            triVertices[j] = new Vector3D(
+                    vertices.get(vertexIndices[j] - 1)[0],
+                    vertices.get(vertexIndices[j] - 1)[1],
+                    vertices.get(vertexIndices[j] - 1)[2]
+            );
+
+
+            // Normals (optional)
+            if (!normals.isEmpty() && normalIndices[j] > 0 ){
+                Double[] norm = normals.get(normalIndices[j] - 1);
+                triNormals[j] = new Vector3D(norm[0], norm[1], norm[2]);
+            }
+        }
+
+        if (triNormals[0] != null) {
+            return new Triangle(
+                    triVertices[0], triVertices[1], triVertices[2],
                     triNormals[0], triNormals[1], triNormals[2],
-                    Color.WHITE, 0, 0, null
+                    null, material
             );
         }
         else {
