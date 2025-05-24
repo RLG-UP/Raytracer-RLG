@@ -24,16 +24,14 @@ public class Raytracer {
     public static void main(String[] args) throws IOException {
         // Image settings
 
-        /*
         int width = 1600;
         int height = 900;
 
-         */
-
-
-
+/*
         int width = 4096;
         int height = 2160;
+
+ */
 
 
         double nearPlane = -1000, farPlane = 1000;
@@ -49,7 +47,7 @@ public class Raytracer {
         //String objPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Sentence_Splashes.obj").getAbsolutePath();
 
         //Calibration
-        //String objPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Calibration\\Calibrateobj.obj").getAbsolutePath();
+        String objPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Calibration\\Calibrateobj.obj").getAbsolutePath();
 
         //String path2 = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\Raytracer\\LocalFiles\\ObjFiles\\Ring.obj").getAbsolutePath();
         String path = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\Raytracer\\LocalFiles\\ObjFiles\\Ring.obj").getAbsolutePath();
@@ -117,7 +115,31 @@ public class Raytracer {
         //Light light02 = new Directional(100, Color.blue, new Vector3D(0,-10,0), new Vector3D(0,0,0));
         //Light light03 = new Point(10f, Color.white, new Vector3D(0, -1, -2.5));
 
-        Scene scene = new Scene(new Color(220, 20, 60));
+        Scene scene = new Scene(new Color(37,40,40));
+        //String groundPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Aftermath_Scene\\Ground.obj").getAbsolutePath();
+        String greenSoldiersPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Aftermath_Scene\\Green_Soldiers.obj").getAbsolutePath();
+        String redSoldiersPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Aftermath_Scene\\Red_Soldiers.obj").getAbsolutePath();
+        String truckAndTurretPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Aftermath_Scene\\TruckAndTurret.obj").getAbsolutePath();
+        String boxesPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Aftermath_Scene\\Boxes.obj").getAbsolutePath();
+        String tanksPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Aftermath_Scene\\Tanks.obj").getAbsolutePath();
+        String armouredTrucksPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Aftermath_Scene\\ArmoredTrucks.obj").getAbsolutePath();
+
+        String truckAndTurretMTL = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Aftermath_Scene\\TruckAndTurret.mtl").getAbsolutePath();
+        String armouredTrucksMTL = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Aftermath_Scene\\ArmoredTrucks.mtl").getAbsolutePath();
+        //Obj.RenderObj(scene, objPath, Material.ALBEDO(Color.LIGHT_GRAY));
+        //Obj.RenderObj(scene, groundPath, Material.ALBEDO(Color.LIGHT_GRAY));
+
+        //Obj.RenderObj(scene, greenSoldiersPath, Material.ALBEDO(Color.LIGHT_GRAY));
+        //Obj.RenderObj(scene, redSoldiersPath, Material.ALBEDO(Color.LIGHT_GRAY));
+        Obj.RenderObj(scene, truckAndTurretPath, truckAndTurretMTL);
+        Obj.RenderObj(scene, boxesPath, Material.ALBEDO(Color.LIGHT_GRAY));
+        Obj.RenderObj(scene, tanksPath, Material.ALBEDO(Color.LIGHT_GRAY));
+        Obj.RenderObj(scene, armouredTrucksPath, armouredTrucksMTL);
+
+        //Lights
+        Light light02 = new Point(5f, Color.white, new Vector3D(0, 0, -7));
+
+        //Camera camera = new Camera(new Vector3D(-0.005, -0.005, -5.5), nearPlane, farPlane, 30, width, height);
         Camera camera = new Camera(new Vector3D(-0.005, -0.005, -5.5), nearPlane, farPlane, 30, width, height);
 
         Renderer.renderScene(width, height, camera, scene);

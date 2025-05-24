@@ -8,6 +8,7 @@ import edu.up.isgc.raytracer.shapes.Object3D;
 import java.awt.*;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Stack;
 
 public class BBTree {
     private BBNode root;
@@ -30,6 +31,7 @@ public class BBTree {
         insert(root, object);
     }
 
+    /*
     private void insert(BBNode node, Object3D object) {
         // If current node is a leaf, split it
         if (node.isLeaf()) {
@@ -60,6 +62,47 @@ public class BBTree {
         // Update this node's bounding box
         node.updateBoundingBox();
     }
+
+     */
+
+    private void insert(BBNode node, Object3D object) {
+        BBNode currentNode = node;
+        Stack<BBNode> path = new Stack<>();
+        // If current node is a leaf, split it
+        do{
+            path.push(currentNode);
+            if (currentNode.isLeaf()) {
+                 // Create new children
+                 currentNode.left = new BBNode(currentNode.object);
+                 currentNode.right = new BBNode(object);
+
+                 // Update this node to be internal
+                 currentNode.object = null;
+                 //currentNode.updateBoundingBox();
+                 while(!path.isEmpty()){
+                     path.pop().updateBoundingBox();
+                 }
+                 return;
+             }
+             // Decide which child to insert into based on which would result
+             // in the smallest increase in surface area
+             BoundingBox leftBB = BoundingBox.surroundingBox(currentNode.left.bbox, object.getBB());
+             BoundingBox rightBB = BoundingBox.surroundingBox(currentNode.right.bbox, object.getBB());
+
+             double leftCost = leftBB.getSurfaceArea() - currentNode.left.bbox.getSurfaceArea();
+             double rightCost = rightBB.getSurfaceArea() - currentNode.right.bbox.getSurfaceArea();
+
+             if (leftCost < rightCost) {
+                currentNode = currentNode.left;
+            } else {
+                currentNode = currentNode.right;
+            }
+             // Update this node's bounding box
+             //currentNode.updateBoundingBox();
+
+        }while(true);
+    }
+
 
     public Intersection[] traverse(Ray ray) {
         return traverse(root, ray);

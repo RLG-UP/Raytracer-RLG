@@ -4,6 +4,7 @@ import edu.up.isgc.raytracer.lighting.Material;
 import edu.up.isgc.raytracer.shapes.models.Face;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
@@ -44,6 +45,35 @@ public class MTLReader {
                 if (patternNewMTL.matcher(line).find()) {
                     // If this is not the first material, create and store the previous one
                     if (currentName != null) {
+                        /*
+                        if(texture!=null) {
+                            Material material = new Material(
+                                    ks != null ? ks : 0f,
+                                    ns != null ? ns : 0f,
+                                    ka != null ? ka : 0f,
+                                    0f,
+                                    ni != null ? ni : 0f,
+                                    d != null ? d : 0f,
+                                    texture,
+                                    currentName
+                            );
+                            System.out.println("Saving material: " + currentName);
+
+                        }else{
+                            Material material = new Material(
+                                    ks != null ? ks : 0f,
+                                    ns != null ? ns : 0f,
+                                    ka != null ? ka : 0f,
+                                    0f,
+                                    ni != null ? ni : 0f,
+                                    d != null ? d : 0f,
+                                    Color.LIGHT_GRAY,
+                                    currentName
+                            );
+
+                        }
+
+                         */
                         Material material = new Material(
                                 ks != null ? ks : 0f,
                                 ns != null ? ns : 0f,
@@ -55,7 +85,7 @@ public class MTLReader {
                                 currentName
                         );
                         System.out.println("Saving material: " + currentName);
-                        mtlDictionary.put(currentName, material);
+                        mtlDictionary.put(currentName, material);mtlDictionary.put(currentName, material);
                     }
 
                     // Reset values for the new material
@@ -91,7 +121,8 @@ public class MTLReader {
 
             // Create the last material
             if (currentName != null) {
-                Material material = new Material(
+                Material material = null;
+                material = new Material(
                         ks != null ? ks : 0f,
                         ns != null ? ns : 0f,
                         ka != null ? ka : 0f,
@@ -101,6 +132,31 @@ public class MTLReader {
                         texture,
                         currentName
                 );
+                /*
+                if(texture!=null) {
+                    material = new Material(
+                            ks != null ? ks : 0f,
+                            ns != null ? ns : 0f,
+                            ka != null ? ka : 0f,
+                            0f,
+                            ni != null ? ni : 0f,
+                            d != null ? d : 0f,
+                            texture,
+                            currentName
+                    );
+                }else{
+                    material = new Material(
+                            ks != null ? ks : 0f,
+                            ns != null ? ns : 0f,
+                            ka != null ? ka : 0f,
+                            0f,
+                            ni != null ? ni : 0f,
+                            d != null ? d : 0f,
+                            Color.LIGHT_GRAY,
+                            currentName
+                    );
+                }
+*/
                 System.out.println("Saving LAST material: " + currentName);
                 mtlDictionary.put(currentName, material);
             }

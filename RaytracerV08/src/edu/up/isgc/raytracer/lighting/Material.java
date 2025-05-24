@@ -52,6 +52,17 @@ public class Material {
         this.setColor(color);
     }
 
+    public Material(float specular, float shininess, float ambient, float reflectivity, float refraction, float transparency, Color color, String name) {
+        this.setSpecular(specular);
+        this.setShininess(shininess);
+        this.setAmbient(ambient);
+        this.setReflectivity(reflectivity);
+        this.setRefraction(refraction);
+        this.setTransparency(transparency);
+        this.setColor(color);
+        this.setName(name);
+    }
+
 
     public float getSpecular() {
         return specular;
@@ -153,5 +164,8 @@ public class Material {
     }
     public static Material MIRROR(Color color){
         return new Material(1f, 10f, 0.1f,1.0f,0.3f,0.1f, color);
+    }
+    public static Material ALBEDO(Color color){
+        return new Material(0.5f, 1000f, 0.1f,0.01f,0.01f,0.01f, color);
     }
 }

@@ -67,9 +67,6 @@ public class Polygon {
                     Double[] v3 = Vertex.getVertexes().get(coord3);
 
                     if(!Texture.getTexture().isEmpty()) {
-                        Double[] t1 = Texture.getTexture().get(texture1);
-                        Double[] t2 = Texture.getTexture().get(texture2);
-                        Double[] t3 = Texture.getTexture().get(texture3);
                         if(!NormalVertex.getNormalVertexes().isEmpty()) {
                             Double[] nV1 = NormalVertex.getNormalVertexes().get(normal1);
                             Double[] nV2 = NormalVertex.getNormalVertexes().get(normal2);
