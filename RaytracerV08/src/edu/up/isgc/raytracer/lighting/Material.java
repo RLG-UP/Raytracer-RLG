@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class Material {
     private Color color = Color.magenta;
-    private float specular = 0;     //ks - Ns
+    private float specular = 0f;     //ks - Ns
     private float shininess = 0;    //p
     private float ambient = 0;      // ka - Ka
     private float reflectivity = 0;

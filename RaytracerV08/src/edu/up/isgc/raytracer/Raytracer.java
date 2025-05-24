@@ -154,24 +154,24 @@ public class Raytracer {
         Polygon brownBunnies = new Polygon(brownBunniesPath, new Color(95, 100, 100), 0.0, 0.0, brownBunniesTEX);
         Polygon whiteBunnies = new Polygon(whiteBunniesPath, new Color(95, 100, 100), 0.0, 0.0, whiteBunniesTEX);
         Polygon teddyBear = new Polygon(teddyBearPath, Color.BLACK, 0.0, 0.0, teddyBearTEX);
-        Polygon greenChamaleon = new Polygon(greenChamaleonPath, Color.BLACK, 0.0, 0.0, greenChamaleonTEX);
+        //Polygon greenChamaleon = new Polygon(greenChamaleonPath, Color.BLACK, 0.0, 0.0, whiteBunniesTEX);
 
         scene.addPolygon( brownBunnies );
         scene.addPolygon( whiteBunnies );
         scene.addPolygon( teddyBear );
-        scene.addPolygon( greenChamaleon );
+        //scene.addPolygon( greenChamaleon );
 
-        Obj.RenderObj(scene, orangeToyGun_BodyPath, Material.PLASTIC(new Color(100, 0, 200)));
+        Obj.RenderObj(scene, orangeToyGun_BodyPath, Material.PLASTIC(new Color(150, 10, 10)));
         Obj.RenderObj(scene, blackToyGun_DetailsPath, Material.PLASTIC(new Color(5,5,5)));
         Obj.RenderObj(scene, coolAssSoldierPath, Material.PLASTIC(new Color(10,60,120)));
-        //Obj.RenderObj(scene, greenChamaleonPath, Material.GROUND(new Color(20,30,10)));
+        Obj.RenderObj(scene, greenChamaleonPath, Material.GROUND(new Color(7,15,5)));
 
         //BAD GUYS
         //Obj.RenderObj(scene, objPath, Material.GROUND(new Color(130,97,92)));
         //Obj.RenderObj(scene, truckAndTurretPath, Material.PLASTIC(new Color(63, 15, 11)));
         //Obj.RenderObj(scene, tanksPath, Material.PLASTIC(new Color(90,96,69)));
 
-/*
+
         Obj.RenderObj(scene, greenSoldiersPath, Material.PLASTIC(new Color(3,48,15)));
         Obj.RenderObj(scene, redSoldiersPath, Material.PLASTIC(new Color(63, 15, 11)));
         Obj.RenderObj(scene, boxesPath, Material.PLASTIC(new Color(42,48,30)));
@@ -182,7 +182,7 @@ public class Raytracer {
         scene.addPolygon( tanks );
         scene.addPolygon( truckAndTurret );
 
- */
+
         //Obj.RenderObj(scene, armouredTrucksPath, armouredTrucksMTL, null);
 
 
@@ -199,13 +199,13 @@ public class Raytracer {
         //Light light05 = new Spot(5f, new Color(192,167,156), new Vector3D(0, 5, 0), new Vector3D(0, 0, 0), 1f, 1f);
 
 
-        //Light light0D = new Directional(1, Color.white, new Vector3D(0,0,10), new Vector3D(0, 0, 0));
-
+        //Light light0D = new Directional(1, Color.white, new Vector3D(10,0,10), new Vector3D(0, 0, 0));
+        //Light light0S= new Spot(1f, new Color(246,220,189),new Vector3D(20,10,10), new Vector3D(0, 0, 0), 1f, 1f);
 /*
         Light light01 = new Spot(1f, new Color(246,220,189), new Vector3D(-6, -1.5, -7), new Vector3D(0, 0, 0), 1f, 1f);
         Light light02 = new Spot(1f, new Color(246,220,189), new Vector3D(6, -1.5, -7), new Vector3D(0, 0, 0), 1f, 1f);
         Light light03 = new Spot(1f, new Color(246,220,189), new Vector3D(-6, 5, 3), new Vector3D(0, 0, 0), 1f, 1f);
-        Light light04 = new Spot(1f, new Color(246,220,189), new Vector3D(3, 10, 7), new Vector3D(0, 0, 0), 1f, 1f);
+
 
  */
 

@@ -19,9 +19,9 @@ public class Texture {
 
     public static Vector3D ericson(Vector3D point, Vector3D v1, Vector3D v2, Vector3D v3, Vector3D n1, Vector3D n2, Vector3D n3) {
 
-        Vector3D e1 = Vector3D.subtract(v1,v2).scale(1);
-        Vector3D e2 = Vector3D.subtract(v1,v3).scale(1);
-        Vector3D eP = Vector3D.subtract(v1,point).scale(1);
+        Vector3D e1 = Vector3D.subtract(v1,v2).scale(-1);
+        Vector3D e2 = Vector3D.subtract(v1,v3).scale(-1);
+        Vector3D eP = Vector3D.subtract(v1,point).scale(-1);
 
         /*
         Vector3D triNormal = Vector3D.crossProduct(e1,e2).normalize();
@@ -74,8 +74,8 @@ public class Texture {
         //return n1.scale(u).add(n2.scale(v)).add(n3.scale(w)).normalize();
         //return n1.add(n2).add(n3).scale(1.0/3.0).normalize();
 
-        double texU = w * n1.x + v * n2.x + u * n3.x;
-        double texV = w * n1.y + v * n2.y + u * n3.y;
+        double texU = u * n1.x + v * n2.x + w * n3.x;
+        double texV = u * n1.y + v * n2.y + w * n3.y;
 
         return new Vector3D(texU, texV, 0);
     }

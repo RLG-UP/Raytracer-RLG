@@ -57,6 +57,8 @@ public class Triangle extends Object3D {
         this.setParent(parent);
         this.setMaterial(material);
         this.setHasMaterial(true);
+        super.refraction = material.getRefraction();
+        super.transparency = material.getTransparency();
     }
 
     public Triangle(Vector3D A, Vector3D B, Vector3D C, Vector3D nA, Vector3D nB, Vector3D nC , Vector3D tA, Vector3D tB, Vector3D tC, Color color, double refraction, double transparency, Polygon parent) {
@@ -79,6 +81,7 @@ public class Triangle extends Object3D {
     }
 
     public Triangle(Vector3D A, Vector3D B, Vector3D C, Vector3D nA, Vector3D nB, Vector3D nC , Vector3D tA, Vector3D tB, Vector3D tC, Polygon parent, Material material) {
+        // In Triangle constructor:
         super(material);
         this.setA(A);
         this.setB(B);

@@ -74,7 +74,6 @@ public class Polygon {
                             Double[] nV1 = NormalVertex.getNormalVertexes().get(normal1);
                             Double[] nV2 = NormalVertex.getNormalVertexes().get(normal2);
                             Double[] nV3 = NormalVertex.getNormalVertexes().get(normal3);
-
                             //System.out.println("Face: " + faceCount + " // Material: " + Face.findMaterialByIndex(faceCount).getName());
                             shape.add(new Triangle(
                                     new Vector3D(v1[0], v1[1], v1[2]),

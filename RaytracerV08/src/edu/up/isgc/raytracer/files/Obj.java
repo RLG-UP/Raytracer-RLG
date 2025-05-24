@@ -183,6 +183,7 @@ public class Obj {
     }
 
     // Modified createTriangle method
+
     private static Triangle createTriangle(
             ArrayList<Double[]> vertices,
             ArrayList<Double[]> texCoords,
@@ -232,12 +233,17 @@ public class Obj {
                     material
             );
         } else if (hasNormals) {
-            return new Triangle(
-                    triVertices[0], triVertices[1], triVertices[2],
-                    triNormals[0], triNormals[1], triNormals[2],
-                    material != null ? material.getColor() : Scene.background,
-                    0, 0, null
-            );
+            if(material != null){
+                return new Triangle(
+                        triVertices[0], triVertices[1], triVertices[2],
+                        triNormals[0], triNormals[1], triNormals[2],null, material);
+            }else{
+                return new Triangle(
+                        triVertices[0], triVertices[1], triVertices[2],
+                        triNormals[0], triNormals[1], triNormals[2], Scene.background,0, 0, null
+                );
+            }
+
         } else {
             return new Triangle(
                     triVertices[0], triVertices[1], triVertices[2],
