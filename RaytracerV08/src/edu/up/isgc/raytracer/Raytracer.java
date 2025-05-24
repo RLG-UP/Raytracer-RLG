@@ -142,6 +142,7 @@ public class Raytracer {
 
         String orangeToyGun_BodyPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Aftermath_Scene\\OrangeToyGun_Body.obj").getAbsolutePath();
         String blackToyGun_DetailsPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Aftermath_Scene\\BlackToyGun_Details.obj").getAbsolutePath();
+        String coinsPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Aftermath_Scene\\Coins.obj").getAbsolutePath();
 
         String teddyBearPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Aftermath_Scene\\TeddyBear.obj").getAbsolutePath();
         BufferedImage teddyBearTEX = ImageIO.read(new File("C:\\Users\\rodlo\\Downloads\\Aftermath\\Added\\Bear_obj\\texbear.png"));
@@ -151,19 +152,26 @@ public class Raytracer {
         String greenChamaleonPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Aftermath_Scene\\GreenChamaleon.obj").getAbsolutePath();
         BufferedImage greenChamaleonTEX = ImageIO.read(new File("C:\\Users\\rodlo\\Downloads\\Aftermath\\Added\\Suse_3dscan_obj\\tex\\suse_scan_aligned_v01.png"));
 
+        String rocketPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Aftermath_Scene\\Rocket.obj").getAbsolutePath();
+        BufferedImage rocketTEX = ImageIO.read(new File("C:\\Users\\rodlo\\Downloads\\Aftermath\\Toy Rocket 4K\\Toy Rocket_Toy Ship_BaseColor.png"));
+
+        //Polygon greenChamaleon = new Polygon(greenChamaleonPath, Color.BLACK, 0.0, 0.0, whiteBunniesTEX);
+        //scene.addPolygon( greenChamaleon );
+
+
         Polygon brownBunnies = new Polygon(brownBunniesPath, new Color(95, 100, 100), 0.0, 0.0, brownBunniesTEX);
         Polygon whiteBunnies = new Polygon(whiteBunniesPath, new Color(95, 100, 100), 0.0, 0.0, whiteBunniesTEX);
         Polygon teddyBear = new Polygon(teddyBearPath, Color.BLACK, 0.0, 0.0, teddyBearTEX);
-        //Polygon greenChamaleon = new Polygon(greenChamaleonPath, Color.BLACK, 0.0, 0.0, whiteBunniesTEX);
-
+        Polygon rocket = new Polygon(rocketPath, Color.BLACK, 1, 0.0, rocketTEX);
         scene.addPolygon( brownBunnies );
         scene.addPolygon( whiteBunnies );
         scene.addPolygon( teddyBear );
-        //scene.addPolygon( greenChamaleon );
+        scene.addPolygon( rocket );
 
         Obj.RenderObj(scene, orangeToyGun_BodyPath, Material.PLASTIC(new Color(150, 10, 10)));
         Obj.RenderObj(scene, blackToyGun_DetailsPath, Material.PLASTIC(new Color(5,5,5)));
         Obj.RenderObj(scene, coolAssSoldierPath, Material.PLASTIC(new Color(10,60,120)));
+        Obj.RenderObj(scene, coinsPath, Material.PLASTIC(new Color(150,100,0)));
         Obj.RenderObj(scene, greenChamaleonPath, Material.GROUND(new Color(7,15,5)));
 
         //BAD GUYS
@@ -181,6 +189,8 @@ public class Raytracer {
         scene.addPolygon( armouredTrucks );
         scene.addPolygon( tanks );
         scene.addPolygon( truckAndTurret );
+
+
 
 
         //Obj.RenderObj(scene, armouredTrucksPath, armouredTrucksMTL, null);
