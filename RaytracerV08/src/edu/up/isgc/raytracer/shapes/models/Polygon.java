@@ -306,6 +306,7 @@ public class Polygon {
                         Double[] t1 = Texture.getTexture().get(texture1);
                         Double[] t2 = Texture.getTexture().get(texture2);
                         Double[] t3 = Texture.getTexture().get(texture3);
+                        Material material = new Material(0.0f,0.0f,0.0f,0.0f,(float)refraction, (float)transparency,textureMap, String.valueOf(textureMap.hashCode()));
 
                         if(!NormalVertex.getNormalVertexes().isEmpty()) {
                             Double[] nV1 = NormalVertex.getNormalVertexes().get(normal1);
@@ -321,10 +322,8 @@ public class Polygon {
                                     new Vector3D(t1[0], t1[1], t1[2]),
                                     new Vector3D(t2[0], t2[1], t2[2]),
                                     new Vector3D(t3[0], t3[1], t3[2]),
-                                    color,
-                                    refraction,
-                                    transparency,
-                                    this
+                                    this,
+                                    material
                             ));
                         }
                     }else{

@@ -59,7 +59,7 @@ public class Obj {
         if (objData == null) return;
 
         // Create polygon from data
-        Polygon polygon = material != null ? createPolygonFromObjData(objData, material) : createPolygonFromObjData(objData);
+        Polygon polygon = material != null ? createPolygonFromObjData(objData, material) : createPolygonFromObjData(objData, null);
         if (polygon != null) {
             //polygon.rotate(0, 90, 0);
             //polygon.scale(10,10,10);
@@ -122,16 +122,19 @@ public class Obj {
     }
 
     // Second method: Creates triangles from collected data
+    // In your Obj class:
+
+    // Modified createPolygonFromObjData method
     public static Polygon createPolygonFromObjData(ObjData objData, Material mat) {
         if (objData == null) return null;
 
         ArrayList<Triangle> triangles = new ArrayList<>();
 
         for (FaceData face : objData.faces) {
-            Material material = mat == null ? Material.findByName(face.materialName) : mat;
+            Material material = mat != null ? mat : Material.findByName(face.materialName);
             if (material == null) {
                 System.err.println("Warning: Material not found - " + face.materialName);
-                material = Material.ALBEDO(Color.magenta); // Default material
+                material = Material.ALBEDO(Color.MAGENTA); // Default material
             }
 
             // Handle both triangles and quads
@@ -160,44 +163,26 @@ public class Obj {
                     }
                 }
 
-                // Create the triangle
+                // Always create triangle with texture coordinates if available
+                Triangle triangle = createTriangle(
+                        objData.vertices,
+                        objData.texCoords,
+                        objData.normals,
+                        triVertexIndices,
+                        triTexIndices,
+                        triNormalIndices,
+                        material
+                );
 
-                if(material == null) {
-                    Triangle triangle = createTriangle(
-                            objData.vertices,
-                            objData.texCoords,
-                            objData.normals,
-                            triVertexIndices,
-                            triTexIndices,
-                            triNormalIndices,
-                            material
-                    );
-                    if (triangle != null) {
-                        triangles.add(triangle);
-                    }
-                }else{
-                    Triangle triangle = createTriangle(
-                            objData.vertices,
-                            objData.normals,
-                            triVertexIndices,
-                            triNormalIndices,
-                            material
-                    );
-                    if (triangle != null) {
-                        triangles.add(triangle);
-                    }
+                if (triangle != null) {
+                    triangles.add(triangle);
                 }
-
             }
         }
-
         return new Polygon(triangles);
     }
 
-    public static Polygon createPolygonFromObjData(ObjData objData){ return Obj.createPolygonFromObjData(objData, null);}
-
-    // Helper method to create a single triangle
-
+    // Modified createTriangle method
     private static Triangle createTriangle(
             ArrayList<Double[]> vertices,
             ArrayList<Double[]> texCoords,
@@ -211,61 +196,8 @@ public class Obj {
         Vector3D[] triTexCoords = new Vector3D[3];
         Vector3D[] triNormals = new Vector3D[3];
 
-        for (int j = 0; j < 3; j++) {
-            // Vertices (required)
-                triVertices[j] = new Vector3D(
-                        vertices.get(vertexIndices[j] - 1)[0],
-                        vertices.get(vertexIndices[j] - 1)[1],
-                        vertices.get(vertexIndices[j] - 1)[2]
-                );
-
-
-            // Texture coordinates (optional)
-            if (!texCoords.isEmpty() && texIndices[j] > 0 ) {
-                Double[] tex = texCoords.get(texIndices[j] - 1);
-                triTexCoords[j] = new Vector3D(tex[0], tex[1], tex.length > 2 ? tex[2] : 0);
-            }
-
-            // Normals (optional)
-            if (!normals.isEmpty() && normalIndices[j] > 0 ){
-                Double[] norm = normals.get(normalIndices[j] - 1);
-                triNormals[j] = new Vector3D(norm[0], norm[1], norm[2]);
-            }
-        }
-
-        // Create the appropriate triangle based on available data
-        if (triTexCoords[0] != null && triNormals[0] != null) {
-            return new Triangle(
-                    triVertices[0], triVertices[1], triVertices[2],
-                    triNormals[0], triNormals[1], triNormals[2],
-                    triTexCoords[0], triTexCoords[1], triTexCoords[2],
-                    null, // parent polygon
-                    material
-            );
-        }
-        else if (triNormals[0] != null) {
-            return new Triangle(
-                    triVertices[0], triVertices[1], triVertices[2],
-                    triNormals[0], triNormals[1], triNormals[2], null, material
-            );
-        }
-        else {
-            return new Triangle(
-                    triVertices[0], triVertices[1], triVertices[2],
-                    Color.WHITE, 0, 0
-            );
-        }
-    }
-
-    private static Triangle createTriangle(
-            ArrayList<Double[]> vertices,
-            ArrayList<Double[]> normals,
-            int[] vertexIndices,
-            int[] normalIndices,
-            Material material
-    ) {
-        Vector3D[] triVertices = new Vector3D[3];
-        Vector3D[] triNormals = new Vector3D[3];
+        boolean hasTexCoords = !texCoords.isEmpty() && texIndices[0] > 0;
+        boolean hasNormals = !normals.isEmpty() && normalIndices[0] > 0;
 
         for (int j = 0; j < 3; j++) {
             // Vertices (required)
@@ -275,25 +207,42 @@ public class Obj {
                     vertices.get(vertexIndices[j] - 1)[2]
             );
 
+            // Texture coordinates (if available)
+            if (hasTexCoords) {
+                Double[] tex = texCoords.get(texIndices[j] - 1);
+                triTexCoords[j] = new Vector3D(tex[0], tex[1], tex.length > 2 ? tex[2] : 0);
+            }
 
-            // Normals (optional)
-            if (!normals.isEmpty() && normalIndices[j] > 0 ){
+            // Normals (if available)
+            if (hasNormals) {
                 Double[] norm = normals.get(normalIndices[j] - 1);
                 triNormals[j] = new Vector3D(norm[0], norm[1], norm[2]);
             }
         }
 
-        if (triNormals[0] != null) {
+        // Create triangle based on available data
+        if (hasTexCoords && material != null && material.getTextureMap() != null) {
+            return new Triangle(
+                    triVertices[0], triVertices[1], triVertices[2],
+                    hasNormals ? triNormals[0] : null,
+                    hasNormals ? triNormals[1] : null,
+                    hasNormals ? triNormals[2] : null,
+                    triTexCoords[0], triTexCoords[1], triTexCoords[2],
+                    null, // parent polygon
+                    material
+            );
+        } else if (hasNormals) {
             return new Triangle(
                     triVertices[0], triVertices[1], triVertices[2],
                     triNormals[0], triNormals[1], triNormals[2],
-                    null, material
+                    material != null ? material.getColor() : Scene.background,
+                    0, 0, null
             );
-        }
-        else {
+        } else {
             return new Triangle(
                     triVertices[0], triVertices[1], triVertices[2],
-                    Color.WHITE, 0, 0
+                    material != null ? material.getColor() : Scene.background,
+                    0, 0
             );
         }
     }
