@@ -171,4 +171,7 @@ public class Material {
     public static Material PLASTIC(Color color){
         return new Material(1f, 100f, 0.1f,0.00f,0.00f,0.00f, color);
     }
+    public static Material GROUND(Color color){
+        return new Material(0.0f, 10000f, 0.1f,0.00f,0.00f,0.00f, color);
+    }
 }

@@ -51,7 +51,7 @@ public class Raytracer {
         //String objPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Sentence_Splashes.obj").getAbsolutePath();
 
         //Calibration
-        //String objPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Calibration\\Calibrateobj.obj").getAbsolutePath();
+        String objPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Calibration\\Calibrateobj.obj").getAbsolutePath();
 
         //String path2 = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\Raytracer\\LocalFiles\\ObjFiles\\Ring.obj").getAbsolutePath();
         String path = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\Raytracer\\LocalFiles\\ObjFiles\\Ring.obj").getAbsolutePath();
@@ -134,36 +134,37 @@ public class Raytracer {
         String truckAndTurretMTL = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Aftermath_Scene\\TruckAndTurret.mtl").getAbsolutePath();
         //String armouredTrucksMTL = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Aftermath_Scene\\ArmoredTrucks.mtl").getAbsolutePath();
         BufferedImage armouredTrucksTEX = ImageIO.read(new File("C:\\Users\\rodlo\\Downloads\\Aftermath\\Added\\apcf.obj\\apcf_1.png"));
-        //Obj.RenderObj(scene, objPath, Material.ALBEDO(Color.LIGHT_GRAY));
+        //Obj.RenderObj(scene, objPath, Material.GROUND(new Color(130,97,92)));
         //Obj.RenderObj(scene, objPath, mtlPath);
-        Obj.RenderObj(scene, groundPath, Material.PLASTIC( new Color(192,167,156)));
+        Obj.RenderObj(scene, groundPath, Material.GROUND(new Color(140,106,86)));
         //Obj.RenderObj(scene, groundPath, groundMTL);
 
 
-        Obj.RenderObj(scene, greenSoldiersPath, Material.PLASTIC(new Color(4,48,10)));
+        Obj.RenderObj(scene, greenSoldiersPath, Material.PLASTIC(new Color(3,48,15)));
         Obj.RenderObj(scene, redSoldiersPath, Material.PLASTIC(new Color(63, 15, 11)));
         //Obj.RenderObj(scene, truckAndTurretPath, Material.PLASTIC(new Color(63, 15, 11)));
-        Obj.RenderObj(scene, boxesPath, Material.PLASTIC(new Color(4,48,10)));
+        Obj.RenderObj(scene, boxesPath, Material.PLASTIC(new Color(42,48,30)));
         //Obj.RenderObj(scene, tanksPath, Material.PLASTIC(new Color(90,96,69)));
 
 
         Polygon armouredTrucks = new Polygon(armouredTrucksPath, Color.BLACK, 0.0, 0.0, armouredTrucksTEX);
         Polygon tanks = new Polygon(tanksPath, Color.BLACK, 0.0, 0.0, armouredTrucksTEX);
-        Polygon truckAndTurre = new Polygon(truckAndTurretPath, Color.BLACK, 0.0, 0.0, armouredTrucksTEX);
+        Polygon truckAndTurret = new Polygon(truckAndTurretPath, Color.BLACK, 0.0, 0.0, armouredTrucksTEX);
         scene.addPolygon( armouredTrucks );
         scene.addPolygon( tanks );
-        scene.addPolygon( truckAndTurre );
+        scene.addPolygon( truckAndTurret );
         //Obj.RenderObj(scene, armouredTrucksPath, armouredTrucksMTL, null);
 
 
         //Obj.RenderObj(scene, truckAndTurretPath, truckAndTurretMTL, null);
         //Lights
 
-        Light light01 = new Point(25f, new Color(192,167,156), new Vector3D(-6, 2, -3));
-        Light light02 = new Point(5f, new Color(192,167,156), new Vector3D(6, 0.5, -7));
-        Light light03 = new Point(45f, new Color(192,167,156), new Vector3D(-6.5, 3, 3));
-        Light light04 = new Point(45f, new Color(192,167,156), new Vector3D(8.5, 3, 3));
-        Light light05 = new Point(10f, new Color(192,167,156), new Vector3D(-3, 3, 0));
+        Light light01 = new Point(25f, Color.WHITE, new Vector3D(-6, 2, -3));
+        Light light02 = new Point(5f, new Color(192,167,156), new Vector3D(3, 0.5, -7));
+        Light light03 = new Point(55f, Color.WHITE, new Vector3D(-4, 3, 9));
+        Light light04 = new Point(55f, Color.WHITE, new Vector3D(13, 5, 4));
+        Light light05 = new Point(10f, Color.WHITE, new Vector3D(-3, 1, -5));
+        Light light06 = new Point(5f, new Color(192,167,156), new Vector3D(-3, 0, -7));
 
         //Light light05 = new Spot(5f, new Color(192,167,156), new Vector3D(0, 5, 0), new Vector3D(0, 0, 0), 1f, 1f);
 
