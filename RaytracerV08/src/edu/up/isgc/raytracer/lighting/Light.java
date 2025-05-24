@@ -83,6 +83,7 @@ public abstract class Light {
         float refraction = 0.4f;
         float transparency = 0.0f;
 
+
         if(object.getHasMaterial()){
             Material material = object.getMaterial();
             ks = material.getSpecular();
@@ -173,6 +174,7 @@ public abstract class Light {
         );
 
          */
+
 
         Color reflectionColor = Scene.castReflection(point, N, object, 10);
         Color refractionColor = Scene.castRefraction(point, N, object, 15);

@@ -214,7 +214,7 @@ public class Scene {
 
 
 
-    /*
+
     public static Intersection findRayIntersection(Ray ray, Object3D ignoreShape) {
         Intersection closestHit = Scene.BBTree.traverse(ray);
         if (closestHit == null) return null;
@@ -231,7 +231,7 @@ public class Scene {
         //return closestHit;
     }
 
-     */
+
 
 
 
@@ -332,7 +332,7 @@ public class Scene {
         Vector3D lightDir = Vector3D.subtract(light.getPosition(), surfacePoint).normalize().scale(-1);
 
         // Step 2: Offset the ray origin slightly along the normal to prevent self-intersection
-        Vector3D shadowOrigin = surfacePoint.add(normal.scale(Camera.getEpsilon()));
+        Vector3D shadowOrigin = surfacePoint.add(normal.scale(Camera.getShadowEpsilon()));
 
         // Step 3: Cast shadow ray toward the light
         Ray shadowRay = new Ray(shadowOrigin, lightDir);
@@ -349,7 +349,7 @@ public class Scene {
 
         if (obj == sourceObject) return false; // Skip the object casting the shadow ray
 
-        if (intersection.distance > Camera.getEpsilon() && intersection.distance < lightDistance) {
+        if (intersection.distance > Camera.getShadowEpsilon() && intersection.distance < lightDistance) {
             return true; // Object blocks the light — surface is in shadow
         }
 
@@ -383,6 +383,7 @@ public class Scene {
             // Recurse
             Color reflectedColor = castReflection(hit.point, hit.getNormal(), hit.object, recursionLimit - 1);
 
+
             // Combine local and reflected colors
             int r = clamp((int) (localColor.getRed() * 0.5 + reflectedColor.getRed() * 0.5), 0, 255);
             int g = clamp((int) (localColor.getGreen() * 0.5 + reflectedColor.getGreen() * 0.5), 0, 255);
@@ -406,6 +407,7 @@ public class Scene {
         Vector3D incoming = Vector3D.subtract(surfacePoint, Camera.getCameraPosition()).normalize().scale(-1);
         double c1 = normal.dot(incoming);
 
+
         if (c1 < 0) {
             c1 = -c1;
         }else{
@@ -413,6 +415,7 @@ public class Scene {
             n1 = n2;
             n2 = 1.0;
         }
+
 
         double eta = n1 / n2;
         double theta = Math.acos(c1);

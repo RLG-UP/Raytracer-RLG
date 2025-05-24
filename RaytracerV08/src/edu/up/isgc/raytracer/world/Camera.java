@@ -10,6 +10,7 @@ import edu.up.isgc.raytracer.Vector3D;
 public class Camera {
     public static Vector3D position;  // The position of the camera in 3D space
     private static double epsilon = 0.00001;
+    private static double shadowEpsilon = 0.001;
     public double[] clipPlanes = new double[2];
     private double fov;
     private int width, height;
@@ -64,5 +65,13 @@ public class Camera {
 
     public void setWidth(int width) {
         this.width = width;
+    }
+
+    public static double getShadowEpsilon() {
+        return shadowEpsilon;
+    }
+
+    public static void setShadowEpsilon(double shadowEpsilon) {
+        Camera.shadowEpsilon = shadowEpsilon;
     }
 }

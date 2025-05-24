@@ -23,15 +23,17 @@ import java.io.IOException;
 public class Raytracer {
     public static void main(String[] args) throws IOException {
         // Image settings
-/*
+
         int width = 1600;
         int height = 900;
 
- */
 
+/*
 
         int width = 4096;
         int height = 2160;
+
+ */
 
 
 
@@ -127,7 +129,7 @@ public class Raytracer {
         String armouredTrucksPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Aftermath_Scene\\ArmoredTrucks.obj").getAbsolutePath();
 
         BufferedImage armouredTrucksTEX = ImageIO.read(new File("C:\\Users\\rodlo\\Downloads\\Aftermath\\Added\\apcf.obj\\apcf_1.png"));
-        Obj.RenderObj(scene, groundPath, Material.GROUND(new Color(140,106,86)));
+        //Obj.RenderObj(scene, groundPath, Material.GROUND(new Color(140,106,86)));
         //Obj.RenderObj(scene, groundPath, groundMTL);
 
         //GOOD GUYS
@@ -171,6 +173,8 @@ public class Raytracer {
         Obj.RenderObj(scene, coinsPath, Material.PLASTIC(new Color(150,100,0)));
         Obj.RenderObj(scene, greenChamaleonPath, Material.GROUND(new Color(3,10,1)));
 
+
+
         //BAD GUYS
         //Obj.RenderObj(scene, objPath, Material.GROUND(new Color(130,97,92)));
         //Obj.RenderObj(scene, truckAndTurretPath, Material.PLASTIC(new Color(63, 15, 11)));
@@ -190,18 +194,27 @@ public class Raytracer {
 
 
 
+        //String objPath03 = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Scream_Scene\\RenderOBJS\\Rage_Background.obj").getAbsolutePath();
+        //Obj.RenderObj(scene, path, Material.GLASS(Color.WHITE));
+        Polygon polygon = new Polygon(path, Material.MIRROR(Color.WHITE));
+        polygon.rotate((float)90, (float)0, (float)0);
+        scene.addPolygon(polygon);
+        Obj.RenderObj(scene, path, Material.MIRROR(Color.RED));
+
         //Obj.RenderObj(scene, armouredTrucksPath, armouredTrucksMTL, null);
 
 
         //Obj.RenderObj(scene, truckAndTurretPath, truckAndTurretMTL, null);
         //Lights
 
-        Light light01 = new Point(25f, Color.WHITE, new Vector3D(-6, 2, -3));
-        Light light02 = new Point(5f, new Color(192,167,156), new Vector3D(3, 0.5, -7));
-        Light light03 = new Point(55f, Color.WHITE, new Vector3D(-4, 3, 9));
-        Light light04 = new Point(55f, Color.WHITE, new Vector3D(13, 5, 4));
-        Light light05 = new Point(10f, Color.WHITE, new Vector3D(-3, 1, -5));
-        Light light06 = new Point(5f, new Color(192,167,156), new Vector3D(-3, 0, -7));
+        //Light light01 = new Point(25f, Color.WHITE, new Vector3D(-6, 2, -3));
+        //Light light02 = new Point(5f, new Color(192,167,156), new Vector3D(3, 0.5, -7));
+        Light light03 = new Point(2f, Color.WHITE, new Vector3D(-1, 0.2, -2.5));
+        Light light04 = new Point(2f, Color.WHITE, new Vector3D(1.75, 1.2, -2));
+        Light light05 = new Point(0.1f, new Color(192,167,156), new Vector3D(0.5, 0, -5));
+        Light light06 = new Point(1f, new Color(192,167,156), new Vector3D(-1, 0, -4));
+        //Light light05 = new Point(10f, Color.WHITE, new Vector3D(-3, 1, -5));
+        //Light light06 = new Point(5f, new Color(192,167,156), new Vector3D(-3, 0, -7));
 
         //Light light05 = new Spot(5f, new Color(192,167,156), new Vector3D(0, 5, 0), new Vector3D(0, 0, 0), 1f, 1f);
 
