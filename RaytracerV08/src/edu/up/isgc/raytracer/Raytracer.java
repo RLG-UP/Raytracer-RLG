@@ -122,7 +122,6 @@ public class Raytracer {
         Scene scene = new Scene(new Color(58,58,58));
         //Scene scene = new Scene(Color.white);
         String groundPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Aftermath_Scene\\Ground.obj").getAbsolutePath();
-        //String groundPath = new File("C:\\Users\\rodlo\\Downloads\\Ground.obj").getAbsolutePath();
         String greenSoldiersPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Aftermath_Scene\\Green_Soldiers.obj").getAbsolutePath();
         String redSoldiersPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Aftermath_Scene\\Red_Soldiers.obj").getAbsolutePath();
         String truckAndTurretPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Aftermath_Scene\\TruckAndTurret.obj").getAbsolutePath();
@@ -130,29 +129,60 @@ public class Raytracer {
         String tanksPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Aftermath_Scene\\Tanks.obj").getAbsolutePath();
         String armouredTrucksPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Aftermath_Scene\\ArmoredTrucks.obj").getAbsolutePath();
 
-        String groundMTL = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Aftermath_Scene\\Ground.mtl").getAbsolutePath();
-        String truckAndTurretMTL = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Aftermath_Scene\\TruckAndTurret.mtl").getAbsolutePath();
-        //String armouredTrucksMTL = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Aftermath_Scene\\ArmoredTrucks.mtl").getAbsolutePath();
         BufferedImage armouredTrucksTEX = ImageIO.read(new File("C:\\Users\\rodlo\\Downloads\\Aftermath\\Added\\apcf.obj\\apcf_1.png"));
-        //Obj.RenderObj(scene, objPath, Material.GROUND(new Color(130,97,92)));
-        //Obj.RenderObj(scene, objPath, mtlPath);
-        Obj.RenderObj(scene, groundPath, Material.GROUND(new Color(140,106,86)));
+        //Obj.RenderObj(scene, groundPath, Material.GROUND(new Color(140,106,86)));
         //Obj.RenderObj(scene, groundPath, groundMTL);
 
+        //GOOD GUYS
+        String brownBunniesPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Aftermath_Scene\\BrownBunnies.obj").getAbsolutePath();
+        BufferedImage brownBunniesTEX = ImageIO.read(new File("C:\\Users\\rodlo\\Downloads\\Aftermath\\Added\\TwoBunnies\\brownTexture.jpg"));
 
-        Obj.RenderObj(scene, greenSoldiersPath, Material.PLASTIC(new Color(3,48,15)));
-        Obj.RenderObj(scene, redSoldiersPath, Material.PLASTIC(new Color(63, 15, 11)));
+        String whiteBunniesPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Aftermath_Scene\\WhiteBunnies.obj").getAbsolutePath();
+        BufferedImage whiteBunniesTEX = ImageIO.read(new File("C:\\Users\\rodlo\\Downloads\\Aftermath\\Added\\TwoBunnies\\whiteTexture.jpg"));
+
+        String orangeToyGun_BodyPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Aftermath_Scene\\OrangeToyGun_Body.obj").getAbsolutePath();
+        String blackToyGun_DetailsPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Aftermath_Scene\\BlackToyGun_Details.obj").getAbsolutePath();
+
+        String teddyBearPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Aftermath_Scene\\TeddyBear.obj").getAbsolutePath();
+        BufferedImage teddyBearTEX = ImageIO.read(new File("C:\\Users\\rodlo\\Downloads\\Aftermath\\Added\\Bear_obj\\texbear.png"));
+
+        String coolAssSoldierPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Aftermath_Scene\\CoolAssSoldier.obj").getAbsolutePath();
+
+        String greenChamaleonPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Aftermath_Scene\\GreenChamaleon.obj").getAbsolutePath();
+        BufferedImage greenChamaleonTEX = ImageIO.read(new File("C:\\Users\\rodlo\\Downloads\\Aftermath\\Added\\Suse_3dscan_obj\\tex\\suse_scan_aligned_v01.png"));
+
+        Polygon brownBunnies = new Polygon(brownBunniesPath, new Color(95, 100, 100), 0.0, 0.0, brownBunniesTEX);
+        Polygon whiteBunnies = new Polygon(whiteBunniesPath, new Color(95, 100, 100), 0.0, 0.0, whiteBunniesTEX);
+        Polygon teddyBear = new Polygon(teddyBearPath, Color.BLACK, 0.0, 0.0, teddyBearTEX);
+        Polygon greenChamaleon = new Polygon(greenChamaleonPath, Color.BLACK, 0.0, 0.0, greenChamaleonTEX);
+
+        scene.addPolygon( brownBunnies );
+        scene.addPolygon( whiteBunnies );
+        scene.addPolygon( teddyBear );
+        scene.addPolygon( greenChamaleon );
+
+        Obj.RenderObj(scene, orangeToyGun_BodyPath, Material.PLASTIC(new Color(100, 0, 200)));
+        Obj.RenderObj(scene, blackToyGun_DetailsPath, Material.PLASTIC(new Color(5,5,5)));
+        Obj.RenderObj(scene, coolAssSoldierPath, Material.PLASTIC(new Color(10,60,120)));
+        //Obj.RenderObj(scene, greenChamaleonPath, Material.GROUND(new Color(20,30,10)));
+
+        //BAD GUYS
+        //Obj.RenderObj(scene, objPath, Material.GROUND(new Color(130,97,92)));
         //Obj.RenderObj(scene, truckAndTurretPath, Material.PLASTIC(new Color(63, 15, 11)));
-        Obj.RenderObj(scene, boxesPath, Material.PLASTIC(new Color(42,48,30)));
         //Obj.RenderObj(scene, tanksPath, Material.PLASTIC(new Color(90,96,69)));
 
-
+/*
+        Obj.RenderObj(scene, greenSoldiersPath, Material.PLASTIC(new Color(3,48,15)));
+        Obj.RenderObj(scene, redSoldiersPath, Material.PLASTIC(new Color(63, 15, 11)));
+        Obj.RenderObj(scene, boxesPath, Material.PLASTIC(new Color(42,48,30)));
         Polygon armouredTrucks = new Polygon(armouredTrucksPath, Color.BLACK, 0.0, 0.0, armouredTrucksTEX);
         Polygon tanks = new Polygon(tanksPath, Color.BLACK, 0.0, 0.0, armouredTrucksTEX);
         Polygon truckAndTurret = new Polygon(truckAndTurretPath, Color.BLACK, 0.0, 0.0, armouredTrucksTEX);
         scene.addPolygon( armouredTrucks );
         scene.addPolygon( tanks );
         scene.addPolygon( truckAndTurret );
+
+ */
         //Obj.RenderObj(scene, armouredTrucksPath, armouredTrucksMTL, null);
 
 
