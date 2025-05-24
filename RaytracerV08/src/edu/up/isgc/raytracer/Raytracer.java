@@ -23,21 +23,18 @@ import java.io.IOException;
 public class Raytracer {
     public static void main(String[] args) throws IOException {
         // Image settings
-
+/*
         int width = 1600;
         int height = 900;
 
+ */
 
 
-
-
-/*
         int width = 4096;
         int height = 2160;
 
 
 
- */
         double nearPlane = -1000, farPlane = 1000;
         //String objPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\optimized-3d-capturedphotogrammetry-hat\\Hat.obj").getAbsolutePath();
         //String mtlPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\optimized-3d-capturedphotogrammetry-hat\\Hat.mtl").getAbsolutePath();
@@ -130,7 +127,7 @@ public class Raytracer {
         String armouredTrucksPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Aftermath_Scene\\ArmoredTrucks.obj").getAbsolutePath();
 
         BufferedImage armouredTrucksTEX = ImageIO.read(new File("C:\\Users\\rodlo\\Downloads\\Aftermath\\Added\\apcf.obj\\apcf_1.png"));
-        //Obj.RenderObj(scene, groundPath, Material.GROUND(new Color(140,106,86)));
+        Obj.RenderObj(scene, groundPath, Material.GROUND(new Color(140,106,86)));
         //Obj.RenderObj(scene, groundPath, groundMTL);
 
         //GOOD GUYS
@@ -155,7 +152,7 @@ public class Raytracer {
         String rocketPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Aftermath_Scene\\Rocket.obj").getAbsolutePath();
         BufferedImage rocketTEX = ImageIO.read(new File("C:\\Users\\rodlo\\Downloads\\Aftermath\\Toy Rocket 4K\\Toy Rocket_Toy Ship_BaseColor.png"));
 
-        //Polygon greenChamaleon = new Polygon(greenChamaleonPath, Color.BLACK, 0.0, 0.0, whiteBunniesTEX);
+        //Polygon greenChamaleon = new Polygon(greenChamaleonPath, Color.BLACK, 0.0, 0.0, greenChamaleonTEX);
         //scene.addPolygon( greenChamaleon );
 
 
@@ -172,7 +169,7 @@ public class Raytracer {
         Obj.RenderObj(scene, blackToyGun_DetailsPath, Material.PLASTIC(new Color(5,5,5)));
         Obj.RenderObj(scene, coolAssSoldierPath, Material.PLASTIC(new Color(10,60,120)));
         Obj.RenderObj(scene, coinsPath, Material.PLASTIC(new Color(150,100,0)));
-        Obj.RenderObj(scene, greenChamaleonPath, Material.GROUND(new Color(7,15,5)));
+        Obj.RenderObj(scene, greenChamaleonPath, Material.GROUND(new Color(3,10,1)));
 
         //BAD GUYS
         //Obj.RenderObj(scene, objPath, Material.GROUND(new Color(130,97,92)));
