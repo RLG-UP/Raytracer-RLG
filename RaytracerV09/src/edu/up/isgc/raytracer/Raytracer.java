@@ -23,15 +23,16 @@ import java.io.IOException;
 public class Raytracer {
     public static void main(String[] args) throws IOException {
         // Image settings
+
+        int width = 800;
+        int height = 450;
+
+
 /*
-        int width = 1600;
-        int height = 900;
-*/
-
-
         int width = 4096;
         int height = 2160;
 
+ */
 
 
         double nearPlane = -1000, farPlane = 1000;
@@ -47,7 +48,7 @@ public class Raytracer {
         //String objPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Sentence_Splashes.obj").getAbsolutePath();
 
         //Calibration
-        //String objPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Calibration\\Calibrateobj.obj").getAbsolutePath();
+        String objPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Calibration\\Calibrateobj.obj").getAbsolutePath();
 
         //String path2 = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\Raytracer\\LocalFiles\\ObjFiles\\Ring.obj").getAbsolutePath();
         //String path = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\Raytracer\\LocalFiles\\ObjFiles\\Ring.obj").getAbsolutePath();
@@ -121,7 +122,7 @@ public class Raytracer {
         //Light light03 = new Point(10f, Color.white, new Vector3D(0, -1, -2.5));
 */
 
-
+/*
         //War Is Childs Play Scene
 
         Scene scene = new Scene(new Color(158,158,158));
@@ -227,8 +228,48 @@ public class Raytracer {
  */
 
 
-        //Camera camera = new Camera(new Vector3D(-0.005, -0.005, -5.5), nearPlane, farPlane, 30, width, height);
+        //Pandemonium Scene
+        Scene scene = new Scene(Color.BLACK);
 
+        //NINJA
+        String ninjaHelmetPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Pandemonium_Scene\\RENDER_Objs\\NinjaHelmet.obj").getAbsolutePath();
+        String ninjaBodyPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Pandemonium_Scene\\RENDER_Objs\\NinjaBody.obj").getAbsolutePath();
+        String ninjaArmsPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Pandemonium_Scene\\RENDER_Objs\\NinjaArms.obj").getAbsolutePath();
+        String ninjaSkullPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Pandemonium_Scene\\RENDER_Objs\\NinjaSkull.obj").getAbsolutePath();
+        String ninjaLightPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Pandemonium_Scene\\RENDER_Objs\\NinjaLight.obj").getAbsolutePath();
+        BufferedImage armouredTrucksTEX = ImageIO.read(new File("C:\\Users\\rodlo\\Downloads\\Aftermath\\Added\\apcf.obj\\apcf_1.png"));
+
+        Obj.RenderObj(scene, ninjaHelmetPath, Material.PANDEMONIUM_MIRROR(new Color(10,15,15)));
+        Obj.RenderObj(scene, ninjaBodyPath, Material.PANDEMONIUM_MIRROR(new Color(10,15,15)));
+        Obj.RenderObj(scene, ninjaArmsPath, Material.RAGE_GLASS(new Color(255,10,30)));
+        Obj.RenderObj(scene, ninjaSkullPath, Material.RAGE_GLASS(new Color(255,10,30)));
+        Obj.RenderObj(scene, ninjaLightPath, Material.PANDEMONIUM_MIRROR(new Color(10,15,15)));
+
+
+
+        //EVIL MECHA
+        String ballMechaCablesPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Pandemonium_Scene\\RENDER_Objs\\BallMecha_Cables.obj").getAbsolutePath();
+        String ballMechaCasesPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Pandemonium_Scene\\RENDER_Objs\\BallMecha_Cases.obj").getAbsolutePath();
+        String ballMechaCentralPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Pandemonium_Scene\\RENDER_Objs\\BallMecha_Central.obj").getAbsolutePath();
+        String ballMechaCoilsPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Pandemonium_Scene\\RENDER_Objs\\BallMecha_Coils.obj").getAbsolutePath();
+        String ballMechaDisksPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Pandemonium_Scene\\RENDER_Objs\\BallMecha_Disks.obj").getAbsolutePath();
+        String ballMechaMetalPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Pandemonium_Scene\\RENDER_Objs\\BallMecha_Metal.obj").getAbsolutePath();
+        String ballMechaRodsPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Pandemonium_Scene\\RENDER_Objs\\BallMecha_Rods.obj").getAbsolutePath();
+
+
+        Obj.RenderObj(scene, ballMechaCablesPath, Material.PLASTIC(Color.LIGHT_GRAY));
+        Obj.RenderObj(scene, ballMechaCasesPath, Material.ALBEDO(Color.LIGHT_GRAY));
+        Obj.RenderObj(scene, ballMechaCentralPath, Material.PLASTIC(Color.LIGHT_GRAY));
+        Obj.RenderObj(scene, ballMechaCoilsPath, Material.ALBEDO(Color.LIGHT_GRAY));
+        Obj.RenderObj(scene, ballMechaDisksPath, Material.ALBEDO(Color.LIGHT_GRAY));
+        Obj.RenderObj(scene, ballMechaMetalPath, Material.PANDEMONIUM_METAL(Color.CYAN));
+        Obj.RenderObj(scene, ballMechaRodsPath, Material.ALBEDO(Color.LIGHT_GRAY));
+
+
+        Light light01 = new Point(1f, Color.WHITE, new Vector3D(0, 0, -1));
+        Light light02 = new Point(0.5f, Color.WHITE, new Vector3D(0, 1, 0.2));
+        //Light light0S= new Spot(3f, Color.WHITE ,new Vector3D(-10,-20,0), new Vector3D(1.5, 1.5, -3), 1f, 1f);
+        Camera camera = new Camera(new Vector3D(-0.005, -0.005, -4.75), nearPlane, farPlane, 30, width, height);
         Renderer.renderScene(width, height, camera, scene);
 
     }
