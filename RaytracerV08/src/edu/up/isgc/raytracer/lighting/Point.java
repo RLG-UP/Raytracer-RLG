@@ -25,4 +25,9 @@ public class Point extends Light{
     public void setAttenuation(float d){
        super.attenuation =  this.getIntensity()/(1+d);
     }
+
+    @Override
+    public float calculateAttenuation(Vector3D point){
+        return (float)(this.getIntensity()/(1+point.value));
+    }
 }

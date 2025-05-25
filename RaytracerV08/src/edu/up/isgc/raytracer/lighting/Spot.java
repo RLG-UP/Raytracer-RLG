@@ -22,28 +22,6 @@ public class Spot extends Light{
 
     @Override
     public Vector3D getDirection(Vector3D point) {
-        Vector3D L = Vector3D.subtract(point, super.getPosition());
-        Vector3D Lnormalized = L.normalize();
-
-        // Calculate spot factor
-        float cosAngle = (float) clamp(this.direction.dot(Lnormalized), -1, 1);
-        float angle = (float) Math.acos(cosAngle);
-
-        float spotFactor;
-        if (angle <= this.getInnerAngle()) {
-            spotFactor = 1.0f;
-        } else if (angle >= this.getOuterAngle()) {
-            spotFactor = 0.0f;
-        } else {
-            spotFactor = (this.getOuterAngle() - angle) /
-                    (this.getOuterAngle() - this.getInnerAngle());
-        }
-
-        // Calculate attenuation separately (don't modify class field)
-        float distance = (float)L.value;
-        float attenuation = spotFactor / (1.0f + 0.1f * distance + 0.01f * distance * distance);
-
-        this.setAttenuation(attenuation);
         return this.direction.normalize().scale(1);
     }
 
@@ -70,5 +48,25 @@ public class Spot extends Light{
 
     public void setOuterAngle(float outerAngle) {
         this.outerAngle = outerAngle;
+    }
+
+    @Override
+    public float calculateAttenuation(Vector3D point) {
+        Vector3D L = Vector3D.subtract(point, super.getPosition());
+        Vector3D Lnormalized = L.normalize();
+
+        // Calculate spot factor
+        float cosAngle = (float) clamp(this.direction.dot(Lnormalized), -1, 1);
+        float angle = (float) Math.acos(cosAngle);
+        float spotFactor;
+        if (angle <= this.getInnerAngle()) {
+            spotFactor = 1.0f;
+        } else if (angle >= this.getOuterAngle()) {
+            spotFactor = 0.0f;
+        } else {
+            spotFactor = (this.getOuterAngle() - angle) /
+                    (this.getOuterAngle() - this.getInnerAngle());
+        }
+        return (float)((spotFactor * this.getInnerAngle())/(L.value));
     }
 }

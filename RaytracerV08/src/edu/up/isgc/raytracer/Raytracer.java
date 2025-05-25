@@ -118,8 +118,8 @@ public class Raytracer {
         //Light light02 = new Directional(100, Color.blue, new Vector3D(0,-10,0), new Vector3D(0,0,0));
         //Light light03 = new Point(10f, Color.white, new Vector3D(0, -1, -2.5));
 
-        //Scene scene = new Scene(new Color(58,58,58));
-        Scene scene = new Scene(Color.BLACK);
+        Scene scene = new Scene(new Color(158,158,158));
+        //Scene scene = new Scene(Color.BLACK);
         String groundPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Aftermath_Scene\\Ground.obj").getAbsolutePath();
         String greenSoldiersPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Aftermath_Scene\\Green_Soldiers.obj").getAbsolutePath();
         String redSoldiersPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Aftermath_Scene\\Red_Soldiers.obj").getAbsolutePath();
@@ -129,7 +129,7 @@ public class Raytracer {
         String armouredTrucksPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Aftermath_Scene\\ArmoredTrucks.obj").getAbsolutePath();
 
         BufferedImage armouredTrucksTEX = ImageIO.read(new File("C:\\Users\\rodlo\\Downloads\\Aftermath\\Added\\apcf.obj\\apcf_1.png"));
-        //Obj.RenderObj(scene, groundPath, Material.GROUND(new Color(140,106,86)));
+        Obj.RenderObj(scene, groundPath, Material.GROUND(new Color(140,106,86)));
         //Obj.RenderObj(scene, groundPath, groundMTL);
 
         //GOOD GUYS
@@ -154,10 +154,13 @@ public class Raytracer {
         String rocketPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Aftermath_Scene\\Rocket.obj").getAbsolutePath();
         BufferedImage rocketTEX = ImageIO.read(new File("C:\\Users\\rodlo\\Downloads\\Aftermath\\Toy Rocket 4K\\Toy Rocket_Toy Ship_BaseColor.png"));
 
+        String wallPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Aftermath_Scene\\Wall.obj").getAbsolutePath();
+        Obj.RenderObj(scene, wallPath, Material.GROUND(new Color(13,13,13)));
+
         //Polygon greenChamaleon = new Polygon(greenChamaleonPath, Color.BLACK, 0.0, 0.0, greenChamaleonTEX);
         //scene.addPolygon( greenChamaleon );
-
 /*
+
         Polygon brownBunnies = new Polygon(brownBunniesPath, new Color(95, 100, 100), 0.0, 0.0, brownBunniesTEX);
         Polygon whiteBunnies = new Polygon(whiteBunniesPath, new Color(95, 100, 100), 0.0, 0.0, whiteBunniesTEX);
         Polygon teddyBear = new Polygon(teddyBearPath, Color.BLACK, 0.0, 0.0, teddyBearTEX);
@@ -172,6 +175,7 @@ public class Raytracer {
         Obj.RenderObj(scene, coolAssSoldierPath, Material.PLASTIC(new Color(10,60,120)));
         Obj.RenderObj(scene, coinsPath, Material.PLASTIC(new Color(150,100,0)));
         Obj.RenderObj(scene, greenChamaleonPath, Material.GROUND(new Color(3,10,1)));
+
 
 
         //BAD GUYS
@@ -190,9 +194,7 @@ public class Raytracer {
         scene.addPolygon( tanks );
         scene.addPolygon( truckAndTurret );
 
-
  */
-
 
 
         //String objPath03 = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Scream_Scene\\RenderOBJS\\Rage_Background.obj").getAbsolutePath();
@@ -216,17 +218,28 @@ public class Raytracer {
         scene.addPolygon(polygon);
         scene.addObject(new Sphere(new Vector3D(0, 0, 2), 1, Material.MIRROR(new Color(220, 20, 60))));
         scene.addObject(new Sphere(new Vector3D(-1.1, 0, 2), 0.7, Material.MIRROR(Color.WHITE)));
-        
+
  */
 
         //Lights
 
         //Light light01 = new Point(25f, Color.WHITE, new Vector3D(-6, 2, -3));
         //Light light02 = new Point(5f, new Color(192,167,156), new Vector3D(3, 0.5, -7));
+/*
         Light light03 = new Point(2f, Color.WHITE, new Vector3D(-1, 0.2, -2.5));
         Light light04 = new Point(2f, Color.WHITE, new Vector3D(1.75, 1.2, -2));
         Light light05 = new Point(0.1f, new Color(192,167,156), new Vector3D(0.5, 0, -5));
         Light light06 = new Point(1f, new Color(192,167,156), new Vector3D(-1, 0, -4));
+
+ */
+
+        //Light light07 = new Point(1f, new Color(192,167,156), new Vector3D(0, 0, -5));
+        Light light0S01 = new Spot(2f, Color.WHITE,new Vector3D(1, -1, -2.5), new Vector3D(-1, 0.2, -2.5), 0.5f, 1f);
+        //Light light0S02 = new Spot(0.5f, Color.WHITE,new Vector3D(-1.75, -1.2, -2), new Vector3D(1.75, 1.2, -2), 0.5f, 1f);
+        //Light light0S03 = new Spot(0.025f, new Color(192,167,156),new Vector3D(-0.5, 0, -5), new Vector3D(0.5, 0, -5), 0.5f, 1f);
+        //Light light0S04 = new Spot(0.25f, new Color(192,167,156),new Vector3D(1, 0, -4), new Vector3D(-1, 0, -4), 0.5f, 1f);
+        //Light light0S_BACK = new Spot(2f, new Color(100,140,190),new Vector3D(50, -30, 100), new Vector3D(-2.2, 0.65, -1.3), 0.5f, 1f);
+
         //Light light05 = new Point(10f, Color.WHITE, new Vector3D(-3, 1, -5));
         //Light light06 = new Point(5f, new Color(192,167,156), new Vector3D(-3, 0, -7));
 

@@ -99,7 +99,8 @@ public abstract class Light {
 
         float ambientIntensity = ka * Light.getAmbientLight();
 
-        for (Light light : Light.getLights()) {
+        for (Light light: Light.getLights()) {
+
             Vector3D l = Vector3D.getZero();
             double lightDistance = Double.MAX_VALUE;
             boolean inShadow = false;
@@ -117,7 +118,7 @@ public abstract class Light {
             float blinn = 0;
 
             if (!inShadow) {
-                lambertian = (float) Math.max(N.dot(l) * light.getAttenuation(), 0.0);
+                lambertian = (float) Math.max(N.dot(l) * light.calculateAttenuation(point), 0.0);
                 Vector3D h = Vector3D.subtract(Camera.getCameraPosition(), point).normalize().add(l).normalize();
                 blinn = (float) (ks * Math.pow(Math.max(N.dot(h), 0.0), p));
             }
@@ -309,4 +310,6 @@ public abstract class Light {
 
 
     public static ArrayList<Light> getLights(){return Light.lights;}
+    public abstract float calculateAttenuation(Vector3D point);
+
 }

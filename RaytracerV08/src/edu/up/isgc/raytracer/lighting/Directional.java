@@ -20,6 +20,11 @@ public class Directional extends Light{
     }
 
     @Override
+    public float calculateAttenuation(Vector3D point) {
+        return super.getIntensity();
+    }
+
+    @Override
     public void setAttenuation(float d){ super.attenuation = super.getIntensity(); }
 
     public void setDirection(Vector3D direction) {
