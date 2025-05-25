@@ -179,8 +179,8 @@ public abstract class Light {
          */
 
 
-        Color reflectionColor = Scene.castReflection(point, N, object, 10);
-        Color refractionColor = Scene.castRefraction(point, N, object, 15);
+        Color reflectionColor = Scene.castReflection(point, N, object, 50);
+        Color refractionColor = Scene.castRefraction(point, N, object, 50);
 
         /*
         Vector3D viewDir = Vector3D.subtract(Camera.getCameraPosition(), point).normalize();

@@ -455,7 +455,7 @@ public class Scene {
             Vector3D viewDir = Vector3D.subtract(Camera.getCameraPosition(), surfacePoint).normalize();
             float cosTheta = Math.max(0f, (float)viewDir.dot(normal.normalize()));
             float fresnel = Light.schlick(cosTheta, (float)ignoreShape.refraction);
-
+            
             //Color localColor = hit.object.getColor();
             for(Light l : Light.getLights()) {
                 if(isInShadow(hit.point, hit.getNormal(), l, ignoreShape)) {

@@ -156,6 +156,10 @@ public class Material {
         return new Material(1.0f, 8000f, 0.1f,0.0f,0.9f,0.7f, color);
     }
 
+    public static Material RAGE_GLASS(Color color){
+        return new Material(1.0f, 8000f, 0.1f,0.8f,0.37f,0.5f, color);
+    }
+
     public static Material GLASS(){
         return Material.GLASS(Color.white);
     }
@@ -163,7 +167,7 @@ public class Material {
         return new Material(1f, 300f, 0.1f,0.1f,0.0f,0.0f, color);
     }
     public static Material MIRROR(Color color){
-        return new Material(1f, 80000f, 0.1f,0.9f,0.0f,1.0f, color);
+        return new Material(1f, 80000f, 0.1f,0.9f,0.0f,0.0f, color);
     }
     public static Material ALBEDO(Color color){
         return new Material(1.0f, 1000f, 0.1f,0.00f,0.00f,0.00f, color);
