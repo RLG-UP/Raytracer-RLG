@@ -239,11 +239,12 @@ public class Raytracer {
         String ninjaLightPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Pandemonium_Scene\\RENDER_Objs\\NinjaLight.obj").getAbsolutePath();
         BufferedImage armouredTrucksTEX = ImageIO.read(new File("C:\\Users\\rodlo\\Downloads\\Aftermath\\Added\\apcf.obj\\apcf_1.png"));
 
-        Obj.RenderObj(scene, ninjaHelmetPath, Material.PANDEMONIUM_MIRROR(new Color(10,15,15)));
-        Obj.RenderObj(scene, ninjaBodyPath, Material.PANDEMONIUM_MIRROR(new Color(10,15,15)));
+        //new Color(10,15,15)
+        Obj.RenderObj(scene, ninjaHelmetPath, Material.PANDEMONIUM_METAL(new Color(5,7,7)));
+        Obj.RenderObj(scene, ninjaBodyPath, Material.PANDEMONIUM_METAL(new Color(5,7,7)));
         Obj.RenderObj(scene, ninjaArmsPath, Material.RAGE_GLASS(new Color(255,10,30)));
         Obj.RenderObj(scene, ninjaSkullPath, Material.RAGE_GLASS(new Color(255,10,30)));
-        Obj.RenderObj(scene, ninjaLightPath, Material.PANDEMONIUM_MIRROR(new Color(10,15,15)));
+        Obj.RenderObj(scene, ninjaLightPath, Material.PANDEMONIUM_METAL(new Color(5,7,7)));
 
 
 
@@ -262,13 +263,13 @@ public class Raytracer {
         Obj.RenderObj(scene, ballMechaCentralPath, Material.PLASTIC(Color.LIGHT_GRAY));
         Obj.RenderObj(scene, ballMechaCoilsPath, Material.ALBEDO(Color.LIGHT_GRAY));
         Obj.RenderObj(scene, ballMechaDisksPath, Material.ALBEDO(Color.LIGHT_GRAY));
-        Obj.RenderObj(scene, ballMechaMetalPath, Material.PANDEMONIUM_METAL(Color.CYAN));
+        Obj.RenderObj(scene, ballMechaMetalPath, Material.PANDEMONIUM_METAL(new Color(0,2,2)));
         Obj.RenderObj(scene, ballMechaRodsPath, Material.ALBEDO(Color.LIGHT_GRAY));
 
 
-        Light light01 = new Point(1f, Color.WHITE, new Vector3D(0, 0, -1));
+        Light light01 = new Point(1f, Color.WHITE, new Vector3D(0, 0.5, 0));
         Light light02 = new Point(0.5f, Color.WHITE, new Vector3D(0, 1, 0.2));
-        //Light light0S= new Spot(3f, Color.WHITE ,new Vector3D(-10,-20,0), new Vector3D(1.5, 1.5, -3), 1f, 1f);
+        Light light0S= new Spot(3f, Color.WHITE ,new Vector3D(-10,-20,0), new Vector3D(1.5, 1.5, -3), 1f, 1f);
         Camera camera = new Camera(new Vector3D(-0.005, -0.005, -4.75), nearPlane, farPlane, 30, width, height);
         Renderer.renderScene(width, height, camera, scene);
 
