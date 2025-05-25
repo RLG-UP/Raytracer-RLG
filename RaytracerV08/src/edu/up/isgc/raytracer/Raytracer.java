@@ -155,7 +155,7 @@ public class Raytracer {
         BufferedImage rocketTEX = ImageIO.read(new File("C:\\Users\\rodlo\\Downloads\\Aftermath\\Toy Rocket 4K\\Toy Rocket_Toy Ship_BaseColor.png"));
 
         String wallPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Aftermath_Scene\\Wall.obj").getAbsolutePath();
-        Obj.RenderObj(scene, wallPath, Material.GROUND(new Color(13,13,13)));
+        //Obj.RenderObj(scene, wallPath, Material.GROUND(new Color(13,13,13)));
 
         //Polygon greenChamaleon = new Polygon(greenChamaleonPath, Color.BLACK, 0.0, 0.0, greenChamaleonTEX);
         //scene.addPolygon( greenChamaleon );
@@ -234,10 +234,10 @@ public class Raytracer {
  */
 
         //Light light07 = new Point(1f, new Color(192,167,156), new Vector3D(0, 0, -5));
-        Light light0S01 = new Spot(2f, Color.WHITE,new Vector3D(1, -1, -2.5), new Vector3D(-1, 0.2, -2.5), 0.5f, 1f);
-        //Light light0S02 = new Spot(0.5f, Color.WHITE,new Vector3D(-1.75, -1.2, -2), new Vector3D(1.75, 1.2, -2), 0.5f, 1f);
+        //Light light0S01 = new Spot(4.5f, Color.WHITE,new Vector3D(1, -3, -2.5), new Vector3D(-1.2, 0.35, -1.9), 0.5f, 1f);
+        Light light0S02 = new Spot(15f, Color.WHITE,new Vector3D(-1.3, -2, -4), new Vector3D(0.9, 0.3, -2.5), 0.5f, 1f);
         //Light light0S03 = new Spot(0.025f, new Color(192,167,156),new Vector3D(-0.5, 0, -5), new Vector3D(0.5, 0, -5), 0.5f, 1f);
-        //Light light0S04 = new Spot(0.25f, new Color(192,167,156),new Vector3D(1, 0, -4), new Vector3D(-1, 0, -4), 0.5f, 1f);
+        //Light light0S04 = new Spot(10f, new Color(192,167,156),new Vector3D(1, -1.7, 1), new Vector3D(-1.3, 0.1, -4.3), 0.5f, 1f);
         //Light light0S_BACK = new Spot(2f, new Color(100,140,190),new Vector3D(50, -30, 100), new Vector3D(-2.2, 0.65, -1.3), 0.5f, 1f);
 
         //Light light05 = new Point(10f, Color.WHITE, new Vector3D(-3, 1, -5));
