@@ -23,23 +23,19 @@ import java.io.IOException;
 public class Raytracer {
     public static void main(String[] args) throws IOException {
         // Image settings
-/*
+
         int width = 1600;
         int height = 900;
-*/
 
 
 
 
 
+/*
         int width = 4096;
         int height = 2160;
 
-
-
-
-
-
+ */
 
 
         double nearPlane = -1000, farPlane = 1000;
@@ -103,7 +99,7 @@ public class Raytracer {
         String objPath01 = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Scream_Scene\\RenderOBJS\\Rage_Shards2.obj").getAbsolutePath();
         String objPath02 = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Scream_Scene\\RenderOBJS\\Rage_Man.obj").getAbsolutePath();
         String objPath02B = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Scream_Scene\\RenderOBJS\\Rage_Man3.obj").getAbsolutePath();
-        String objPath03 = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Scream_Scene\\RenderOBJS\\Rage_Background.obj").getAbsolutePath();
+        String objPath03 = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Scream_Scene\\RenderOBJS\\Rage_Background2.obj").getAbsolutePath();
         String objPath04 = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Scream_Scene\\RenderOBJS\\BackMirror.obj").getAbsolutePath();
         Obj.RenderObj(scene, objPath, Material.MIRROR(Color.CYAN));
         Obj.RenderObj(scene, objPath01, Material.MIRROR(Color.CYAN));
