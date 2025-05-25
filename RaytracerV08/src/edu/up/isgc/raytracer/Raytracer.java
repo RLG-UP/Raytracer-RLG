@@ -23,19 +23,19 @@ import java.io.IOException;
 public class Raytracer {
     public static void main(String[] args) throws IOException {
         // Image settings
-
+/*
         int width = 1600;
         int height = 900;
+*/
 
 
 
 
-/*
 
         int width = 4096;
         int height = 2160;
 
- */
+
 
 
 
