@@ -366,6 +366,11 @@ public class Scene {
 
         // Step 1: Compute reflected direction
         Vector3D incoming = Vector3D.subtract(surfacePoint, Camera.getCameraPosition()).normalize().scale(-1);
+
+        if (incoming.dot(normal) > 0) {
+            normal = normal.scale(-1);
+        }
+
         Vector3D reflected = Vector3D.subtract(incoming, normal.scale(2 * incoming.dot(normal))).normalize();
 
         // Step 2: Offset origin to avoid self-hit
@@ -383,11 +388,11 @@ public class Scene {
             // Recurse
             Color reflectedColor = castReflection(hit.point, hit.getNormal(), hit.object, recursionLimit - 1);
 
-
             // Combine local and reflected colors
-            int r = clamp((int) (localColor.getRed() * 0.5 + reflectedColor.getRed() * 0.5), 0, 255);
-            int g = clamp((int) (localColor.getGreen() * 0.5 + reflectedColor.getGreen() * 0.5), 0, 255);
-            int b = clamp((int) (localColor.getBlue() * 0.5 + reflectedColor.getBlue() * 0.5), 0, 255);
+
+            int r = clamp((int) (localColor.getRed() * 0.9 + reflectedColor.getRed() * 0.9), 0, 255);
+            int g = clamp((int) (localColor.getGreen() * 0.9 + reflectedColor.getGreen() * 0.9), 0, 255);
+            int b = clamp((int) (localColor.getBlue() * 0.9 + reflectedColor.getBlue() * 0.9), 0, 255);
 
             return new Color(r, g, b);
         }

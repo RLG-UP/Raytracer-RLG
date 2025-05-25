@@ -118,8 +118,8 @@ public class Raytracer {
         //Light light02 = new Directional(100, Color.blue, new Vector3D(0,-10,0), new Vector3D(0,0,0));
         //Light light03 = new Point(10f, Color.white, new Vector3D(0, -1, -2.5));
 
-        Scene scene = new Scene(new Color(58,58,58));
-        //Scene scene = new Scene(Color.white);
+        //Scene scene = new Scene(new Color(58,58,58));
+        Scene scene = new Scene(Color.white);
         String groundPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Aftermath_Scene\\Ground.obj").getAbsolutePath();
         String greenSoldiersPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Aftermath_Scene\\Green_Soldiers.obj").getAbsolutePath();
         String redSoldiersPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Aftermath_Scene\\Red_Soldiers.obj").getAbsolutePath();
@@ -157,7 +157,7 @@ public class Raytracer {
         //Polygon greenChamaleon = new Polygon(greenChamaleonPath, Color.BLACK, 0.0, 0.0, greenChamaleonTEX);
         //scene.addPolygon( greenChamaleon );
 
-
+/*
         Polygon brownBunnies = new Polygon(brownBunniesPath, new Color(95, 100, 100), 0.0, 0.0, brownBunniesTEX);
         Polygon whiteBunnies = new Polygon(whiteBunniesPath, new Color(95, 100, 100), 0.0, 0.0, whiteBunniesTEX);
         Polygon teddyBear = new Polygon(teddyBearPath, Color.BLACK, 0.0, 0.0, teddyBearTEX);
@@ -172,7 +172,6 @@ public class Raytracer {
         Obj.RenderObj(scene, coolAssSoldierPath, Material.PLASTIC(new Color(10,60,120)));
         Obj.RenderObj(scene, coinsPath, Material.PLASTIC(new Color(150,100,0)));
         Obj.RenderObj(scene, greenChamaleonPath, Material.GROUND(new Color(3,10,1)));
-
 
 
         //BAD GUYS
@@ -192,19 +191,32 @@ public class Raytracer {
         scene.addPolygon( truckAndTurret );
 
 
+ */
+
 
 
         //String objPath03 = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Scream_Scene\\RenderOBJS\\Rage_Background.obj").getAbsolutePath();
         //Obj.RenderObj(scene, path, Material.GLASS(Color.WHITE));
+        /*
         Polygon polygon = new Polygon(path, Material.MIRROR(Color.WHITE));
         polygon.rotate((float)90, (float)0, (float)0);
         scene.addPolygon(polygon);
         Obj.RenderObj(scene, path, Material.MIRROR(Color.RED));
 
+         */
+
         //Obj.RenderObj(scene, armouredTrucksPath, armouredTrucksMTL, null);
 
 
         //Obj.RenderObj(scene, truckAndTurretPath, truckAndTurretMTL, null);
+
+
+        String objPath03 = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Scream_Scene\\RenderOBJS\\Rage_Background.obj").getAbsolutePath();
+        Polygon polygon = new Polygon(objPath03, Material.GLASS(Color.BLUE));
+        scene.addPolygon(polygon);
+        scene.addObject(new Sphere(new Vector3D(0, 0, 2), 1, Material.MIRROR(Color.RED)));
+        scene.addObject(new Sphere(new Vector3D(-1.1, 0, 2), 0.7, Material.MIRROR(Color.BLACK)));
+
         //Lights
 
         //Light light01 = new Point(25f, Color.WHITE, new Vector3D(-6, 2, -3));

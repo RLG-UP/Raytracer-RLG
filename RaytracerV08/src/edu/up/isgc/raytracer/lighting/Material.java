@@ -163,10 +163,10 @@ public class Material {
         return new Material(1f, 10f, 0.1f,0.4f,0.7f,0.1f, color);
     }
     public static Material MIRROR(Color color){
-        return new Material(1f, 10000f, 0.1f,1.0f,0.5f,0.0f, color);
+        return new Material(1f, 8000f, 0.1f,0.9f,0.0f,1.0f, color);
     }
     public static Material ALBEDO(Color color){
-        return new Material(0.5f, 1000f, 0.1f,0.00f,0.00f,0.00f, color);
+        return new Material(1.0f, 1000f, 0.1f,0.00f,0.00f,0.00f, color);
     }
     public static Material PLASTIC(Color color){
         return new Material(1f, 100f, 0.1f,0.00f,0.00f,0.00f, color);

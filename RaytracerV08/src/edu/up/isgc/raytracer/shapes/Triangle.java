@@ -201,9 +201,7 @@ public class Triangle extends Object3D {
             Vector3D vectorQ = Vector3D.crossProduct(vectorT, v2v0);
             double v = invDet * D.dot(vectorQ);
             if (!(v < 0 || (u + v) > (1.0 + Camera.getEpsilon()))) {
-                this.u = u;
-                this.v = v;
-                this.w = 1-u-v;
+                double w = 1-u-v;
                 double t = invDet * vectorQ.dot(v1v0);
                 intersection.point = ray.origin.add(D.scale(t));
                 intersection.distance = t;
@@ -228,7 +226,7 @@ public class Triangle extends Object3D {
                 }else{
                     intersection.color = super.getColor();
                 }
-                intersection.setNormal(this.calculateNormalPoint((float) this.u, (float) this.v, (float) this.w));
+                intersection.setNormal(this.calculateNormalPoint((float) u, (float) v, (float) w));
                 return new Intersection[] {intersection};
             }
         }
@@ -243,7 +241,7 @@ public class Triangle extends Object3D {
         return Vector3D.crossProduct(v, w).normalize();
     }
 
-    public Vector3D calculateNormalPoint(float u, float v, float w){ return this.getnA().scale(this.w).add(this.getnB().scale(this.v)).add(this.getnC().scale(this.u)).normalize(); }
+    public Vector3D calculateNormalPoint(float u, float v, float w){ return this.getnA().scale(w).add(this.getnB().scale(v)).add(this.getnC().scale(u)).normalize(); }
 
 /*
     @Override
@@ -255,7 +253,7 @@ public class Triangle extends Object3D {
  */
     @Override
     public Color addLight(Intersection intersection) {
-        Vector3D N = this.getnA().scale(this.w).add(this.getnB().scale(this.v)).add(this.getnC().scale(this.u)).normalize();
+        Vector3D N = intersection.getNormal();
         return Light.calculateColor(N, intersection.point, this, intersection);
     }
 

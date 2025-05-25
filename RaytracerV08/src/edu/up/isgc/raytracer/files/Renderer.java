@@ -125,31 +125,14 @@ public class Renderer {
 
     }
     public static void paintSplit(BufferedImage renderImage, Camera camera, Scene scene, int x, int y, int tileW, int tileH){
+        double aspectRatio = (double) renderImage.getWidth() / renderImage.getHeight();
+        double tanFov = Math.tan(Math.toRadians(camera.getFov()) / 2.0);
         for(int tY= 0; tY<tileH; tY++){
-            //System.out.println("Process: " + x + " // " + (int)((tY/tileH)*100) + "%");
-
-            /*
-            int progress = (int)((Renderer.totalY / (double)renderImage.getHeight()) * 100);
-            if (progress != Renderer.lastProgress && progress % 10 == 0) {
-                System.out.println("Progress: " + progress + "%");
-                Renderer.lastProgress = progress;
-            }
-
-            Renderer.totalY+=1;
-
-             */
 
             for(int tX=0; tX<tileW; tX++){
-                double aspectRatio = (double) renderImage.getWidth() / renderImage.getHeight();
-                double tanFov = Math.tan(Math.toRadians(camera.getFov()) / 2.0);
-                double scale = 1.0;
 
                 int pX = tX + x;
                 int pY = tY + y;
-
-                double px = (2 * ((pX + 0.5) / renderImage.getWidth()) - 1) * aspectRatio * scale;
-                double py = (1 - 2 * ((pY + 0.5) / renderImage.getHeight())) * scale;
-
 
                 double ndcX = (2.0 * (pX + 0.5) / renderImage.getWidth() - 1.0);
                 double ndcY = (1.0 - 2.0 * (pY + 0.5) / renderImage.getHeight());

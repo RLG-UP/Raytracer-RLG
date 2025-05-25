@@ -72,8 +72,8 @@ public class Sphere extends Object3D {
             color = this.getMaterial().getColor();
         }
         // Create intersection points
-        Intersection p0 = new Intersection(A, t0, super.getColor(), this.normal(A));
-        Intersection p1 = new Intersection(B, t1, super.getColor(), this.normal(B));
+        Intersection p0 = new Intersection(A, t0, color, this.normal(A));
+        Intersection p1 = new Intersection(B, t1, color, this.normal(B));
 
         // Return intersections with valid points
         return new Intersection[]{

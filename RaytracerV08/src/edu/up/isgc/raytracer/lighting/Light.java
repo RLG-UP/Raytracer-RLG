@@ -84,6 +84,8 @@ public abstract class Light {
         float transparency = 0.0f;
 
 
+
+
         if(object.getHasMaterial()){
             Material material = object.getMaterial();
             ks = material.getSpecular();
@@ -179,9 +181,11 @@ public abstract class Light {
         Color reflectionColor = Scene.castReflection(point, N, object, 10);
         Color refractionColor = Scene.castRefraction(point, N, object, 15);
 
+        /*
         Vector3D viewDir = Vector3D.subtract(Camera.getCameraPosition(), point).normalize();
         float cosTheta = Math.max(0f, (float)viewDir.dot(N.normalize()));
         float fresnel = reflectivity * Light.schlick(cosTheta, refraction);
+
         //float fresnel = reflectivity * Light.schlick(cosTheta, (float)object.refraction);
         //float transparency = (float)object.transparency;
 
@@ -202,7 +206,37 @@ public abstract class Light {
 
         finalColor = new Color(rI, gI, bI);
 
+         */
+        Vector3D viewDir = Vector3D.subtract(Camera.getCameraPosition(), point).normalize();
+        float cosTheta = Math.max(0f, (float)viewDir.dot(N.normalize()));
+        float fresnel = reflectivity * Light.schlick(cosTheta, refraction);
+        float reflectFactor = fresnel * reflectivity;
+        float refractFactor = (1 - fresnel) * transparency;
+        float baseFactor = 1 - reflectFactor - refractFactor;
 
+// Prevent negative contribution due to floating-point inaccuracies
+        baseFactor = Math.max(0, baseFactor);
+
+        int rI = clamp(Math.round(
+                baseFactor * finalColor.getRed() +
+                        refractFactor * refractionColor.getRed() +
+                        reflectFactor * reflectionColor.getRed()
+        ), 0, 255);
+
+        int gI = clamp(Math.round(
+                baseFactor * finalColor.getGreen() +
+                        refractFactor * refractionColor.getGreen() +
+                        reflectFactor * reflectionColor.getGreen()
+        ), 0, 255);
+
+        int bI = clamp(Math.round(
+                baseFactor * finalColor.getBlue() +
+                        refractFactor * refractionColor.getBlue() +
+                        reflectFactor * reflectionColor.getBlue()
+        ), 0, 255);
+
+
+        finalColor = new Color(rI, gI, bI);
         float gamma = 2.2f;
 
         float r = finalColor.getRed() / 255.0f;
