@@ -88,7 +88,7 @@ public class Raytracer {
         //scene.addPolygon( polygon2 );
 
         //RAGE SCENE
-
+/*
         Scene scene = new Scene(new Color(220,20,60));
         //Scene scene = new Scene(Color.BLACK);
         String objPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Scream_Scene\\RenderOBJS\\Rage_Shards.obj").getAbsolutePath();
@@ -119,11 +119,11 @@ public class Raytracer {
         //Light light0D = new Directional(1, Color.white, new Vector3D(0,0,10), new Vector3D(2, 0, 0));
         //Light light02 = new Directional(100, Color.blue, new Vector3D(0,-10,0), new Vector3D(0,0,0));
         //Light light03 = new Point(10f, Color.white, new Vector3D(0, -1, -2.5));
-
+*/
 
 
         //War Is Childs Play Scene
-/*
+
         Scene scene = new Scene(new Color(158,158,158));
         String groundPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Aftermath_Scene\\Ground.obj").getAbsolutePath();
         String greenSoldiersPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Aftermath_Scene\\Green_Soldiers.obj").getAbsolutePath();
@@ -210,7 +210,7 @@ public class Raytracer {
         Light light0S04 = new Spot(1f, new Color(192,167,156),new Vector3D(1, -1.7, 1), new Vector3D(-1.3, 0.1, -4.3), 0.5f, 1f);
 
         Camera camera = new Camera(new Vector3D(-0.2, -0.005, -5.6), nearPlane, farPlane, 30, width, height);
-*/
+
 
 
 /*
