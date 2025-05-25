@@ -30,10 +30,10 @@ public class Raytracer {
  */
 
 
-
-
         int width = 4096;
         int height = 2160;
+
+
 
 
 
@@ -134,11 +134,17 @@ public class Raytracer {
         //Obj.RenderObj(scene, groundPath, groundMTL);
 
         //GOOD GUYS
-        String brownBunniesPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Aftermath_Scene\\BrownBunnies.obj").getAbsolutePath();
-        BufferedImage brownBunniesTEX = ImageIO.read(new File("C:\\Users\\rodlo\\Downloads\\Aftermath\\Added\\TwoBunnies\\brownTexture.jpg"));
+        //String brownBunniesPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Aftermath_Scene\\BrownBunnies.obj").getAbsolutePath();
+        //BufferedImage brownBunniesTEX = ImageIO.read(new File("C:\\Users\\rodlo\\Downloads\\Aftermath\\Added\\TwoBunnies\\brownTexture.jpg"));
 
         String whiteBunniesPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Aftermath_Scene\\WhiteBunnies.obj").getAbsolutePath();
-        BufferedImage whiteBunniesTEX = ImageIO.read(new File("C:\\Users\\rodlo\\Downloads\\Aftermath\\Added\\TwoBunnies\\whiteTexture.jpg"));
+        String bunniesEarsPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Aftermath_Scene\\BunniesEars.obj").getAbsolutePath();
+        String bunniesEyesPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Aftermath_Scene\\BunniesEyes.obj").getAbsolutePath();
+        String bunniesNosesPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Aftermath_Scene\\BunniesNoses.obj").getAbsolutePath();
+        BufferedImage whiteBunniesTEX = ImageIO.read(new File("C:\\Users\\rodlo\\Downloads\\Aftermath\\Added\\TwoBunnies\\whiteTexture2.jpg"));
+
+        String eyesPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Aftermath_Scene\\Eyes.obj").getAbsolutePath();
+        String eyes02Path = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Aftermath_Scene\\Eyes02.obj").getAbsolutePath();
 
         String orangeToyGun_BodyPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Aftermath_Scene\\OrangeToyGun_Body.obj").getAbsolutePath();
         String blackToyGun_DetailsPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Aftermath_Scene\\BlackToyGun_Details.obj").getAbsolutePath();
@@ -156,17 +162,17 @@ public class Raytracer {
         BufferedImage rocketTEX = ImageIO.read(new File("C:\\Users\\rodlo\\Downloads\\Aftermath\\Toy Rocket 4K\\Toy Rocket_Toy Ship_BaseColor.png"));
 
         String wallPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Aftermath_Scene\\Wall.obj").getAbsolutePath();
-        Obj.RenderObj(scene, wallPath, Material.GROUND(new Color(90,90,90)));
+        Obj.RenderObj(scene, wallPath, Material.GROUND(new Color(60,60,60)));
 
         //Polygon greenChamaleon = new Polygon(greenChamaleonPath, Color.BLACK, 0.0, 0.0, greenChamaleonTEX);
         //scene.addPolygon( greenChamaleon );
 
 
-        Polygon brownBunnies = new Polygon(brownBunniesPath, new Color(95, 100, 100), 0.0, 0.0, brownBunniesTEX);
+        //Polygon brownBunnies = new Polygon(brownBunniesPath, new Color(95, 100, 100), 0.0, 0.0, brownBunniesTEX);
         Polygon whiteBunnies = new Polygon(whiteBunniesPath, new Color(95, 100, 100), 0.0, 0.0, whiteBunniesTEX);
         Polygon teddyBear = new Polygon(teddyBearPath, Color.BLACK, 0.0, 0.0, teddyBearTEX);
         Polygon rocket = new Polygon(rocketPath, Color.BLACK, 1, 0.0, rocketTEX);
-        scene.addPolygon( brownBunnies );
+        //scene.addPolygon( brownBunnies );
         scene.addPolygon( whiteBunnies );
         scene.addPolygon( teddyBear );
         scene.addPolygon( rocket );
@@ -174,8 +180,13 @@ public class Raytracer {
         Obj.RenderObj(scene, orangeToyGun_BodyPath, Material.PLASTIC(new Color(150, 10, 10)));
         Obj.RenderObj(scene, blackToyGun_DetailsPath, Material.PLASTIC(new Color(5,5,5)));
         Obj.RenderObj(scene, coolAssSoldierPath, Material.PLASTIC(new Color(10,60,120)));
-        Obj.RenderObj(scene, coinsPath, Material.PLASTIC(new Color(150,100,0)));
+        Obj.RenderObj(scene, coinsPath, Material.PLASTIC(new Color(150, 50, 10)));
         Obj.RenderObj(scene, greenChamaleonPath, Material.GROUND(new Color(3,10,1)));
+        Obj.RenderObj(scene, bunniesEarsPath, Material.GROUND(Color.PINK));
+        Obj.RenderObj(scene, bunniesEyesPath, Material.PLASTIC(Color.BLACK));
+        Obj.RenderObj(scene, bunniesNosesPath, Material.GROUND(Color.PINK));
+        Obj.RenderObj(scene, eyesPath, Material.PLASTIC(Color.BLACK));
+        Obj.RenderObj(scene, eyes02Path, Material.PLASTIC(Color.GREEN));
 
 
 
@@ -194,6 +205,8 @@ public class Raytracer {
         scene.addPolygon( armouredTrucks );
         scene.addPolygon( tanks );
         scene.addPolygon( truckAndTurret );
+
+
 
 
 
@@ -230,7 +243,7 @@ public class Raytracer {
 
 
         Light light03 = new Point(1f, Color.WHITE, new Vector3D(-1, 0.2, -2.5));
-        Light light04 = new Point(6f, Color.WHITE, new Vector3D(1.75, 1.2, -2.6));
+        Light light04 = new Point(5.3f, Color.WHITE, new Vector3D(1.75, 1.2, -2.9));
         Light light05 = new Point(0.5f, new Color(192,167,156), new Vector3D(0.5, 0, -5));
         Light light06 = new Point(0.5f, new Color(192,167,156), new Vector3D(-1, 0, -4));
 
@@ -241,7 +254,7 @@ public class Raytracer {
         Light light0S02 = new Spot(10f, Color.WHITE,new Vector3D(-1.3, -2, -4), new Vector3D(0.9, 0.3, -2.5), 0.5f, 1f);
         Light light0S03 = new Spot(1.5f, new Color(192,167,156), new Vector3D(-1.2, -2, -1.0), new Vector3D(1, 2, -3), 0.5f, 1f);
         Light light0S04 = new Spot(1f, new Color(192,167,156),new Vector3D(1, -1.7, 1), new Vector3D(-1.3, 0.1, -4.3), 0.5f, 1f);
-        Light light0S_BACK = new Spot(0.2f, new Color(100,140,190),new Vector3D(50, -30, 100), new Vector3D(-2.2, 0.65, -1.3), 0.5f, 1f);
+        //Light light0S_BACK = new Spot(0.2f, new Color(100,140,190),new Vector3D(50, -30, 100), new Vector3D(-2.2, 0.65, -1.3), 0.5f, 1f);
 
         //Light light05 = new Point(10f, Color.WHITE, new Vector3D(-3, 1, -5));
         //Light light06 = new Point(5f, new Color(192,167,156), new Vector3D(-3, 0, -7));
