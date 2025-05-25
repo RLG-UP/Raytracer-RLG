@@ -379,11 +379,20 @@ public class Scene {
 
         // Step 3: Check intersection
         Intersection hit = Scene.findRayIntersection(reflectionRay, ignoreShape);
+        boolean shadowFound = false;
+
 
         if (hit != null && hit.object != null) {
             // Get base color of object hit
             //Color localColor = hit.object.getColor(); // Or calculate with lighting, if available
-            Color localColor = hit.color; // Or calculate with lighting, if available
+            for(Light l : Light.getLights()) {
+                if(isInShadow(hit.point, hit.getNormal(), l, ignoreShape)) {
+                    shadowFound = true;
+                    break;
+                }
+            }
+
+            Color localColor = !shadowFound? hit.color : new Color((int) (hit.color.getRed()*0.1), (int) (hit.color.getGreen()*0.1), (int) (hit.color.getBlue()*0.1)); // Or calculate with lighting, if available
 
             // Recurse
             Color reflectedColor = castReflection(hit.point, hit.getNormal(), hit.object, recursionLimit - 1);
@@ -440,6 +449,7 @@ public class Scene {
 
         Intersection hit = Scene.findRayIntersection(refractionRay, ignoreShape);
 
+        boolean shadowFound = false;
         if (hit != null && hit.object != null) {
 
             Vector3D viewDir = Vector3D.subtract(Camera.getCameraPosition(), surfacePoint).normalize();
@@ -447,7 +457,15 @@ public class Scene {
             float fresnel = Light.schlick(cosTheta, (float)ignoreShape.refraction);
 
             //Color localColor = hit.object.getColor();
-            Color localColor = hit.color;
+            for(Light l : Light.getLights()) {
+                if(isInShadow(hit.point, hit.getNormal(), l, ignoreShape)) {
+                    shadowFound = true;
+                    break;
+                }
+            }
+
+            Color localColor = !shadowFound? hit.color : new Color((int) (hit.color.getRed()*0.1), (int) (hit.color.getGreen()*0.1), (int) (hit.color.getBlue()*0.1)); // Or calculate with lighting, if available
+
             //Color localColor = ignoreShape.getColor();
             Color refractedColor = castRefraction(hit.point, hit.getNormal(), hit.object, recursionLimit - 1);
 

@@ -119,7 +119,7 @@ public class Raytracer {
         //Light light03 = new Point(10f, Color.white, new Vector3D(0, -1, -2.5));
 
         //Scene scene = new Scene(new Color(58,58,58));
-        Scene scene = new Scene(Color.white);
+        Scene scene = new Scene(Color.BLACK);
         String groundPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Aftermath_Scene\\Ground.obj").getAbsolutePath();
         String greenSoldiersPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Aftermath_Scene\\Green_Soldiers.obj").getAbsolutePath();
         String redSoldiersPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Aftermath_Scene\\Red_Soldiers.obj").getAbsolutePath();
@@ -212,10 +212,10 @@ public class Raytracer {
 
 
         String objPath03 = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Scream_Scene\\RenderOBJS\\Rage_Background.obj").getAbsolutePath();
-        Polygon polygon = new Polygon(objPath03, Material.GLASS(Color.BLUE));
+        Polygon polygon = new Polygon(objPath03, Material.METAL(Color.CYAN));
         scene.addPolygon(polygon);
-        scene.addObject(new Sphere(new Vector3D(0, 0, 2), 1, Material.MIRROR(Color.RED)));
-        scene.addObject(new Sphere(new Vector3D(-1.1, 0, 2), 0.7, Material.MIRROR(Color.BLACK)));
+        scene.addObject(new Sphere(new Vector3D(0, 0, 2), 1, Material.METAL(new Color(220, 20, 60))));
+        scene.addObject(new Sphere(new Vector3D(-1.1, 0, 2), 0.7, Material.METAL(Color.WHITE)));
 
         //Lights
 
