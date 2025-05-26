@@ -1,0 +1,26 @@
+# Blender 4.4.3 MTL File: 'Punk.blend'
+# www.blender.org
+
+newmtl Body
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd C:/Users/rodlo/Downloads/Aftermath/Added/CoolAssSoldier/Obj/Body_BaseColor.png
+map_Ns C:/Users/rodlo/Downloads/Aftermath/Obj (2)/Obj/C:/Users/Kheaw/Desktop/Test/PBR/Body_Roughness.png
+map_refl C:/Users/rodlo/Downloads/Aftermath/Obj (2)/Obj/C:/Users/Kheaw/Desktop/Test/PBR/Body_Metallic.png
+map_Bump C:/Users/rodlo/Downloads/Aftermath/Obj (2)/Obj/C:/Users/Kheaw/Desktop/Test/PBR/Body_Normal_Open_GL.png
+
+newmtl GasMask
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd C:/Users/rodlo/Downloads/Aftermath/Added/CoolAssSoldier/Obj/GasMask_BaseColor.png
+map_Ns C:/Users/rodlo/Downloads/Aftermath/Obj (2)/Obj/C:/Users/Kheaw/Desktop/Test/PBR/GasMask_Roughness.png
+map_refl C:/Users/rodlo/Downloads/Aftermath/Obj (2)/Obj/C:/Users/Kheaw/Desktop/Test/PBR/GasMask_Metallic.png
+map_Bump C:/Users/rodlo/Downloads/Aftermath/Obj (2)/Obj/C:/Users/Kheaw/Desktop/Test/PBR/GasMask_Normal_Open_GL.png
