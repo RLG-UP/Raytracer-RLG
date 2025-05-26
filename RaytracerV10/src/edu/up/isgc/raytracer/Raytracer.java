@@ -46,13 +46,8 @@ public class Raytracer {
         //String objPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Sentence_Splashes.obj").getAbsolutePath();
 
         //Calibration
-        String objPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Calibration\\Calibrateobj.obj").getAbsolutePath();
+        //String objPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Calibration\\Calibrateobj.obj").getAbsolutePath();
 
-        //String path2 = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\Raytracer\\LocalFiles\\ObjFiles\\Ring.obj").getAbsolutePath();
-        //String path = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\Raytracer\\LocalFiles\\ObjFiles\\Ring.obj").getAbsolutePath();
-        //String path = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\Raytracer\\LocalFiles\\ObjFiles\\SmallTeapot.obj").getAbsolutePath();
-        //String path = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\optimized-3d-capturedphotogrammetry-hat\\Hat.obj").getAbsolutePath();
-        //String path = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\Raytracer\\LocalFiles\\ObjFiles\\shark1.obj").getAbsolutePath();
 
         // Create scene with objects
         //Scene scene = new Scene(Color.white);
@@ -86,8 +81,8 @@ public class Raytracer {
         //scene.addPolygon( polygon );
         //scene.addPolygon( polygon2 );
 
-        //RAGE SCENE
-/*
+        //RAGE SCENE (3-4 minutes APPROX)
+
         Scene scene = new Scene(new Color(220,20,60));
         //Scene scene = new Scene(Color.BLACK);
         String objPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Scream_Scene\\RenderOBJS\\Rage_Shards.obj").getAbsolutePath();
@@ -118,7 +113,7 @@ public class Raytracer {
         //Light light0D = new Directional(1, Color.white, new Vector3D(0,0,10), new Vector3D(2, 0, 0));
         //Light light02 = new Directional(100, Color.blue, new Vector3D(0,-10,0), new Vector3D(0,0,0));
         //Light light03 = new Point(10f, Color.white, new Vector3D(0, -1, -2.5));
-*/
+
 
 /*
         //War Is Childs Play Scene
@@ -225,8 +220,8 @@ public class Raytracer {
 
  */
 
-
         //Pandemonium Scene
+        /*
         Scene scene = new Scene(Color.BLACK);
 
         //NINJA
@@ -311,6 +306,8 @@ public class Raytracer {
         Light light0S= new Spot(3f, Color.WHITE ,new Vector3D(-10,-20,0), new Vector3D(1.5, 1.5, -3), 1f, 1f);
         Light light0S2= new Spot(0.01f, new Color(255,10,30) ,new Vector3D(0,-4,-6), new Vector3D(0, -1, 0), 1f, 1f);
         Camera camera = new Camera(new Vector3D(-0.005, -0.005, -4.75), nearPlane, farPlane, 30, width, height);
+        */
+
         Renderer.renderScene(width, height, camera, scene);
 
     }
