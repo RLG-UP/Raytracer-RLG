@@ -43,48 +43,11 @@ public class Renderer {
 
 
         for (int y = 0; y < height; y+=splitHeight) {
-            // Calculate and print progress percentage
-            /*
-            int progress = (int)((y / (double)height) * 100);
-            if (progress != lastProgress && progress % 10 == 0) {
-                //System.out.println("Progress: " + progress + "%");
-                lastProgress = progress;
-            }
-
-             */
-
             for (int x = 0; x < width; x+=splitWidth) {
-                /*
-                double aspectRatio = (double) width / height;
-                double scale = 1.0;
-
-                double px = (2 * ((x + 0.5) / width) - 1) * aspectRatio * scale;
-                double py = (1 - 2 * ((y + 0.5) / height)) * scale;
-
-                 */
-
                 final int tileX = x;
                 final int tileY = y;
                 final int tileW = Math.min(splitWidth, width-x);
                 final int tileH = Math.min(splitHeight, height-y);
-
-
-                /*
-                Ray ray = camera.generateRay(px, py);
-                Intersection intersection = scene.findClosestIntersection(ray, camera);
-
-                Color pixelColor;
-                if (intersection != null && intersection.color != null && intersection.object != null) {
-                    intersection.color = intersection.object.addLight(intersection);
-                    pixelColor = intersection.color;
-                } else {
-                    pixelColor = Scene.background;
-                }
-
-                image.setRGB(x, height - y - 1, pixelColor.getRGB());
-
-                 */
-
 
                 futures.add(executor.submit(() -> {Renderer.paintSplit(image, camera, scene, tileX, tileY, tileW, tileH); }));
             }

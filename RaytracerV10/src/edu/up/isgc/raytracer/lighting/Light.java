@@ -143,71 +143,10 @@ public abstract class Light {
             );
         }
 
-        //Color reflectContribution = Scene.castReflection(point, N, object, 5);
-        //Color reflectContribution = Scene.castRefraction(point, N, object, 5);
-        /*
-        finalColor = new Color(
-                clamp(Math.round( finalColor.getRed() + (reflectContribution.getRed()) ), 0, 255),
-                clamp(Math.round( finalColor.getGreen() + (reflectContribution.getGreen()) ), 0, 255),
-                clamp(Math.round( finalColor.getBlue() + (reflectContribution.getBlue()) ), 0, 255)
-        );
-
-                finalColor = new Color(
-                clamp(Math.round( finalColor.getRed() * (1 - reflectivity) + (reflectivity * reflectContribution.getRed()) ), 0, 255),
-                clamp(Math.round( finalColor.getGreen() * (1 - reflectivity) + (reflectivity * reflectContribution.getGreen()) ), 0, 255),
-                clamp(Math.round( finalColor.getBlue() * (1 - reflectivity) + (reflectivity * reflectContribution.getBlue()) ), 0, 255)
-        );
-         */
-
-        /*
-        Vector3D viewDir = Vector3D.subtract(Camera.getCameraPosition(), point).normalize();
-        float cosTheta = Math.max(0f, (float)viewDir.dot(N.normalize()));
-        float fresnel = schlick(cosTheta, (float)object.refraction);
-
-
-        float transparency = (float)object.transparency;
-
-        finalColor = new Color(
-                clamp(Math.round(finalColor.getRed() * (1 - transparency) +
-                        transparency * (finalColor.getRed() * (1 - fresnel) + reflectContribution.getRed() * fresnel)), 0, 255),
-                clamp(Math.round(finalColor.getGreen() * (1 - transparency) +
-                        transparency * (finalColor.getGreen() * (1 - fresnel) + reflectContribution.getGreen() * fresnel)), 0, 255),
-                clamp(Math.round(finalColor.getBlue() * (1 - transparency) +
-                        transparency * (finalColor.getBlue() * (1 - fresnel) + reflectContribution.getBlue() * fresnel)), 0, 255)
-        );
-
-         */
-
 
         Color reflectionColor = Scene.castReflection(point, N, object, 50);
         Color refractionColor = Scene.castRefraction(point, N, object, 50);
 
-        /*
-        Vector3D viewDir = Vector3D.subtract(Camera.getCameraPosition(), point).normalize();
-        float cosTheta = Math.max(0f, (float)viewDir.dot(N.normalize()));
-        float fresnel = reflectivity * Light.schlick(cosTheta, refraction);
-
-        //float fresnel = reflectivity * Light.schlick(cosTheta, (float)object.refraction);
-        //float transparency = (float)object.transparency;
-
-        int rI = clamp(Math.round(
-                finalColor.getRed() * (1 - transparency) +
-                        transparency * ((1 - fresnel) * refractionColor.getRed() + fresnel * reflectionColor.getRed())
-        ), 0, 255);
-
-        int gI = clamp(Math.round(
-                finalColor.getGreen() * (1 - transparency) +
-                        transparency * ((1 - fresnel) * refractionColor.getGreen() + fresnel * reflectionColor.getGreen())
-        ), 0, 255);
-
-        int bI = clamp(Math.round(
-                finalColor.getBlue() * (1 - transparency) +
-                        transparency * ((1 - fresnel) * refractionColor.getBlue() + fresnel * reflectionColor.getBlue())
-        ), 0, 255);
-
-        finalColor = new Color(rI, gI, bI);
-
-         */
         Vector3D viewDir = Vector3D.subtract(Camera.getCameraPosition(), point).normalize();
         float cosTheta = Math.max(0f, (float)viewDir.dot(N.normalize()));
         float fresnel = reflectivity * Light.schlick(cosTheta, refraction);
@@ -215,7 +154,7 @@ public abstract class Light {
         float refractFactor = (1 - fresnel) * transparency;
         float baseFactor = 1 - reflectFactor - refractFactor;
 
-// Prevent negative contribution due to floating-point inaccuracies
+        // Prevent negative contribution due to floating-point inaccuracies
         baseFactor = Math.max(0, baseFactor);
 
         int rI = clamp(Math.round(
@@ -259,36 +198,6 @@ public abstract class Light {
 
     public abstract Vector3D getDirection(Vector3D point);
     public Vector3D getDirection() { return this.getDirection(Vector3D.getZero()); }
-
-    /*
-    public static Color shine(Color lightColor, Color objectColor, float lambertian){
-        float[] nLC = Light.normalizeColor(lightColor);
-        float[] nOC = Light.normalizeColor(objectColor);
-        float[] nLOC = new float[]{nLC[0] * nOC[0], nLC[1] * nOC[1], nLC[2] * nOC[2]};
-
-        return new Color(clamp(nLOC[0] * lambertian, 0,1.0f), clamp(nLOC[1] * lambertian,0,1.0f), clamp(nLOC[2] * lambertian,0,1.0f));
-    }
-
-     */
-
-    /*
-    // New version: separate diffuse/specular and object color logic
-    public static Color shine(Color lightColor, Color objectColor, float intensity, boolean applyObjectColor) {
-        float[] nLC = normalizeColor(lightColor);
-        float[] nOC = normalizeColor(objectColor);
-
-        float r = nLC[0] * (applyObjectColor ? nOC[0] : 1.0f) * intensity;
-        float g = nLC[1] * (applyObjectColor ? nOC[1] : 1.0f) * intensity;
-        float b = nLC[2] * (applyObjectColor ? nOC[2] : 1.0f) * intensity;
-
-        return new Color(
-                clamp((int)(r * 255), 0, 255),
-                clamp((int)(g * 255), 0, 255),
-                clamp((int)(b * 255), 0, 255)
-        );
-    }
-
-     */
 
     public static Color shine(Color lightColor, Color objectColor, float intensity, boolean applyObjectColor) {
         float[] nLC = normalizeColor(lightColor);

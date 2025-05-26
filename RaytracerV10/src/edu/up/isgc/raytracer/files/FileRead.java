@@ -15,55 +15,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class FileRead {
-    /*
-    public static ArrayList<ArrayList<String>> readFile(String filePath) {
-        ArrayList<String> vertexList = new ArrayList<>();
-        ArrayList<String> faceList = new ArrayList<>();
-        ArrayList<String> textureList = new ArrayList<>();
-        ArrayList<String> vertexNormalList = new ArrayList<>();
-        Map<Integer, Material> materialMap = new HashMap<>();
-
-        File file = new File(filePath);
-        Pattern vertex = Pattern.compile("^v[^a-zA-Z]*");
-        Pattern texture = Pattern.compile("^vt[^a-zA-Z]*");
-        Pattern normal = Pattern.compile("^vn[^a-zA-Z]*");
-        Pattern face = Pattern.compile("^f[^a-zA-Z]*");
-        Pattern mtl = Pattern.compile("^usemtl[^a-zA-Z]*");
-
-        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
-            String line;
-            Integer mtlFaceCount = 0;
-            int startCount = 0;
-            boolean newFace = true;
-            String materialName = "";
-
-            while ((line = br.readLine()) != null) {
-
-                //System.out.println(line);
-                if(line.matches(vertex.pattern())) { vertexList.add(line); }
-                else if(line.matches(face.pattern())){ faceList.add(line); }
-                else if(line.matches(texture.pattern())){ textureList.add(line); }
-                else if(line.matches(normal.pattern())){ vertexNormalList.add(line); }
-                else if(line.matches(mtl.pattern())){ materialName = line.split("\\s+")[1]; }
-
-                System.out.println("Saving FACE: " + mtlFaceCount + " // Saving MATERIAL: " + materialName);
-                materialMap.put(mtlFaceCount, Material.findByName(materialName));
-                mtlFaceCount++;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        ArrayList<ArrayList<String>> objLines = new ArrayList<>();
-        objLines.add(vertexList);
-        objLines.add(faceList);
-        objLines.add(textureList);
-        objLines.add(vertexNormalList);
-        Face.setMaterialMap(materialMap);
-
-        return objLines;
-    }
-
-     */
 
     public static ArrayList<ArrayList<String>> readFile(String filePath) {
         ArrayList<String> vertexList = new ArrayList<>();
@@ -290,11 +241,7 @@ public class FileRead {
             Vertex.addVertex(vertex);
         }
 
-        //System.out.println("Vertex count: " + Vertex.getVertexes().size());
-
-
         // Store faces
-
         for(Double[] texture : createVertexMap(list.get(2)).values()){
             Texture.addTexture(texture);
         }
