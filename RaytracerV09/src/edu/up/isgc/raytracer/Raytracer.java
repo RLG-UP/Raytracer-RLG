@@ -246,9 +246,23 @@ public class Raytracer {
         Obj.RenderObj(scene, ninjaSkullPath, Material.RAGE_GLASS(new Color(255,10,30)));
         Obj.RenderObj(scene, ninjaLightPath, Material.PANDEMONIUM_METAL(new Color(5,7,7)));
 
+        //SWORD
+        String swordBladePath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Pandemonium_Scene\\RENDER_Objs\\Sword_Blade.obj").getAbsolutePath();
+        String swordBladeDetailsPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Pandemonium_Scene\\RENDER_Objs\\Sword_Details.obj").getAbsolutePath();
+        String swordBladeDetailsBPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Pandemonium_Scene\\RENDER_Objs\\Sword_DetailsB.obj").getAbsolutePath();
+        String swordHandlePath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Pandemonium_Scene\\RENDER_Objs\\Sword_HandleP.obj").getAbsolutePath();
+        String swordSupportPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Pandemonium_Scene\\RENDER_Objs\\Sword_Support.obj").getAbsolutePath();
+        String swordSupportBPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Pandemonium_Scene\\RENDER_Objs\\Sword_SupportB.obj").getAbsolutePath();
+        Obj.RenderObj(scene, swordBladePath, Material.PANDEMONIUM_METAL(Color.WHITE));
+        Obj.RenderObj(scene, swordBladeDetailsPath, Material.PANDEMONIUM_METAL(Color.WHITE));
+        Obj.RenderObj(scene, swordBladeDetailsBPath, Material.PANDEMONIUM_METAL(Color.WHITE));
+        Obj.RenderObj(scene, swordHandlePath, Material.PANDEMONIUM_METAL(Color.WHITE));
+        Obj.RenderObj(scene, swordSupportPath, Material.PANDEMONIUM_METAL(Color.WHITE));
+        Obj.RenderObj(scene, swordSupportBPath, Material.PANDEMONIUM_METAL(Color.WHITE));
 
 
         //EVIL MECHA
+        /*
         String ballMechaCablesPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Pandemonium_Scene\\RENDER_Objs\\BallMecha_Cables.obj").getAbsolutePath();
         String ballMechaCasesPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Pandemonium_Scene\\RENDER_Objs\\BallMecha_Cases.obj").getAbsolutePath();
         String ballMechaCentralPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Pandemonium_Scene\\RENDER_Objs\\BallMecha_Central.obj").getAbsolutePath();
@@ -265,6 +279,8 @@ public class Raytracer {
         Obj.RenderObj(scene, ballMechaDisksPath, Material.ALBEDO(Color.LIGHT_GRAY));
         Obj.RenderObj(scene, ballMechaMetalPath, Material.PANDEMONIUM_METAL(new Color(0,2,2)));
         Obj.RenderObj(scene, ballMechaRodsPath, Material.ALBEDO(Color.LIGHT_GRAY));
+
+         */
 
 
         Light light01 = new Point(1f, Color.WHITE, new Vector3D(0, 0.5, 0));
