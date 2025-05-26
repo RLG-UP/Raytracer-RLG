@@ -232,6 +232,7 @@ public class Raytracer {
         Scene scene = new Scene(Color.BLACK);
 
         //NINJA
+/*
         String ninjaHelmetPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Pandemonium_Scene\\RENDER_Objs\\NinjaHelmet.obj").getAbsolutePath();
         String ninjaBodyPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Pandemonium_Scene\\RENDER_Objs\\NinjaBody.obj").getAbsolutePath();
         String ninjaArmsPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Pandemonium_Scene\\RENDER_Objs\\NinjaArms.obj").getAbsolutePath();
@@ -270,7 +271,7 @@ public class Raytracer {
 
 
         //EVIL MECHA
-/*
+
         String ballMechaCablesPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Pandemonium_Scene\\RENDER_Objs\\BallMecha_Cables.obj").getAbsolutePath();
         String ballMechaCasesPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Pandemonium_Scene\\RENDER_Objs\\BallMecha_Cases.obj").getAbsolutePath();
         String ballMechaCentralPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Pandemonium_Scene\\RENDER_Objs\\BallMecha_Central.obj").getAbsolutePath();
@@ -279,22 +280,37 @@ public class Raytracer {
         String ballMechaMetalPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Pandemonium_Scene\\RENDER_Objs\\BallMecha_Metal.obj").getAbsolutePath();
         String ballMechaRodsPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Pandemonium_Scene\\RENDER_Objs\\BallMecha_Rods.obj").getAbsolutePath();
 
-        Obj.RenderObj(scene, ballMechaCablesPath, Material.PLASTIC(Color.LIGHT_GRAY));
-        Obj.RenderObj(scene, ballMechaCasesPath, Material.ALBEDO(Color.LIGHT_GRAY));
-        Obj.RenderObj(scene, ballMechaCentralPath, Material.PLASTIC(Color.LIGHT_GRAY));
-        Obj.RenderObj(scene, ballMechaCoilsPath, Material.ALBEDO(Color.LIGHT_GRAY));
-        Obj.RenderObj(scene, ballMechaDisksPath, Material.ALBEDO(Color.LIGHT_GRAY));
+        String floorPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Pandemonium_Scene\\RENDER_Objs\\Floor.obj").getAbsolutePath();
+
+        Obj.RenderObj(scene, ballMechaCablesPath, Material.PLASTIC(new Color(160,220,220)));
+        Obj.RenderObj(scene, ballMechaCasesPath, Material.ALBEDO(new Color(160,220,220)));
+        Obj.RenderObj(scene, ballMechaCentralPath, Material.PLASTIC(new Color(160,220,220)));
+        Obj.RenderObj(scene, ballMechaCoilsPath, Material.ALBEDO(new Color(160,220,220)));
+        Obj.RenderObj(scene, ballMechaDisksPath, Material.ALBEDO(new Color(160,220,220)));
         Obj.RenderObj(scene, ballMechaMetalPath, Material.PANDEMONIUM_METAL(new Color(0,2,2)));
-        Obj.RenderObj(scene, ballMechaRodsPath, Material.ALBEDO(Color.LIGHT_GRAY));
- */
+        Obj.RenderObj(scene, ballMechaRodsPath, Material.PANDEMONIUM_MIRROR(new Color(160,220,220)));
+*/
+        //Obj.RenderObj(scene, floorPath, Material.MIRROR(Color.WHITE));
+        //String pillarsPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Pandemonium_Scene\\RENDER_Objs\\Pillars.obj").getAbsolutePath();
+        String interiorPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Pandemonium_Scene\\RENDER_Objs\\Interior.obj").getAbsolutePath();
+
+        //Obj.RenderObj(scene, pillarsPath, Material.METAL(new Color(0,2,2)));
+        Obj.RenderObj(scene, interiorPath, Material.METAL(new Color(0,1,1)));
+
 
         Light light01 = new Point(1f, Color.WHITE, new Vector3D(0, 0.5, 0));
         Light light02 = new Point(0.5f, Color.WHITE, new Vector3D(0, 1, 0.2));
         Light light03 = new Point(30f, new Color(255,10,30), new Vector3D(0.3, -0.6, -1.17));
         //Light light04 = new Point(30f, new Color(255,10,30), new Vector3D(0.3, -0.6, -1.2));
         Light light05 = new Point(75f, new Color(255,10,30), new Vector3D(0.2, -0.8, -1.08));
-        Light light06 = new Point(10f, new Color(255,10,30), new Vector3D(0.3, -0, -1.17));
+        Light light06 = new Point(3f, new Color(255,10,30), new Vector3D(0.3, -0, -1.17));
+        Light light07 = new Point(3f, new Color(160,220,220), new Vector3D(0, 3, 3));
+        Light light08 = new Point(5f, new Color(255,10,30),  new Vector3D(0, -2.5, -3));
+        Light light09 = new Point(5f, new Color(255,10,30),  new Vector3D(-4, -2.5, 8));
+        Light light10 = new Point(5f, new Color(255,10,30),  new Vector3D(4, -2.5, 8));
+        //Light light08 = new Point(5f, new Color(160,220,220), new Vector3D(0, 0, 3));
         Light light0S= new Spot(3f, Color.WHITE ,new Vector3D(-10,-20,0), new Vector3D(1.5, 1.5, -3), 1f, 1f);
+        //Light light0S2= new Spot(0.01f, new Color(160,220,220) ,new Vector3D(0,-3,-6), new Vector3D(0, -1, 0), 1f, 1f);
         Camera camera = new Camera(new Vector3D(-0.005, -0.005, -4.75), nearPlane, farPlane, 30, width, height);
         Renderer.renderScene(width, height, camera, scene);
 
