@@ -42,8 +42,29 @@ public class Obj {
         // Create polygon from data
         Polygon polygon = material != null ? createPolygonFromObjData(objData, material) : createPolygonFromObjData(objData, null);
         if (polygon != null) {
-            //polygon.rotate(0, 90, 0);
-            //polygon.scale(10,10,10);
+            scene.addPolygon(polygon);
+        }
+
+        // Clean up
+        Face.clearMaterialMap();
+    }
+
+    public static void RenderObj(Scene scene, String objPath, String mtlPath, Material material, Vector3D rotate, Vector3D scale, Vector3D translate) {
+        // Load materials first
+        if (mtlPath != null) {
+            MTLReader.readMTL(mtlPath);
+        }
+
+        // Read OBJ data
+        ObjData objData = readObjData(objPath);
+        if (objData == null) return;
+
+        // Create polygon from data
+        Polygon polygon = material != null ? createPolygonFromObjData(objData, material) : createPolygonFromObjData(objData, null);
+        if (polygon != null) {
+            polygon.rotate((float)rotate.x, (float)rotate.y, (float)rotate.x);
+            polygon.scale((float)scale.x, (float)scale.y, (float)scale.z);
+            polygon.translate((float)translate.x, (float)translate.y, (float)translate.z);
             scene.addPolygon(polygon);
         }
 

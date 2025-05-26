@@ -23,38 +23,23 @@ import java.io.IOException;
 public class Raytracer {
     public static void main(String[] args) throws IOException {
         // Image settings
+
+        int width = 1600;
+        int height = 900;
+
+
 /*
-        int width = 409;
-        int height = 216;
-*/
-
-
         int width = 4096;
         int height = 2160;
-
+*/
 
         double nearPlane = -1000, farPlane = 1000;
-        //String objPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\optimized-3d-capturedphotogrammetry-hat\\Hat.obj").getAbsolutePath();
-        //String mtlPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\optimized-3d-capturedphotogrammetry-hat\\Hat.mtl").getAbsolutePath();
-
-        //String objPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\carl-manfred-detroit-become-human\\CarlManfred.obj").getAbsolutePath();
-        //String mtlPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\carl-manfred-detroit-become-human\\CarlManfred.mtl").getAbsolutePath();
-
-        //String objPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Pilot_Scene\\Hazmat\\Obj\\tripo_pbr_model_a7cac90a-deb1-4ce8-9cef-093d5db3efea.obj").getAbsolutePath();
-        //String mtlPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Pilot_Scene\\Hazmat\\Obj\\tripo_pbr_model_a7cac90a-deb1-4ce8-9cef-093d5db3efea.mtl").getAbsolutePath();
-
-        //String objPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Sentence_Splashes.obj").getAbsolutePath();
 
         //Calibration
-        //String objPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Calibration\\Calibrateobj.obj").getAbsolutePath();
-
-
-        // Create scene with objects
-        //Scene scene = new Scene(Color.white);
+        //String calibratePath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Calibration\\Calibrateobj.obj").getAbsolutePath();
 
         //scene.addObject(new Sphere(new Vector3D(0, 0, 0), 2, Color.green,  0.5, 0.9));
-        //scene.addObject(new Sphere(new Vector3D(0, -2, 0), 3, Material.GLASS(Color.WHITE)));
-        //scene.addObject(new Sphere(new Vector3D(1, 2, 0), 3, Material.GLASS(Color.RED)));
+
         //scene.addObject(new Sphere(new Vector3D(0, 2, 0), 1, Color.lightGray,  0.4, 0.7));
 
         //BufferedImage texture = ImageIO.read(new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\optimized-3d-capturedphotogrammetry-hat\\textures\\Hat_Albedo.png"));
@@ -81,8 +66,67 @@ public class Raytracer {
         //scene.addPolygon( polygon );
         //scene.addPolygon( polygon2 );
 
-        //RAGE SCENE (3-4 minutes APPROX)
+        //TEST SCENE FOR MOYA ;D
+        Scene scene = new Scene(Color.BLACK);
+        String hatPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\optimized-3d-capturedphotogrammetry-hat\\Hat.obj").getAbsolutePath();
+        String hatMTLPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\optimized-3d-capturedphotogrammetry-hat\\Hat.mtl").getAbsolutePath();
 
+        String wheeliePath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\carl-manfred-detroit-become-human\\CarlManfred.obj").getAbsolutePath();
+        String wheelieMTLPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\carl-manfred-detroit-become-human\\CarlManfred.mtl").getAbsolutePath();
+
+        String hazmatPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\CrimsonTracer\\Raytracer-RLG\\LocalFiles\\ObjFiles\\SmallTeapot.obj").getAbsolutePath();
+        String hazmatMTLPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Pilot_Scene\\Hazmat\\Obj\\tripo_pbr_model_a7cac90a-deb1-4ce8-9cef-093d5db3efea.mtl").getAbsolutePath();
+
+
+        //POLYGONS
+
+        //MTL File reading
+
+        Obj.RenderObj(scene, wheeliePath, wheelieMTLPath, null,
+                new Vector3D(0,180,0),
+                new Vector3D(0.5f,0.5f,0.5f),
+                new Vector3D(0,-1,0));
+
+
+
+        //TEXTURE READING
+        BufferedImage texture = ImageIO.read(new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\optimized-3d-capturedphotogrammetry-hat\\textures\\Hat_Albedo.png"));
+        Polygon hat = new Polygon(hatPath, new Color(220, 20, 60), 0.4, 0.3, texture);
+        hat.scale(0.4f,0.4f,0.4f);
+        hat.translate(0.04f,0.75f,-0.3f);
+        hat.rotate(0,180,0);
+        scene.addPolygon( hat );
+
+        //MATERIAL ADDITION TO OBJ
+        Obj.RenderObj(scene, hazmatPath,Material.GLASS(Color.RED), //REFLECTION
+                new Vector3D(0,90,0),
+                new Vector3D(0.7f,0.7f,0.7f),
+                new Vector3D(-1.6,-0.2,-0.1));
+        //
+        Obj.RenderObj(scene, hazmatPath,Material.MIRROR(Color.BLUE), //REFRACTION
+                new Vector3D(0,90,0),
+                new Vector3D(0.7f,0.7f,0.7f),
+                new Vector3D(-1.2,-0.6,-0.1));
+
+        Obj.RenderObj(scene, hazmatPath,Material.ALBEDO(Color.YELLOW), //PHONG
+                new Vector3D(0,0,0),
+                new Vector3D(0.7f,0.7f,0.7f),
+                new Vector3D(-1.2,0.3,1));
+
+        //Obj.RenderObj(scene, objPath, Material.GLASS(Color.white));
+
+        //SPHERES
+        scene.addObject(new Sphere(new Vector3D(1.5, 0, 0), 0.5, Material.METAL(Color.YELLOW))); //PHONG
+        scene.addObject(new Sphere(new Vector3D(1, 0, 0), 0.5, Material.GLASS(Color.RED))); //REFRACTION
+        scene.addObject(new Sphere(new Vector3D(1.25, 0.5, 0), 0.5, Material.MIRROR(Color.BLUE))); //REFLECTION
+
+
+        //LIGHTS
+        Light light01 = new Point(1f, Color.WHITE, new Vector3D(1.25, 0.2, -1)); //POINT
+        Camera camera = new Camera(new Vector3D(-0.005, -0.005, -5.5), nearPlane, farPlane, 30, width, height);
+
+        //RAGE SCENE (3-4 minutes APPROX)
+/*
         Scene scene = new Scene(new Color(220,20,60));
         //Scene scene = new Scene(Color.BLACK);
         String objPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Scream_Scene\\RenderOBJS\\Rage_Shards.obj").getAbsolutePath();
@@ -113,10 +157,10 @@ public class Raytracer {
         //Light light0D = new Directional(1, Color.white, new Vector3D(0,0,10), new Vector3D(2, 0, 0));
         //Light light02 = new Directional(100, Color.blue, new Vector3D(0,-10,0), new Vector3D(0,0,0));
         //Light light03 = new Point(10f, Color.white, new Vector3D(0, -1, -2.5));
-
+*/
 
 /*
-        //War Is Childs Play Scene
+        //War Is Childs Play Scene (10-12 minutes approx)
 
         Scene scene = new Scene(new Color(158,158,158));
         String groundPath = new File("W:\\-UP_PC-\\4th_SEMESTER\\MMCG_FOURTH_SEMESTER_RLG\\RayTracer_Objs\\Aftermath_Scene\\Ground.obj").getAbsolutePath();
@@ -220,7 +264,7 @@ public class Raytracer {
 
  */
 
-        //Pandemonium Scene
+        //Pandemonium Scene (104+ minutes approx)
         /*
         Scene scene = new Scene(Color.BLACK);
 
