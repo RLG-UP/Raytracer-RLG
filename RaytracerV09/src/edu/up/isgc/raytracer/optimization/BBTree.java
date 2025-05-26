@@ -6,8 +6,10 @@ import edu.up.isgc.raytracer.Vector3D;
 import edu.up.isgc.raytracer.shapes.Object3D;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Stack;
 
 public class BBTree {
@@ -235,7 +237,7 @@ public class BBTree {
 
      */
 
-
+/*
     private Intersection[] traverse(BBNode node, Ray ray) {
         if (node == null || !node.bbox.bbIntersects(ray)) {
             return null;
@@ -260,6 +262,51 @@ public class BBTree {
 
         return combineIntersections(leftHits, rightHits);
     }
+
+ */
+
+
+
+    private Intersection[] traverse(BBNode node, Ray ray) {
+        if (node == null || !node.bbox.bbIntersects(ray)) {
+            return null;
+        }
+
+        // Stack for iterative traversal
+        Stack<BBNode> stack = new Stack<>();
+        stack.push(node);
+
+        Intersection[] finalResult = null;
+
+        while (!stack.isEmpty()) {
+            BBNode current = stack.pop();
+
+            if (current.isLeaf()) {
+                // Process leaf node
+                Intersection[] intersections = current.object.intersect(ray);
+                if (intersections != null) {
+                    for (Intersection intersection : intersections) {
+                        if (intersection != null) {
+                            intersection.object = current.object;
+                        }
+                    }
+                    finalResult = combineIntersections(finalResult, intersections);
+                }
+            } else {
+                // Push left first, so right gets processed first (stack is LIFO)
+                if (current.left != null && current.left.bbox.bbIntersects(ray)) {
+                    stack.push(current.left);
+                }
+                if (current.right != null && current.right.bbox.bbIntersects(ray)) {
+                    stack.push(current.right);
+                }
+            }
+        }
+
+        return finalResult;
+    }
+
+
 
     private Intersection[] combineIntersections(Intersection[] hits1, Intersection[] hits2) {
         if (hits1 == null) return hits2;

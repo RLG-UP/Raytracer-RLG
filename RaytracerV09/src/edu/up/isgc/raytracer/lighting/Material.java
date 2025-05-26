@@ -159,6 +159,9 @@ public class Material {
     public static Material RAGE_GLASS(Color color){
         return new Material(1.0f, 8000f, 0.1f,0.8f,0.37f,0.5f, color);
     }
+    public static Material NINJA_GLASS(Color color){
+        return new Material(1.0f, 5f, 0.1f,0.4f,0.4f,0.7f, color);
+    }
 
     public static Material GLASS(){
         return Material.GLASS(Color.white);
@@ -169,9 +172,12 @@ public class Material {
     public static Material PANDEMONIUM_METAL(Color color){
         return new Material(1f, 30000f, 0.1f,0.7f,0.0f,0.0f, color);
     }
+    public static Material NINJA_METAL(Color color){
+        return new Material(1f, 800f, 0.1f,0.7f,0.0f,0.0f, color);
+    }
     public static Material MIRROR(Color color){ return new Material(1f, 80000f, 0.1f,0.9f,0.0f,0.0f, color); }
     public static Material PANDEMONIUM_MIRROR(Color color){
-        return new Material(1f, 800f, 0.1f,0.9f,0.5f,0.0f, color); }
+        return new Material(1f, 10f, 0.1f,0.9f,0.5f,0.0f, color); }
     public static Material ALBEDO(Color color){
         return new Material(1.0f, 1000f, 0.1f,0.00f,0.00f,0.00f, color);
     }
