@@ -8,7 +8,7 @@ Ks 0.000000 0.000000 0.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 illum 1
-map_Kd ./cm_arml_d.png
+map_Kd ./OBJS/cm_arml_d.png
 
 newmtl Modelpart1_armr_Material003
 Ns 9.849158
@@ -17,7 +17,7 @@ Ks 0.000000 0.000000 0.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 illum 1
-map_Kd ./cm_armr_d.png
+map_Kd ./OBJS/cm_armr_d.png
 
 newmtl Modelpart1_elashes_Material012
 Ns 9.849158
@@ -26,8 +26,8 @@ Ks 0.000000 0.000000 0.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 illum 1
-map_Kd ./cm_elashes_d.png
-map_d ./cm_elashes_d.png
+map_Kd ./OBJS/cm_elashes_d.png
+map_d ./OBJS/cm_elashes_d.png
 
 newmtl Modelpart1_eyes_Material004
 Ns 9.849158
@@ -36,7 +36,7 @@ Ks 0.000000 0.000000 0.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 illum 1
-map_Kd ./cm_eyes_d.png
+map_Kd ./OBJS/cm_eyes_d.png
 
 newmtl Modelpart1_hair_Material015
 Ns 9.849158
@@ -45,8 +45,8 @@ Ks 0.000000 0.000000 0.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 illum 1
-map_Kd ./cm_hair_d.png
-map_d ./cm_hair_d.png
+map_Kd ./OBJS/cm_hair_d.png
+map_d ./OBJS/cm_hair_d.png
 
 newmtl Modelpart1_head_Material005
 Ns 9.849158
@@ -55,8 +55,8 @@ Ks 0.000000 0.000000 0.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 illum 1
-map_Kd ./cm_head_d1.png
-map_d ./cm_head_d1.png
+map_Kd ./OBJS/cm_head_d1.png
+map_d ./OBJS/cm_head_d1.png
 
 newmtl Modelpart1_jeans_Material006
 Ns 9.849158
@@ -65,7 +65,7 @@ Ks 0.000000 0.000000 0.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 illum 1
-map_Kd ./cm_jeans_d.png
+map_Kd ./OBJS/cm_jeans_d.png
 
 newmtl Modelpart1_part1_base1_Material001
 Ns 9.849158
@@ -74,8 +74,8 @@ Ks 0.000000 0.000000 0.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 illum 1
-map_Kd ./cmw_chairbase1_d.png
-map_d ./cmw_chairbase1_d.png
+map_Kd ./OBJS/cmw_chairbase1_d.png
+map_d ./OBJS/cmw_chairbase1_d.png
 
 newmtl Modelpart1_part1_base1sit_Material002
 Ns 9.849158
@@ -84,8 +84,8 @@ Ks 0.000000 0.000000 0.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 illum 1
-map_Kd ./cmw_chairbase1_d.png
-map_d ./cmw_chairbase1_d.png
+map_Kd ./OBJS/cmw_chairbase1_d.png
+map_d ./OBJS/cmw_chairbase1_d.png
 
 newmtl Modelpart1_part1_base2_Material003
 Ns 9.849158
@@ -94,7 +94,7 @@ Ks 0.000000 0.000000 0.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 illum 1
-map_Kd ./cmw_chairbase2_d.png
+map_Kd ./OBJS/cmw_chairbase2_d.png
 
 newmtl Modelpart1_part1_base2wheel_Material004
 Ns 9.849158
@@ -103,7 +103,7 @@ Ks 0.000000 0.000000 0.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 illum 1
-map_Kd ./cmw_chairbase2_d.png
+map_Kd ./OBJS/cmw_chairbase2_d.png
 
 newmtl Modelpart1_scarf_Material001
 Ns 9.849158
@@ -112,7 +112,7 @@ Ks 0.000000 0.000000 0.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 illum 1
-map_Kd ./cm_scarf_d.png
+map_Kd ./OBJS/cm_scarf_d.png
 
 newmtl Modelpart1_shirt_Material007
 Ns 9.849158
@@ -121,7 +121,7 @@ Ks 0.000000 0.000000 0.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 illum 1
-map_Kd ./cm_shirt_d.png
+map_Kd ./OBJS/cm_shirt_d.png
 
 newmtl Modelpart1_shoes_Material008
 Ns 9.849158
@@ -130,7 +130,7 @@ Ks 0.000000 0.000000 0.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 illum 1
-map_Kd ./cm_shoes_d.png
+map_Kd ./OBJS/cm_shoes_d.png
 
 newmtl Modelpart1_teeth_Material009
 Ns 9.849158
@@ -139,7 +139,7 @@ Ks 0.000000 0.000000 0.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 illum 1
-map_Kd ./cm_teeth_d.png
+map_Kd ./OBJS/cm_teeth_d.png
 
 newmtl Modelpart1_top_Material010
 Ns 9.849158
@@ -148,4 +148,4 @@ Ks 0.000000 0.000000 0.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 illum 1
-map_Kd ./cm_top_d.png
+map_Kd ./OBJS/cm_top_d.png

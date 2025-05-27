@@ -10,6 +10,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -83,7 +85,9 @@ public class MTLReader {
                 } else if (patternMapKd.matcher(line).find()) {
                     String texturePath = line.substring(line.indexOf(" ") + 1).trim();
                     try {
-                        texture = ImageIO.read(new File(texturePath));
+                        Path path = Paths.get(texturePath).toAbsolutePath();
+                        File textureFile = path.toFile();
+                        texture = ImageIO.read(textureFile);
                         //System.out.println("Loaded texture: \"" + texturePath + "\"");
                     } catch (IOException e) {
                         System.err.println("Failed to load texture: " + texturePath);
