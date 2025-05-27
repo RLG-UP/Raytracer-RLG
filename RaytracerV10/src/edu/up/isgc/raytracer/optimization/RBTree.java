@@ -8,14 +8,29 @@ import edu.up.isgc.raytracer.shapes.Object3D;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Represents a Red-Black Tree for optimizing spatial queries in ray tracing.
+ * The tree organizes 3D objects based on their centroid positions to accelerate intersection tests.
+ */
 public class RBTree {
+
+    /**
+     * The root node of the Red-Black Tree.
+     */
     public Node root;
 
+    /**
+     * Constructs an empty Red-Black Tree.
+     */
     public RBTree() {
         this.root = null;
     }
 
-    // Left rotation
+    /**
+     * Performs a left rotation on the specified node to maintain tree balance.
+     *
+     * @param node The node to rotate around.
+     */
     private void rotateLeft(Node node) {
         Node rightChild = node.right;
         node.right = rightChild.left;
@@ -38,7 +53,11 @@ public class RBTree {
         node.parent = rightChild;
     }
 
-    // Right rotation
+    /**
+     * Performs a right rotation on the specified node to maintain tree balance.
+     *
+     * @param node The node to rotate around.
+     */
     private void rotateRight(Node node) {
         Node leftChild = node.left;
         node.left = leftChild.right;
@@ -61,7 +80,11 @@ public class RBTree {
         node.parent = leftChild;
     }
 
-    // Fix insertion to maintain red-black properties
+    /**
+     * Fixes the Red-Black Tree properties after insertion of a new node.
+     *
+     * @param node The node recently inserted into the tree.
+     */
     private void fixInsertion(Node node) {
         while (node != root && node.parent.isRed) {
             if (node.parent == node.parent.parent.left) {
@@ -85,7 +108,7 @@ public class RBTree {
                     rotateRight(node.parent.parent);
                 }
             } else {
-                // Mirror cases
+                // Mirror cases for right-side insertion
                 Node uncle = node.parent.parent.left;
 
                 if (uncle != null && uncle.isRed) {
@@ -107,7 +130,11 @@ public class RBTree {
         root.paintBlack();
     }
 
-    // Public insert method
+    /**
+     * Inserts a 3D object into the Red-Black Tree based on the centroid of its bounding box.
+     *
+     * @param obj The 3D object to insert.
+     */
     public void insert(Object3D obj) {
         BoundingBox bbox = obj.getBB();
         Vector3D centroid = bbox.getMin().add(bbox.getMax()).scale(0.5);
@@ -123,7 +150,7 @@ public class RBTree {
         Node parent = null;
         int depth = 0;
 
-        // Find insertion point
+        // Traverse the tree to find the insertion point
         while (current != null) {
             parent = current;
             double valueToCompare = getAxisValue(centroid, depth % 3);
@@ -136,8 +163,8 @@ public class RBTree {
             depth++;
         }
 
-        // Insert new node
-        double valueToCompare = getAxisValue(centroid, (depth-1) % 3);
+        // Insert new node under the correct parent
+        double valueToCompare = getAxisValue(centroid, (depth - 1) % 3);
         if (valueToCompare < parent.centroidValue) {
             parent.left = newNode;
         } else {
@@ -145,10 +172,17 @@ public class RBTree {
         }
         newNode.parent = parent;
 
-        // Fix RB tree properties
+        // Fix Red-Black Tree properties after insertion
         fixInsertion(newNode);
     }
 
+    /**
+     * Retrieves the value of the centroid along a specific axis (X=0, Y=1, Z=2).
+     *
+     * @param centroid The centroid of the object's bounding box.
+     * @param axis     The axis index to use for comparison.
+     * @return The corresponding coordinate value along the specified axis.
+     */
     private double getAxisValue(Vector3D centroid, int axis) {
         return switch (axis) {
             case 0 -> centroid.x;
@@ -158,17 +192,24 @@ public class RBTree {
         };
     }
 
+    /**
+     * Recursively traverses the tree and returns the closest intersection of the ray with any object.
+     *
+     * @param node The current node to evaluate.
+     * @param ray  The ray to test for intersection.
+     * @return The closest {@link Intersection} found in the subtree rooted at this node, or {@code null} if none.
+     */
     public Intersection traverse(Node node, Ray ray) {
         if (node == null) return null;
 
-        // First check if ray intersects this node's bounding box
+        // Skip this node if its bounding box is not intersected by the ray
         if (!node.objectRef.getBB().bbIntersects(ray)) {
             return null;
         }
 
         Intersection closest = null;
 
-        // Check this node's object
+        // Check for intersection with the object in this node
         Intersection[] nodeIntersections = node.objectRef.intersect(ray);
         if (nodeIntersections != null) {
             for (Intersection intersection : nodeIntersections) {
@@ -179,12 +220,13 @@ public class RBTree {
             }
         }
 
-        // Recursively check children
+        // Recursively check left subtree
         Intersection leftHit = traverse(node.left, ray);
         if (leftHit != null && (closest == null || leftHit.distance < closest.distance)) {
             closest = leftHit;
         }
 
+        // Recursively check right subtree
         Intersection rightHit = traverse(node.right, ray);
         if (rightHit != null && (closest == null || rightHit.distance < closest.distance)) {
             closest = rightHit;
@@ -193,6 +235,12 @@ public class RBTree {
         return closest;
     }
 
+    /**
+     * Prints the structure of the tree in a readable format, including object info and color.
+     *
+     * @param node  The current node to print.
+     * @param level The depth level in the tree (used for indentation).
+     */
     public void printTree(Node node, int level) {
         if (node == null) return;
 

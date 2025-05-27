@@ -17,9 +17,23 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+/**
+ * Utility class for loading and rendering 3D objects from OBJ files.
+ * Handles parsing of OBJ files, material application, and transformation of 3D models.
+ */
 public class Obj {
 
-    public static void RenderObj(Scene scene, String objPath, Material material, Vector3D rotate, Vector3D scale, Vector3D translate){
+    /**
+     * Renders an OBJ object with specified transformations and adds it to the scene.
+     *
+     * @param scene The scene to add the object to
+     * @param objPath Path to the OBJ file
+     * @param material The material to apply to the object
+     * @param rotate Rotation angles in degrees (x, y, z)
+     * @param scale Scaling factors (x, y, z)
+     * @param translate Translation offsets (x, y, z)
+     */
+    public static void RenderObj(Scene scene, String objPath, Material material, Vector3D rotate, Vector3D scale, Vector3D translate) {
         Polygon polygon = new Polygon(objPath, material);
         polygon.rotate((float)rotate.x, (float)rotate.y, (float)rotate.x);
         polygon.scale((float)scale.x,(float)scale.y,(float)scale.z);
@@ -28,7 +42,14 @@ public class Obj {
         Face.clearMaterialMap();
     }
 
-    // Updated RenderObj method
+    /**
+     * Renders an OBJ object with optional MTL materials and adds it to the scene.
+     *
+     * @param scene The scene to add the object to
+     * @param objPath Path to the OBJ file
+     * @param mtlPath Path to the MTL file (can be null)
+     * @param material Fallback material if MTL is not specified
+     */
     public static void RenderObj(Scene scene, String objPath, String mtlPath, Material material) {
         // Load materials first
         if (mtlPath != null) {
@@ -49,6 +70,17 @@ public class Obj {
         Face.clearMaterialMap();
     }
 
+    /**
+     * Renders an OBJ object with transformations, optional MTL materials, and adds it to the scene.
+     *
+     * @param scene The scene to add the object to
+     * @param objPath Path to the OBJ file
+     * @param mtlPath Path to the MTL file (can be null)
+     * @param material Fallback material if MTL is not specified
+     * @param rotate Rotation angles in degrees (x, y, z)
+     * @param scale Scaling factors (x, y, z)
+     * @param translate Translation offsets (x, y, z)
+     */
     public static void RenderObj(Scene scene, String objPath, String mtlPath, Material material, Vector3D rotate, Vector3D scale, Vector3D translate) {
         // Load materials first
         if (mtlPath != null) {
@@ -72,11 +104,26 @@ public class Obj {
         Face.clearMaterialMap();
     }
 
-    public static void RenderObj(Scene scene, String objPath, Material material) { Obj.RenderObj(scene, objPath, null, material);}
+    /**
+     * Renders an OBJ object with a single material and adds it to the scene.
+     *
+     * @param scene The scene to add the object to
+     * @param objPath Path to the OBJ file
+     * @param material The material to apply to the object
+     */
+    public static void RenderObj(Scene scene, String objPath, Material material) {
+        Obj.RenderObj(scene, objPath, null, material);
+    }
 
-    // First method: Reads OBJ file and collects data
+    /**
+     * Reads and parses an OBJ file, extracting geometry and material data.
+     *
+     * @param filePath Path to the OBJ file
+     * @return ObjData object containing parsed geometry, or null if reading fails
+     */
     public static ObjData readObjData(String filePath) {
         ObjData objData = new ObjData();
+        // Patterns for matching different OBJ file components
         Pattern vertex = Pattern.compile("^v[^a-zA-Z]*");
         Pattern texture = Pattern.compile("^vt[^a-zA-Z]*");
         Pattern normal = Pattern.compile("^vn[^a-zA-Z]*");
@@ -123,16 +170,20 @@ public class Obj {
         return objData;
     }
 
-    // Second method: Creates triangles from collected data
-    // In your Obj class:
-
-    // Modified createPolygonFromObjData method
+    /**
+     * Creates a Polygon object from parsed OBJ data.
+     *
+     * @param objData Parsed OBJ data
+     * @param mat Fallback material if no material is specified in the OBJ
+     * @return Polygon object containing all triangles from the OBJ, or null if creation fails
+     */
     public static Polygon createPolygonFromObjData(ObjData objData, Material mat) {
         if (objData == null) return null;
 
         ArrayList<Triangle> triangles = new ArrayList<>();
 
         for (FaceData face : objData.faces) {
+            // Use specified material or look up material from MTL
             Material material = mat != null ? mat : Material.findByName(face.materialName);
             if (material == null) {
                 System.err.println("Warning: Material not found - " + face.materialName);
@@ -165,7 +216,7 @@ public class Obj {
                     }
                 }
 
-                // Always create triangle with texture coordinates if available
+                // Create triangle with appropriate attributes
                 Triangle triangle = createTriangle(
                         objData.vertices,
                         objData.texCoords,
@@ -184,8 +235,18 @@ public class Obj {
         return new Polygon(triangles);
     }
 
-    // Modified createTriangle method
-
+    /**
+     * Creates a single Triangle from vertex, texture, and normal data.
+     *
+     * @param vertices List of all vertices in the model
+     * @param texCoords List of all texture coordinates
+     * @param normals List of all vertex normals
+     * @param vertexIndices Indices for this triangle's vertices
+     * @param texIndices Indices for this triangle's texture coordinates
+     * @param normalIndices Indices for this triangle's vertex normals
+     * @param material The material to apply to the triangle
+     * @return A Triangle object with the specified properties
+     */
     private static Triangle createTriangle(
             ArrayList<Double[]> vertices,
             ArrayList<Double[]> texCoords,
@@ -199,9 +260,11 @@ public class Obj {
         Vector3D[] triTexCoords = new Vector3D[3];
         Vector3D[] triNormals = new Vector3D[3];
 
+        // Check if texture coordinates and normals are available
         boolean hasTexCoords = !texCoords.isEmpty() && texIndices[0] > 0;
         boolean hasNormals = !normals.isEmpty() && normalIndices[0] > 0;
 
+        // Process each vertex of the triangle
         for (int j = 0; j < 3; j++) {
             // Vertices (required)
             triVertices[j] = new Vector3D(
@@ -245,7 +308,6 @@ public class Obj {
                         triNormals[0], triNormals[1], triNormals[2], Scene.background,0, 0, null
                 );
             }
-
         } else {
             return new Triangle(
                     triVertices[0], triVertices[1], triVertices[2],
@@ -255,8 +317,9 @@ public class Obj {
         }
     }
 
-
-    // Data classes to hold intermediate OBJ data
+    /**
+     * Helper class to store parsed OBJ data before conversion to Polygons.
+     */
     private static class ObjData {
         ArrayList<Double[]> vertices = new ArrayList<>();
         ArrayList<Double[]> texCoords = new ArrayList<>();
@@ -265,12 +328,23 @@ public class Obj {
         String currentMaterial;
     }
 
+    /**
+     * Helper class to store face data from OBJ files.
+     */
     private static class FaceData {
         Integer[] vertexIndices;
         Integer[] texIndices;
         Integer[] normalIndices;
         String materialName;
 
+        /**
+         * Creates a new FaceData object.
+         *
+         * @param vertexIndices Indices of the face's vertices
+         * @param texIndices Indices of the face's texture coordinates
+         * @param normalIndices Indices of the face's vertex normals
+         * @param materialName Name of the material assigned to this face
+         */
         FaceData(Integer[] vertexIndices, Integer[] texIndices, Integer[] normalIndices, String materialName) {
             this.vertexIndices = vertexIndices;
             this.texIndices = texIndices;
@@ -278,5 +352,4 @@ public class Obj {
             this.materialName = materialName;
         }
     }
-
 }
