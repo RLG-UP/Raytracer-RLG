@@ -30,13 +30,13 @@ public class Raytracer {
      */
     public static void main(String[] args) throws IOException {
         // Image settings
-        int width = 1600;
-        int height = 900;
+        int width = 2048;
+        int height = 1080;
 
         double nearPlane = -1000, farPlane = 1000;
 
         // Create a new scene with black background
-        Scene scene = new Scene(Color.BLACK);
+        Scene scene = new Scene(Color.WHITE);
 
         // Paths to 3D model files
         String hatPath = new File("./OBJS/Hat.obj").getAbsolutePath();
@@ -50,6 +50,7 @@ public class Raytracer {
                 new Vector3D(0.5f,0.5f,0.5f),
                 new Vector3D(0,-1,0));
 
+
         // Load and render hat with texture
         BufferedImage texture = ImageIO.read(new File("./OBJS/Hat_Albedo.png"));
         Polygon hat = new Polygon(hatPath, new Color(220, 20, 60), 0.4, 0.3, texture);
@@ -61,9 +62,9 @@ public class Raytracer {
         // Render teapots with different materials
         // Glass teapot (red)
         Obj.RenderObj(scene, hazmatPath,Material.GLASS(Color.RED),
-                new Vector3D(0,90,0),
-                new Vector3D(0.7f,0.7f,0.7f),
-                new Vector3D(-1.6,-0.2,-0.1));
+                new Vector3D(0,180,0),
+                new Vector3D(0.5f,0.5f,0.5f),
+                new Vector3D(0,-0.6,-1));
 
         // Mirror teapot (blue)
         Obj.RenderObj(scene, hazmatPath,Material.MIRROR(Color.BLUE),

@@ -189,7 +189,7 @@ public class Material {
 
     /** @param color Base color. @return Predefined glass material. */
     public static Material GLASS(Color color){
-        return new Material(1.0f, 8000f, 0.1f, 0.0f, 0.9f, 0.7f, color);
+        return new Material(1.0f, 8000f, 0.1f, 0.2f, 0.9f, 0.7f, color);
     }
 
     /** @param color Base color. @return Glass material with high reflectivity. */

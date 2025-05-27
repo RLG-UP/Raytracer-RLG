@@ -36,7 +36,7 @@ public class Camera {
         Vector3D rayDir = new Vector3D(u, v, -1).normalize();
         return new Ray(position, rayDir);
     }
-
+    // Standard getters and setters with basic documentation
     public static double getEpsilon(){ return Camera.epsilon; }
     public static void setEpsilon(double epsilon){ Camera.epsilon = epsilon; }
     public static Vector3D getCameraPosition() { return Camera.position; }

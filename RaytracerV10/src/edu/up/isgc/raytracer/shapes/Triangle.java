@@ -14,6 +14,12 @@ import java.awt.*;
 
 import static java.lang.Math.clamp;
 
+
+/**
+ * Represents a triangular polygon in 3D space that can be rendered by a raytracer.
+ * Supports vertex normals, texture coordinates, and material properties.
+ * Implements the Möller-Trumbore algorithm for ray-triangle intersection.
+ */
 public class Triangle extends Object3D {
     private Vector3D A, B, C;
     private Vector3D nA, nB, nC;
@@ -22,13 +28,36 @@ public class Triangle extends Object3D {
     private boolean hasNormals = false, hasTextures = false;
     private Polygon parent;
 
+    /**
+     * Constructs a basic triangle with uniform material properties.
+     *
+     * @param A First vertex position
+     * @param B Second vertex position
+     * @param C Third vertex position
+     * @param color Base color of triangle
+     * @param refraction Index of refraction
+     * @param transparency Transparency level (0=opaque, 1=transparent)
+     */
     public Triangle(Vector3D A, Vector3D B, Vector3D C, Color color, double refraction, double transparency) {
         super(color, refraction, transparency);
         this.setA(A);
         this.setB(B);
         this.setC(C);
     }
-
+    /**
+     * Constructs a triangle with vertex normals.
+     *
+     * @param A First vertex position
+     * @param B Second vertex position
+     * @param C Third vertex position
+     * @param nA Normal at first vertex
+     * @param nB Normal at second vertex
+     * @param nC Normal at third vertex
+     * @param color Base color
+     * @param refraction Index of refraction
+     * @param transparency Transparency level
+     * @param parent Parent polygon
+     */
     public Triangle(Vector3D A, Vector3D B, Vector3D C, Vector3D nA, Vector3D nB, Vector3D nC, Color color, double refraction, double transparency, Polygon parent) {
         super(color, refraction, transparency);
         this.setA(A);
@@ -42,7 +71,18 @@ public class Triangle extends Object3D {
 
         this.setParent(parent);
     }
-
+    /**
+     * Constructs a triangle with vertex normals and material properties.
+     *
+     * @param A First vertex position
+     * @param B Second vertex position
+     * @param C Third vertex position
+     * @param nA Normal at first vertex
+     * @param nB Normal at second vertex
+     * @param nC Normal at third vertex
+     * @param parent Parent polygon
+     * @param material Material properties
+     */
     public Triangle(Vector3D A, Vector3D B, Vector3D C, Vector3D nA, Vector3D nB, Vector3D nC, Polygon parent, Material material) {
         super(material);
         this.setA(A);
@@ -60,7 +100,23 @@ public class Triangle extends Object3D {
         super.refraction = material.getRefraction();
         super.transparency = material.getTransparency();
     }
-
+    /**
+     * Constructs a triangle with vertex normals and texture coordinates.
+     *
+     * @param A First vertex position
+     * @param B Second vertex position
+     * @param C Third vertex position
+     * @param nA Normal at first vertex
+     * @param nB Normal at second vertex
+     * @param nC Normal at third vertex
+     * @param tA Texture coordinate at first vertex
+     * @param tB Texture coordinate at second vertex
+     * @param tC Texture coordinate at third vertex
+     * @param color Base color
+     * @param refraction Index of refraction
+     * @param transparency Transparency level
+     * @param parent Parent polygon
+     */
     public Triangle(Vector3D A, Vector3D B, Vector3D C, Vector3D nA, Vector3D nB, Vector3D nC , Vector3D tA, Vector3D tB, Vector3D tC, Color color, double refraction, double transparency, Polygon parent) {
         super(color, refraction, transparency);
         this.setA(A);
@@ -79,7 +135,21 @@ public class Triangle extends Object3D {
 
         this.setParent(parent);
     }
-
+    /**
+     * Constructs a triangle with full attributes (normals, textures, material).
+     *
+     * @param A First vertex position
+     * @param B Second vertex position
+     * @param C Third vertex position
+     * @param nA Normal at first vertex
+     * @param nB Normal at second vertex
+     * @param nC Normal at third vertex
+     * @param tA Texture coordinate at first vertex
+     * @param tB Texture coordinate at second vertex
+     * @param tC Texture coordinate at third vertex
+     * @param parent Parent polygon
+     * @param material Material properties
+     */
     public Triangle(Vector3D A, Vector3D B, Vector3D C, Vector3D nA, Vector3D nB, Vector3D nC , Vector3D tA, Vector3D tB, Vector3D tC, Polygon parent, Material material) {
         // In Triangle constructor:
         super(material);
@@ -102,88 +172,13 @@ public class Triangle extends Object3D {
     }
 
 
-    //INTERSECT METHOD BEFORE REFACTOR
-
-    /*
-    @Override
-    public Intersection[] intersect(Ray ray) {
-        Vector3D v2v0 = Vector3D.subtract(this.getC(), this.getA());
-        Vector3D v1v0 = Vector3D.subtract(this.getB(), this.getA());
-        Vector3D D = ray.direction.normalize();
-        Vector3D P = Vector3D.crossProduct(D, v1v0);
-        double det = v2v0.dot(P);
-        double invDet = 1.0 / det;
-        Vector3D T = Vector3D.subtract(ray.origin, this.getA());
-        u = invDet * T.dot(P);
-
-        if(u < 0 || u > 1) return Intersection.nullIntersection();
-
-        Vector3D Q = Vector3D.crossProduct(T, v2v0);
-        v = invDet * D.dot(Q);
-        if( v< 0 || (u+v) > (1 + Camera.getEpsilon())) return Intersection.nullIntersection();
-        w = 1-u-v;
-
-        double t = invDet * Q.dot(v1v0);
-
-        Vector3D point = ray.origin.add(D.scale(t));
-        //return new Intersection[]{new Intersection(point, t, this.addLight(point))};
-        return new Intersection[]{new Intersection(point, t, super.getColor())};
-    }
-
+    /**
+     * Calculates ray-triangle intersection using Möller-Trumbore algorithm.
+     * Supports textured triangles by sampling from material texture maps.
+     *
+     * @param ray The ray to test for intersection
+     * @return Array containing intersection data or null if no intersection
      */
-
-
-
-    /*
-    @Override
-    public Intersection[] intersect(Ray ray) {
-        final double EPSILON = 1e-8;
-
-        Vector3D v0 = this.getA();
-        Vector3D v1 = this.getB();
-        Vector3D v2 = this.getC();
-
-        Vector3D edge1 = Vector3D.subtract(v1, v0);
-        Vector3D edge2 = Vector3D.subtract(v2, v0);
-
-        Vector3D pvec = Vector3D.crossProduct(ray.direction, edge2);
-        double det = edge1.dot(pvec);
-
-        // Use absolute value check to avoid missing intersections due to small determinant
-        if (Math.abs(det) < EPSILON) return Intersection.nullIntersection();
-
-        double invDet = 1.0 / det;
-        Vector3D tvec = Vector3D.subtract(ray.origin, v0);
-        double u = tvec.dot(pvec) * invDet;
-
-        if (u < 0.0 || u > 1.0) return Intersection.nullIntersection();
-
-        Vector3D qvec = Vector3D.crossProduct(tvec, edge1);
-        double v = ray.direction.dot(qvec) * invDet;
-
-        if (v < 0.0 || (u + v) > 1.0) return Intersection.nullIntersection();
-
-        double t = edge2.dot(qvec) * invDet;
-
-        if (t < EPSILON) return Intersection.nullIntersection();
-
-        // Save barycentric coordinates
-        this.u = u;
-        this.v = v;
-        this.w = 1.0 - u - v;
-
-        Vector3D intersectionPoint = ray.origin.add(ray.direction.scale(t));
-
-        // Lighting-aware rendering: if you have lighting logic, apply it here
-        return new Intersection[] {
-                new Intersection(intersectionPoint, t, super.getColor()) // <- or super.getColor()
-        };
-    }
-
-     */
-
-    //THIS IS THE METHOD WITH THE COLOR PROBLEM BUT ALMOST THERE
-
     @Override
     public Intersection[] intersect(Ray ray) {
         Intersection intersection = new Intersection(null, -1, null);
@@ -233,7 +228,11 @@ public class Triangle extends Object3D {
         return Intersection.nullIntersection();
 
     }
-
+    /**
+     * Calculates the face normal of the triangle.
+     *
+     * @return Normalized face normal vector
+     */
 
     public Vector3D normal(){
         Vector3D v = Vector3D.subtract(this.getB(), this.getA()).normalize().scale(-1);
@@ -241,30 +240,50 @@ public class Triangle extends Object3D {
         return Vector3D.crossProduct(v, w).normalize();
     }
 
+    /**
+     * Interpolates vertex normals using barycentric coordinates.
+     *
+     * @param u First barycentric coordinate
+     * @param v Second barycentric coordinate
+     * @param w Third barycentric coordinate (1-u-v)
+     * @return Interpolated normal vector
+     */
     public Vector3D calculateNormalPoint(float u, float v, float w){ return this.getnA().scale(w).add(this.getnB().scale(v)).add(this.getnC().scale(u)).normalize(); }
 
-/*
-    @Override
-    public Color addLight(Vector3D point) {
-        Vector3D N = this.getnA().scale(this.w).add(this.getnB().scale(this.v)).add(this.getnC().scale(this.u)).normalize();
-        return Light.calculateColor(N, point, this);
-    }
 
- */
+    /**
+     * Calculates lighting at an intersection point.
+     *
+     * @param intersection Contains position, normal and material data
+     * @return Color with lighting applied
+     */
     @Override
     public Color addLight(Intersection intersection) {
         Vector3D N = intersection.getNormal();
         return Light.calculateColor(N, intersection.point, this, intersection);
     }
-
+    /**
+     * Returns the type identifier of this object.
+     *
+     * @return "triangle"
+     */
     @Override
     public String type(){ return "triangle"; }
-
+    /**
+     * Returns a default zero-state triangle instance.
+     *
+     * @return Triangle at origin with zero area
+     */
     @Override
     public Object3D returnZero(){
         return new Triangle(Vector3D.getZero(), Vector3D.getZero(), Vector3D.getZero(), null, 0, 0);
     }
 
+    /**
+     * Computes an axis-aligned bounding box for this triangle.
+     *
+     * @return Bounding box containing the triangle
+     */
     @Override
     public BoundingBox getBB() {
         double minX = Math.min(this.getA().x, Math.min(this.getB().x, this.getC().x));
@@ -280,7 +299,7 @@ public class Triangle extends Object3D {
                 new Vector3D(maxX, maxY, maxZ)
         );
     }
-
+    // Standard getters and setters with basic documentation
     public Vector3D getA() { return this.A; }
 
     public void setA(Vector3D a) { this.A = a; }

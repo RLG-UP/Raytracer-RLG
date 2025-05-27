@@ -19,38 +19,51 @@ import java.util.List;
 import static java.lang.Math.clamp;
 
 /**
- * Represents a 3D scene containing multiple objects to be rendered.
- * Manages object collection and intersection calculations.
+ * Represents a 3D scene containing objects to be rendered by a raytracer.
+ * Manages scene objects, lighting, and optical effects like reflection and refraction.
+ * Uses a BBTree (Bounding Box Tree) for efficient ray intersection calculations.
  */
 public class Scene {
-    private static ArrayList<Object3D> objects;  // Collection of 3D objects in the scene
+    /** Collection of all 3D objects in the scene */
+    private static ArrayList<Object3D> objects;
+    /** Bounding Box Tree for spatial partitioning and accelerated ray tracing */
     public static BBTree BBTree;
+    /** Default background color when rays don't hit any objects */
     public static Color background;
 
     /**
-     * Constructs an empty scene.
+     * Constructs an empty scene with default background.
      */
     public Scene() {
         objects = new ArrayList<>();
         BBTree = new BBTree();
     }
-
+    /**
+     * Constructs an empty scene with specified background color.
+     *
+     * @param background The background color of the scene
+     */
     public Scene(Color background) {
         Scene.background = background;
         objects = new ArrayList<>();
         BBTree = new BBTree();
     }
 
+
     /**
-     * Adds a 3D object to the scene.
+     * Adds a 3D object to the scene and updates the BBTree.
      *
-     * @param obj The object to add
+     * @param obj The object to add to the scene
      */
     public void addObject(Object3D obj) {
         objects.add(obj);
         BBTree.insert(obj);
     }
-
+    /**
+     * Adds all triangles from a polygon to the scene.
+     *
+     * @param p The polygon whose triangles should be added
+     */
     public void addPolygon(Polygon p) {
         for (Triangle triangle : p.getShape()) {
             this.addObject(triangle);
@@ -58,12 +71,12 @@ public class Scene {
     }
 
     /**
-     * Finds the closest intersection between a ray and any object in the scene.
+     * Finds the closest valid intersection between a ray and scene objects.
      *
      * @param ray The ray to test for intersections
-     * @return The closest intersection, or null if no intersection found
+     * @param ignoreShape Object to exclude from intersection tests
+     * @return The closest valid intersection, or null if none found
      */
-
     public static Intersection findRayIntersection(Ray ray, Object3D ignoreShape) {
         Intersection[] allHits = Scene.BBTree.traverse(ray);
         if (allHits == null) return null;
@@ -76,7 +89,13 @@ public class Scene {
         }
         return null;
     }
-
+    /**
+     * Finds the closest intersection within camera clip planes.
+     *
+     * @param ray The ray to test for intersections
+     * @param camera The camera defining clip planes
+     * @return The closest valid intersection, or null if none found
+     */
     public Intersection findClosestIntersection(Ray ray, Camera camera) {
         Intersection[] allHits = Scene.BBTree.traverse(ray);
         if (allHits == null || allHits.length == 0) return null;
@@ -99,7 +118,15 @@ public class Scene {
 
         return closestHit;
     }
-
+    /**
+     * Determines if a surface point is in shadow relative to a light source.
+     *
+     * @param surfacePoint The point being tested
+     * @param normal Surface normal at the point
+     * @param light The light source to test against
+     * @param sourceObject Object casting the shadow
+     * @return true if the point is in shadow, false otherwise
+     */
     public static boolean isInShadow(Vector3D surfacePoint, Vector3D normal, Light light, Object3D sourceObject) {
         // Step 1: Calculate direction from surface point to the light
         Vector3D lightDir = Vector3D.subtract(light.getPosition(), surfacePoint).normalize().scale(-1);
@@ -132,6 +159,15 @@ public class Scene {
     }
 
 
+    /**
+     * Calculates reflection color for a surface point using recursive ray tracing.
+     *
+     * @param surfacePoint The point of reflection
+     * @param normal Surface normal at the point
+     * @param ignoreShape Object to exclude from intersection tests
+     * @param recursionLimit Maximum recursion depth
+     * @return The calculated reflection color
+     */
     public static Color castReflection(Vector3D surfacePoint, Vector3D normal, Object3D ignoreShape, int recursionLimit) {
         if (recursionLimit <= 0) {
             return Scene.background;
@@ -229,7 +265,15 @@ public class Scene {
         return Scene.background;
     }
 
-
+    /**
+     * Calculates refraction color for a surface point using recursive ray tracing.
+     *
+     * @param surfacePoint The point of refraction
+     * @param normal Surface normal at the point
+     * @param ignoreShape Object to exclude from intersection tests
+     * @param recursionLimit Maximum recursion depth
+     * @return The calculated refraction color
+     */
     public static Color castRefraction(Vector3D surfacePoint, Vector3D normal, Object3D ignoreShape, int recursionLimit) {
         if (recursionLimit <= 0 || ignoreShape.transparency <= 0) {
             return Scene.background;
