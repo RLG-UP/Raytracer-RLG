@@ -83,50 +83,10 @@ public class Sphere extends Object3D {
     }
 
 
-    /*
-    @Override
-    public Intersection[] intersect(Ray ray) {
-        Vector3D L = Vector3D.subtract(this.center, ray.origin);
-        double tca = L.dot(ray.direction.scale(-1));
-        double L2 = Math.pow(L.value, 2);
-        double d2 = L2 - Math.pow(tca, 2);
-        if(d2 >= 0){
-            double d = Math.sqrt(d2);
-            double t0 = tca - Math.sqrt(Math.pow(this.radius, 2) - Math.pow(d, 2));
-            double t1 = tca + Math.sqrt(Math.pow(this.radius, 2) - Math.pow(d, 2));
-
-            double distance = Math.min(t0, t1);
-            Vector3D position = ray.origin.add(ray.direction.scale(distance));
-            //Vector3D normal = Vector3D.subtract(position, this.center).normalize();
-            //return new Intersection(position, distance, normal, this);
-
-            Intersection p0 = new Intersection(position, t0, super.getColor(), this.normal(position));
-
-            // Return intersections with valid points
-            return new Intersection[]{
-                    t0 > 0 ? p0 : null,
-                    null
-            };
-        }
-
-        return null;
-    }
-
-     */
-
     public Vector3D normal(Vector3D point){
         return Vector3D.subtract(point, center).normalize();
     }
 
-
-    /*
-    @Override
-    public Color addLight(Vector3D point) {
-        Vector3D N = this.normal(point);
-        return Light.calculateColor(N, point, this);
-    }
-
-     */
 
     @Override
     public Color addLight(Intersection intersection) {
