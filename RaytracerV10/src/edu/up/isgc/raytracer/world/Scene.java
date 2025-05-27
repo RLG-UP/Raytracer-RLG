@@ -1,5 +1,6 @@
 package edu.up.isgc.raytracer.world;
 
+import edu.up.isgc.raytracer.lighting.Material;
 import edu.up.isgc.raytracer.optimization.BBTree;
 import edu.up.isgc.raytracer.optimization.BoundingBox;
 import edu.up.isgc.raytracer.Intersection;
@@ -157,14 +158,61 @@ public class Scene {
         if (hit != null && hit.object != null) {
             // Get base color of object hit
             //Color localColor = hit.object.getColor(); // Or calculate with lighting, if available
+            Vector3D lD = null;
+            float lightDistance = 0;
+            float ks = 0.0f;
+            float p = 1000f;
+            float ka = 0.1f;
+
+            if (hit.object.getHasMaterial()) {
+                Material material = hit.object.getMaterial();
+                ks = material.getSpecular();
+                p = material.getShininess();
+                ka = material.getAmbient();
+            }
+
+            float lambertian = 0;
+            float blinn = 0;
+            float ambientIntensity = ka * Light.getAmbientLight();
+            Color finalColor = Color.BLACK;
+
             for(Light l : Light.getLights()) {
                 if(isInShadow(hit.point, hit.getNormal(), l, ignoreShape)) {
                     shadowFound = true;
                     break;
+                }else{
+                    if (l.type().equals("directional")) {
+                        lD = l.getDirection().normalize().scale(1);
+                    } else if (l.type().equals("point") || l.type().equals("spot")) {
+                        lD = l.getDirection(hit.point).normalize().scale(-1);
+                        lightDistance = (float)Vector3D.subtract(l.getPosition(), hit.point).value;
+                    }
+
+                    Vector3D N = hit.getNormal();
+                    lambertian = (float) Math.max(N.dot(lD) * l.calculateAttenuation(hit.point), 0.0);
+                    Vector3D h = Vector3D.subtract(Camera.getCameraPosition(), hit.point).normalize().add(lD).normalize();
+                    blinn = (float) (ks * Math.pow(Math.max(N.dot(h), 0.0), p));
+
+                    Color ambient = Light.shine(l.getColor(), hit.color, ambientIntensity, true);
+                    Color diffuse = Light.shine(l.getColor(), hit.color, lambertian, true);
+                    Color specular = Light.shine(l.getColor(), hit.color, blinn, false);
+
+                    Color lightContribution = new Color(
+                            clamp(ambient.getRed() + diffuse.getRed() + specular.getRed(), 0, 255),
+                            clamp(ambient.getGreen() + diffuse.getGreen() + specular.getGreen(), 0, 255),
+                            clamp(ambient.getBlue() + diffuse.getBlue() + specular.getBlue(), 0, 255)
+                    );
+
+                    finalColor = new Color(
+                            clamp(finalColor.getRed() + lightContribution.getRed(), 0, 255),
+                            clamp(finalColor.getGreen() + lightContribution.getGreen(), 0, 255),
+                            clamp(finalColor.getBlue() + lightContribution.getBlue(), 0, 255)
+                    );
                 }
+
             }
 
-            Color localColor = !shadowFound? hit.color : new Color((int) (hit.color.getRed()*0.1), (int) (hit.color.getGreen()*0.1), (int) (hit.color.getBlue()*0.1)); // Or calculate with lighting, if available
+            Color localColor = !shadowFound? finalColor : new Color((int) (finalColor.getRed()*0.1), (int) (finalColor.getGreen()*0.1), (int) (finalColor.getBlue()*0.1)); // Or calculate with lighting, if available
 
             // Recurse
             Color reflectedColor = castReflection(hit.point, hit.getNormal(), hit.object, recursionLimit - 1);
@@ -229,14 +277,61 @@ public class Scene {
             float fresnel = Light.schlick(cosTheta, (float)ignoreShape.refraction);
             
             //Color localColor = hit.object.getColor();
+            Vector3D lD = null;
+            float lightDistance = 0;
+            float ks = 0.0f;
+            float p = 1000f;
+            float ka = 0.1f;
+
+            if (hit.object.getHasMaterial()) {
+                Material material = hit.object.getMaterial();
+                ks = material.getSpecular();
+                p = material.getShininess();
+                ka = material.getAmbient();
+            }
+
+            float lambertian = 0;
+            float blinn = 0;
+            float ambientIntensity = ka * Light.getAmbientLight();
+            Color finalColor = Color.BLACK;
+
             for(Light l : Light.getLights()) {
                 if(isInShadow(hit.point, hit.getNormal(), l, ignoreShape)) {
                     shadowFound = true;
                     break;
+                }else{
+                    if (l.type().equals("directional")) {
+                        lD = l.getDirection().normalize().scale(1);
+                    } else if (l.type().equals("point") || l.type().equals("spot")) {
+                        lD = l.getDirection(hit.point).normalize().scale(-1);
+                        lightDistance = (float)Vector3D.subtract(l.getPosition(), hit.point).value;
+                    }
+
+                    Vector3D N = hit.getNormal();
+                    lambertian = (float) Math.max(N.dot(lD) * l.calculateAttenuation(hit.point), 0.0);
+                    Vector3D h = Vector3D.subtract(Camera.getCameraPosition(), hit.point).normalize().add(lD).normalize();
+                    blinn = (float) (ks * Math.pow(Math.max(N.dot(h), 0.0), p));
+
+                    Color ambient = Light.shine(l.getColor(), hit.color, ambientIntensity, true);
+                    Color diffuse = Light.shine(l.getColor(), hit.color, lambertian, true);
+                    Color specular = Light.shine(l.getColor(), hit.color, blinn, false);
+
+                    Color lightContribution = new Color(
+                            clamp(ambient.getRed() + diffuse.getRed() + specular.getRed(), 0, 255),
+                            clamp(ambient.getGreen() + diffuse.getGreen() + specular.getGreen(), 0, 255),
+                            clamp(ambient.getBlue() + diffuse.getBlue() + specular.getBlue(), 0, 255)
+                    );
+
+                    finalColor = new Color(
+                            clamp(finalColor.getRed() + lightContribution.getRed(), 0, 255),
+                            clamp(finalColor.getGreen() + lightContribution.getGreen(), 0, 255),
+                            clamp(finalColor.getBlue() + lightContribution.getBlue(), 0, 255)
+                    );
                 }
+
             }
 
-            Color localColor = !shadowFound? hit.color : new Color((int) (hit.color.getRed()*0.1), (int) (hit.color.getGreen()*0.1), (int) (hit.color.getBlue()*0.1)); // Or calculate with lighting, if available
+            Color localColor = !shadowFound? finalColor : new Color((int) (finalColor.getRed()*0.1), (int) (finalColor.getGreen()*0.1), (int) (finalColor.getBlue()*0.1)); // Or calculate with lighting, if available
 
             //Color localColor = ignoreShape.getColor();
             Color refractedColor = castRefraction(hit.point, hit.getNormal(), hit.object, recursionLimit - 1);
